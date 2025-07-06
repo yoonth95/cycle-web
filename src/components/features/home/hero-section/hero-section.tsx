@@ -1,97 +1,88 @@
 import Image from "next/image";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Phone, MapPin } from "lucide-react";
+import { Phone, MapPin, Clock } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="bg-white min-h-[70vh] flex items-center">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* 이미지 영역 */}
-          <div className="relative">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted">
-              {/* 실제 이미지 대신 플레이스홀더 */}
-              <div className="absolute inset-0 bg-gradient-to-br from-muted to-border flex items-center justify-center">
-                <p className="text-muted-foreground text-lg font-medium">매장 외관 사진</p>
-              </div>
+    <section className="relative">
+      <div className="relative container mx-auto px-6">
+        <div className="grid lg:grid-cols-5 gap-12 lg:gap-9 xl:gap-12 items-center min-h-[85vh]">
+          {/* 텍스트 */}
+          <div className="lg:col-span-2 space-y-4 xl:space-y-8 lg:order-last pt-10 lg:pt-0">
+            <div className="inline-flex items-center gap-2 bg-figma-cinderella text-figma-thunderbird px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-medium border border-figma-your-pink">
+              부천 중동 대표 자전거 전문점
+            </div>
 
-              {/* 그라데이션 오버레이 */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+            <div className="space-y-4 lg:space-y-6">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-figma-ebony-clay leading-tight">
+                <span className="block">삼천리 자전거</span>
+                <span className="block text-figma-alizarin-crimson">중동역점</span>
+              </h1>
 
-              {/* 하단 텍스트 */}
-              <div className="absolute bottom-4 left-4 text-white">
-                <p className="body-small opacity-90">삼천리 자전거 중동역점 매장 외관</p>
+              <p className="text-sm sm:text-base lg:text-base xl:text-xl text-figma-river-bed leading-relaxed">
+                부천 중동 북부역 상동시장입구 대로변에서 20년간 운영해온 신뢰할 수 있는 자전거
+                전문점입니다.
+              </p>
+            </div>
+
+            <div className="grid gap-3 lg:gap-6">
+              <Card className="p-4 xl:p-6 bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3 lg:space-x-4">
+                    <div className="p-2 lg:p-3 bg-figma-cinderella rounded-xl">
+                      <Phone className="w-4 h-4 md:h-5 md:w-5 xl:h-6 xl:w-6 text-figma-thunderbird" />
+                    </div>
+                    <div>
+                      <p className="text-xs lg:text-sm text-figma-jumbo font-medium">전화 문의</p>
+                      <p className="text-lg xl:text-xl font-bold text-figma-cod-gray">
+                        032-326-3002
+                      </p>
+                    </div>
+                  </div>
+                  <Button variant="default">전화하기</Button>
+                </div>
+              </Card>
+
+              <div className="grid sm:grid-cols-2 gap-3 lg:gap-4">
+                <Card className="p-3 lg:p-4 bg-white/60 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-center space-x-2 lg:space-x-3">
+                    <div className="p-1.5 lg:p-2 bg-figma-cinderella rounded-lg">
+                      <MapPin className="h-4 w-4 md:h-5 md:w-5 text-figma-thunderbird" />
+                    </div>
+                    <div>
+                      <p className="text-xs lg:text-sm text-figma-jumbo">위치</p>
+                      <p className="font-semibold text-figma-cod-gray text-sm xl:text-base lg:text-xs">
+                        중동역 도보 3분
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-3 lg:p-4 bg-white/60 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-center space-x-2 lg:space-x-3">
+                    <div className="p-1.5 lg:p-2 bg-figma-cinderella rounded-lg">
+                      <Clock className="h-4 w-4 md:h-5 md:w-5 text-figma-thunderbird" />
+                    </div>
+                    <div>
+                      <p className="text-xs lg:text-sm text-figma-jumbo">영업시간</p>
+                      <p className="font-semibold text-figma-cod-gray text-sm xl:text-base lg:text-xs">
+                        매일 09:00-19:00
+                      </p>
+                    </div>
+                  </div>
+                </Card>
               </div>
             </div>
           </div>
 
-          {/* 텍스트 콘텐츠 */}
-          <div className="space-y-6">
-            {/* 뱃지 */}
-            <div className="inline-flex items-center px-4 py-2 bg-figma-your-pink rounded-full">
-              <span className="text-sm font-medium text-figma-old-brick">부천 중동 대표 자전거 전문점</span>
-            </div>
-
-            {/* 메인 제목 */}
-            <div className="space-y-4">
-              <h1 className="heading-2 text-foreground leading-tight">
-                삼천리 자전거
-                <br />
-                중동역점
-              </h1>
-
-              <p className="body-large text-muted-foreground">
-                부천 중동 북부역 상동시장입구 대로변에 있는 삼천리 자전거 중동역점입니다. 다양한 자전거와 전문적인 수리
-                서비스를 제공합니다.
-              </p>
-            </div>
-
-            {/* 연락처 정보 카드 */}
-            <div className="space-y-3">
-              <Card className="p-4 border-figma-your-pink hover:shadow-md transition-shadow">
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 bg-figma-your-pink rounded p-1 flex items-center justify-center">
-                    <Phone className="w-3 h-3 text-figma-old-brick" />
-                  </div>
-                  <div>
-                    <h3 className="body-medium-strong text-foreground">전화문의</h3>
-                    <p className="mono-small text-muted-foreground">032-326-3002</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-4 border-figma-your-pink hover:shadow-md transition-shadow">
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 bg-figma-your-pink rounded p-1 flex items-center justify-center">
-                    <MapPin className="w-3 h-3 text-figma-old-brick" />
-                  </div>
-                  <div>
-                    <h3 className="body-medium-strong text-foreground">위치</h3>
-                    <p className="body-small text-muted-foreground">중동역점</p>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* 액션 버튼 */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button
-                className="bg-figma-alizarin-crimson hover:bg-figma-old-brick text-white px-6 py-2.5 h-auto"
-                size="lg"
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                전화 문의하기
-              </Button>
-
-              <Button
-                variant="outline"
-                className="border-figma-alizarin-crimson text-figma-alizarin-crimson hover:bg-figma-alizarin-crimson hover:text-white px-6 py-2.5 h-auto"
-                size="lg"
-              >
-                <MapPin className="w-4 h-4 mr-2" />
-                오시는 길
-              </Button>
+          {/* 이미지 */}
+          <div className="lg:col-span-3 relative lg:order-first">
+            <div className="rounded-3xl overflow-hidden shadow-2xl">
+              <AspectRatio ratio={4 / 3}>
+                <Image src="/main-image.png" alt="삼천리 자전거 중동역점" fill />
+              </AspectRatio>
             </div>
           </div>
         </div>
