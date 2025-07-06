@@ -1,8 +1,19 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Phone, Clock, Calendar, Navigation, Map, Smartphone, Wifi, Car } from "lucide-react";
+import SectionHeader from "@/components/common/section-header";
+import {
+  MapPin,
+  Phone,
+  Clock,
+  Calendar,
+  Navigation,
+  Map,
+  CircleQuestionMark,
+  Wifi,
+  Car,
+} from "lucide-react";
 
 const storeInfo = {
   address: "부천시 원미구 부일로 303",
@@ -28,19 +39,16 @@ const amenities = [
 
 export function LocationSection() {
   return (
-    <section className="py-16 lg:py-20 bg-white">
+    <section className="py-16 lg:py-20">
       <div className="container mx-auto px-4 lg:px-8">
-        {/* 섹션 헤더 */}
-        <div className="text-center mx-auto mb-12 lg:mb-16">
-          <h2 className="heading-3 text-foreground mb-4">오시는길</h2>
-          <p className="body-medium text-muted-foreground">
-            도보시 중동북부역 2번출구 건너편, 중동사거리 상동시장 입구 방향으로 오시면 됩니다.
-          </p>
-        </div>
+        <SectionHeader
+          title="오시는길"
+          description="도보시 중동북부역 2번출구 건너편, 중동사거리 상동시장 입구 방향으로 오시면 됩니다."
+        />
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {/* 지도 영역 */}
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             <Card className="overflow-hidden">
               <div className="aspect-[4/3] bg-muted relative">
                 {/* 지도 플레이스홀더 */}
@@ -55,7 +63,7 @@ export function LocationSection() {
             </Card>
 
             {/* 지도 액션 버튼 */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 justify-end">
               <Button className="bg-foreground hover:bg-foreground/90 text-background">
                 <Navigation className="w-4 h-4 mr-2" />
                 길찾기
@@ -68,13 +76,13 @@ export function LocationSection() {
           </div>
 
           {/* 매장 정보 */}
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6 justify-between">
             <h3 className="heading-4 text-foreground">매장 정보</h3>
 
             <div className="space-y-6">
               {/* 주소 */}
               <div className="flex items-start gap-4 pb-4 border-b border-border">
-                <MapPin className="w-6 h-6 text-muted-foreground mt-1 flex-shrink-0" />
+                <MapPin className="w-6 h-6 flex-shrink-0 text-figma-thunderbird" />
                 <div>
                   <h4 className="body-medium-strong text-foreground mb-1">주소</h4>
                   <p className="body-medium text-muted-foreground">{storeInfo.address}</p>
@@ -83,7 +91,7 @@ export function LocationSection() {
 
               {/* 전화번호 */}
               <div className="flex items-start gap-4 pb-4 border-b border-border">
-                <Phone className="w-6 h-6 text-muted-foreground mt-1 flex-shrink-0" />
+                <Phone className="w-6 h-6 flex-shrink-0 text-figma-thunderbird" />
                 <div>
                   <h4 className="body-medium-strong text-foreground mb-2">전화번호</h4>
                   <div className="space-y-1">
@@ -98,22 +106,30 @@ export function LocationSection() {
 
               {/* 이용시간 */}
               <div className="flex items-start gap-4 pb-4 border-b border-border">
-                <Clock className="w-6 h-6 text-muted-foreground mt-1 flex-shrink-0" />
+                <Clock className="w-6 h-6 flex-shrink-0 text-figma-thunderbird" />
                 <div>
                   <h4 className="body-medium-strong text-foreground mb-3">이용시간</h4>
                   <div className="space-y-4">
                     <div className="flex gap-4">
                       <span className="body-medium text-muted-foreground w-8">매일</span>
                       <div>
-                        <p className="mono-medium-strong text-foreground">{storeInfo.hours.summer.time}</p>
-                        <p className="body-xs text-muted-foreground">{storeInfo.hours.summer.label}</p>
+                        <p className="mono-medium-strong text-foreground">
+                          {storeInfo.hours.summer.time}
+                        </p>
+                        <p className="body-xs text-muted-foreground">
+                          {storeInfo.hours.summer.label}
+                        </p>
                       </div>
                     </div>
                     <div className="flex gap-4">
                       <span className="body-medium text-muted-foreground w-8">매일</span>
                       <div>
-                        <p className="mono-medium-strong text-foreground">{storeInfo.hours.winter.time}</p>
-                        <p className="body-xs text-muted-foreground">{storeInfo.hours.winter.label}</p>
+                        <p className="mono-medium-strong text-foreground">
+                          {storeInfo.hours.winter.time}
+                        </p>
+                        <p className="body-xs text-muted-foreground">
+                          {storeInfo.hours.winter.label}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -122,12 +138,15 @@ export function LocationSection() {
 
               {/* 이용안내 */}
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 mt-1 flex-shrink-0" />
+                <CircleQuestionMark className="w-6 h-6 flex-shrink-0 text-figma-thunderbird" />
                 <div>
                   <h4 className="body-medium-strong text-foreground mb-3">이용안내</h4>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
                     {amenities.map((amenity, index) => (
-                      <Card key={index} className="p-3 bg-muted border">
+                      <Card
+                        key={index}
+                        className="p-3 bg-muted border flex flex-col items-center justify-center h-full"
+                      >
                         <div className="text-center">
                           <amenity.icon className="w-6 h-6 text-muted-foreground mx-auto mb-2" />
                           <p className="body-xs text-muted-foreground">{amenity.label}</p>

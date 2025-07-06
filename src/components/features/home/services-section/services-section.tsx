@@ -1,3 +1,4 @@
+import SectionHeader from "@/components/common/section-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Wrench, Truck, HeadphonesIcon } from "lucide-react";
 
@@ -21,15 +22,12 @@ const services = [
 
 export function ServicesSection() {
   return (
-    <section className="py-16 lg:py-20 bg-white">
+    <section className="pt-16 lg:pt-20">
       <div className="container mx-auto px-4 lg:px-8">
-        {/* 섹션 헤더 */}
-        <div className="text-center mx-auto mb-12 lg:mb-16">
-          <h2 className="heading-3 text-foreground mb-4">전문 서비스</h2>
-          <p className="body-medium text-muted-foreground">
-            창업 이후 지속적인 A/S로 보답하겠습니다. 전문적인 수리와 정비 서비스를 제공합니다.
-          </p>
-        </div>
+        <SectionHeader
+          title="전문 서비스"
+          description="창업 이후 지속적인 A/S로 보답하겠습니다. 전문적인 수리와 정비 서비스를 제공합니다."
+        />
 
         {/* 서비스 카드 그리드 */}
         <div className="grid md:grid-cols-3 gap-6">
@@ -48,7 +46,9 @@ export function ServicesSection() {
                 <h3 className="heading-5 text-foreground">{service.title}</h3>
 
                 {/* 설명 */}
-                <p className="body-medium text-muted-foreground leading-relaxed">{service.description}</p>
+                <p className="body-medium text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
               </CardContent>
             </Card>
           ))}
