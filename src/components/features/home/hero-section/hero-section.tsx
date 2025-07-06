@@ -1,10 +1,14 @@
 import Image from "next/image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import CallButton from "./call-button";
+import { getSeason } from "@/utils/getSeason";
+import type { HeroSectionProps } from "@/types";
 import { Phone, MapPin, Clock } from "lucide-react";
 
-export function HeroSection() {
+export function HeroSection({ data }: HeroSectionProps) {
+  const season = getSeason();
+
   return (
     <section className="relative">
       <div className="relative container mx-auto px-6">
@@ -12,18 +16,17 @@ export function HeroSection() {
           {/* 텍스트 */}
           <div className="lg:col-span-2 space-y-4 xl:space-y-8 lg:order-last pt-10 lg:pt-0">
             <div className="inline-flex items-center gap-2 bg-figma-cinderella text-figma-thunderbird px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-medium border border-figma-your-pink">
-              부천 중동 대표 자전거 전문점
+              {data.badge}
             </div>
 
             <div className="space-y-4 lg:space-y-6">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-figma-ebony-clay leading-tight">
-                <span className="block">삼천리 자전거</span>
-                <span className="block text-figma-alizarin-crimson">중동역점</span>
+                <span className="block">{data.title}</span>
+                <span className="block text-figma-alizarin-crimson">{data.subTitle}</span>
               </h1>
 
               <p className="text-sm sm:text-base lg:text-base xl:text-xl text-figma-river-bed leading-relaxed">
-                부천 중동 북부역 상동시장입구 대로변에서 20년간 운영해온 신뢰할 수 있는 자전거
-                전문점입니다.
+                {data.description}
               </p>
             </div>
 
@@ -37,11 +40,11 @@ export function HeroSection() {
                     <div>
                       <p className="text-xs lg:text-sm text-figma-jumbo font-medium">전화 문의</p>
                       <p className="text-lg xl:text-xl font-bold text-figma-cod-gray">
-                        032-326-3002
+                        {data.officeNumber}
                       </p>
                     </div>
                   </div>
-                  <Button variant="default">전화하기</Button>
+                  <CallButton officeNumber={data.officeNumber} />
                 </div>
               </Card>
 
@@ -54,7 +57,7 @@ export function HeroSection() {
                     <div>
                       <p className="text-xs lg:text-sm text-figma-jumbo">위치</p>
                       <p className="font-semibold text-figma-cod-gray text-sm xl:text-base lg:text-xs">
-                        중동역 도보 3분
+                        {data.location}
                       </p>
                     </div>
                   </div>
@@ -68,7 +71,7 @@ export function HeroSection() {
                     <div>
                       <p className="text-xs lg:text-sm text-figma-jumbo">영업시간</p>
                       <p className="font-semibold text-figma-cod-gray text-sm xl:text-base lg:text-xs">
-                        매일 09:00-19:00
+                        {data.hours[season].time}
                       </p>
                     </div>
                   </div>
@@ -81,7 +84,7 @@ export function HeroSection() {
           <div className="lg:col-span-3 relative lg:order-first">
             <div className="rounded-3xl overflow-hidden shadow-2xl">
               <AspectRatio ratio={4 / 3}>
-                <Image src="/main-image.png" alt="삼천리 자전거 중동역점" fill />
+                <Image src={data.mainImage} alt="삼천리 자전거 중동역점" fill />
               </AspectRatio>
             </div>
           </div>

@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { bicycleTypes } from "./bicycle-types-section";
+import type { BicycleType } from "@/types";
 
-const DesktopBicycleTypes = () => {
+const DesktopBicycleTypes = ({ data }: { data: BicycleType[] }) => {
   return (
     <div className="grid grid-cols-3 xl:grid-cols-4 gap-6">
-      {bicycleTypes.map((bicycle, index) => (
+      {data.map((bicycle: BicycleType, index: number) => (
         <Card
           key={index}
           className="group overflow-hidden transition-all duration-300 cursor-pointer border-none"

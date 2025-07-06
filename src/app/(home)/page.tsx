@@ -2,17 +2,20 @@ import { HeroSection } from "@/components/features/home/hero-section";
 import { ServicesSection } from "@/components/features/home/services-section";
 import { BicycleTypesSection } from "@/components/features/home/bicycle-types-section";
 import { LocationSection } from "@/components/features/home/location-section";
+import { getHomePageData } from "@/lib/data-service";
 
-export default function Home() {
+export default async function Home() {
+  const data = await getHomePageData();
+
   return (
     <>
-      <HeroSection />
+      <HeroSection data={data.hero} />
 
-      <ServicesSection />
+      <ServicesSection data={data.services} />
 
-      <BicycleTypesSection />
+      <BicycleTypesSection data={data.bicycleTypes} />
 
-      <LocationSection />
+      <LocationSection data={data.location} />
     </>
   );
 }
