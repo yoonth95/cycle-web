@@ -12,7 +12,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       "cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
     const variantClasses = {
-      default: "bg-primary text-primary-foreground hover:bg-primary/90",
+      default: "bg-figma-alizarin-crimson text-primary-foreground hover:bg-figma-thunderbird",
       destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
       secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
@@ -28,9 +28,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <button className={cn(baseClasses, variantClasses[variant], sizeClasses[size], className)} ref={ref} {...props} />
+      <button
+        className={cn(baseClasses, variantClasses[variant], sizeClasses[size], className)}
+        ref={ref}
+        {...props}
+      />
     );
-  }
+  },
 );
 Button.displayName = "Button";
 
