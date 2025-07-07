@@ -3,7 +3,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 import CallButton from "./call-button";
 import { getSeason } from "@/utils/getSeason";
-import type { HeroSectionProps } from "@/types";
+import type { HeroSectionProps } from "@/types/home";
 import { Phone, MapPin, Clock } from "lucide-react";
 
 export function HeroSection({ data }: HeroSectionProps) {
@@ -49,7 +49,7 @@ export function HeroSection({ data }: HeroSectionProps) {
               </Card>
 
               <div className="grid sm:grid-cols-2 gap-3 lg:gap-4">
-                <Card className="p-3 lg:p-4 bg-white/60 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300">
+                <Card className="flex items-center p-3 lg:p-4 bg-white/60 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300">
                   <div className="flex items-center space-x-2 lg:space-x-3">
                     <div className="p-1.5 lg:p-2 bg-figma-cinderella rounded-lg">
                       <MapPin className="h-4 w-4 md:h-5 md:w-5 text-figma-thunderbird" />
@@ -57,13 +57,13 @@ export function HeroSection({ data }: HeroSectionProps) {
                     <div>
                       <p className="text-xs lg:text-sm text-figma-jumbo">위치</p>
                       <p className="font-semibold text-figma-cod-gray text-sm xl:text-base lg:text-xs">
-                        {data.location}
+                        {data.address}
                       </p>
                     </div>
                   </div>
                 </Card>
 
-                <Card className="p-3 lg:p-4 bg-white/60 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300">
+                <Card className="flex items-center p-3 lg:p-4 bg-white/60 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300">
                   <div className="flex items-center space-x-2 lg:space-x-3">
                     <div className="p-1.5 lg:p-2 bg-figma-cinderella rounded-lg">
                       <Clock className="h-4 w-4 md:h-5 md:w-5 text-figma-thunderbird" />
@@ -71,7 +71,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                     <div>
                       <p className="text-xs lg:text-sm text-figma-jumbo">영업시간</p>
                       <p className="font-semibold text-figma-cod-gray text-sm xl:text-base lg:text-xs">
-                        {data.hours[season].time}
+                        {data.seasonalHours[season].time}
                       </p>
                     </div>
                   </div>
