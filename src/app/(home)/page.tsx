@@ -1,14 +1,16 @@
-import { HeroSection } from "@/components/features/home/hero-section";
-import { ServicesSection } from "@/components/features/home/services-section";
-import { BicycleTypesSection } from "@/components/features/home/bicycle-types-section";
-import { LocationSection } from "@/components/features/home/location-section";
-import homePageData from "@/data/home-page.json";
+import {
+  HeroSection,
+  ServicesSection,
+  BicycleTypesSection,
+  LocationSection,
+} from "@/components/features/home";
 import type {
   HeroSectionType,
   ServicesSectionType,
   BicycleTypesSectionType,
   LocationSectionType,
 } from "@/types/home";
+import homePageData from "@/data/home-page.json";
 
 export default async function Home() {
   const orderedSections = [...homePageData].sort((a, b) => a.order - b.order);
