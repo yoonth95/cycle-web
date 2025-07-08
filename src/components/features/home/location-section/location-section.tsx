@@ -1,10 +1,8 @@
-"use client";
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SectionHeader from "@/components/common/section-header";
 import { getIconComponent } from "@/utils/icon-mapping";
-import type { LocationSectionProps } from "@/types";
+import type { LocationSectionProps } from "@/types/home";
 import { MapPin, Phone, Clock, Navigation, Map, CircleQuestionMark } from "lucide-react";
 
 export function LocationSection({ data }: LocationSectionProps) {
@@ -62,11 +60,8 @@ export function LocationSection({ data }: LocationSectionProps) {
                 <div>
                   <h4 className="body-medium-strong text-foreground mb-2">전화번호</h4>
                   <div className="space-y-1">
-                    {data.phoneNumbers.map((number, index) => (
-                      <p key={index} className="mono-medium text-muted-foreground">
-                        {number}
-                      </p>
-                    ))}
+                    <p className="mono-medium text-muted-foreground">{data.phoneNumber}</p>
+                    <p className="mono-medium text-muted-foreground">{data.officeNumber}</p>
                   </div>
                 </div>
               </div>
@@ -81,18 +76,22 @@ export function LocationSection({ data }: LocationSectionProps) {
                       <span className="body-medium text-muted-foreground w-8">매일</span>
                       <div>
                         <p className="mono-medium-strong text-foreground">
-                          {data.hours.summer.time}
+                          {data.seasonalHours.summer.time}
                         </p>
-                        <p className="body-xs text-muted-foreground">{data.hours.summer.label}</p>
+                        <p className="body-xs text-muted-foreground">
+                          {data.seasonalHours.summer.label}
+                        </p>
                       </div>
                     </div>
                     <div className="flex gap-4">
                       <span className="body-medium text-muted-foreground w-8">매일</span>
                       <div>
                         <p className="mono-medium-strong text-foreground">
-                          {data.hours.winter.time}
+                          {data.seasonalHours.winter.time}
                         </p>
-                        <p className="body-xs text-muted-foreground">{data.hours.winter.label}</p>
+                        <p className="body-xs text-muted-foreground">
+                          {data.seasonalHours.winter.label}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -105,22 +104,24 @@ export function LocationSection({ data }: LocationSectionProps) {
                 <div>
                   <h4 className="body-medium-strong text-foreground mb-3">이용안내</h4>
                   <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
-                    {data.amenities.map((amenity, index) => (
-                      <Card
-                        key={index}
-                        className="p-3 bg-muted border flex flex-col items-center justify-center h-full"
-                      >
-                        <div className="text-center">
-                          {(() => {
-                            const IconComponent = getIconComponent(amenity.iconName);
-                            return (
-                              <IconComponent className="w-6 h-6 text-muted-foreground mx-auto mb-2" />
-                            );
-                          })()}
-                          <p className="body-xs text-muted-foreground">{amenity.label}</p>
-                        </div>
-                      </Card>
-                    ))}
+                    {data.storeInfo
+                      .sort((a, b) => a.order - b.order)
+                      .map((storeInfo) => (
+                        <Card
+                          key={storeInfo.order}
+                          className="p-3 bg-muted border flex flex-col items-center justify-center h-full"
+                        >
+                          <div className="text-center">
+                            {(() => {
+                              const IconComponent = getIconComponent(storeInfo.iconName);
+                              return (
+                                <IconComponent className="w-6 h-6 text-muted-foreground mx-auto mb-2" />
+                              );
+                            })()}
+                            <p className="body-xs text-muted-foreground">{storeInfo.label}</p>
+                          </div>
+                        </Card>
+                      ))}
                   </div>
                 </div>
               </div>

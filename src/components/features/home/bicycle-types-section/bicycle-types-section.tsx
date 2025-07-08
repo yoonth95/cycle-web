@@ -4,7 +4,7 @@ import SectionHeader from "@/components/common/section-header";
 import MobileBicycleTypes from "./mobile-bicycle-types";
 import DesktopBicycleTypes from "./desktop-bicycle-types";
 import { useMobile } from "@/hooks/use-mobile";
-import type { BicycleTypesSectionProps } from "@/types";
+import type { BicycleTypesSectionProps } from "@/types/home";
 
 export function BicycleTypesSection({ data }: BicycleTypesSectionProps) {
   const [isMobile, windowWidth] = useMobile({ breakpoint: 640 });
