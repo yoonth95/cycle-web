@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/utils";
 import type { BicycleTypesSectionType } from "@/types/home";
 
 const DesktopBicycleTypes = ({ data }: { data: BicycleTypesSectionType["bicycleTypes"] }) => {
