@@ -1,9 +1,26 @@
-type NavItemType = {
+export type NavSubItem = {
   id: number;
   slug: string;
-  type: "group" | "single";
+  link: string;
   order: number;
-  items: string[] | null;
 };
 
-export type NavType = NavItemType[];
+type NavGroupItem = {
+  id: number;
+  slug: string;
+  link: string;
+  type: "group";
+  order: number;
+  items: NavSubItem[];
+};
+
+type NavSingleItem = {
+  id: number;
+  slug: string;
+  link: string;
+  type: "single";
+  order: number;
+};
+
+export type NavItem = NavGroupItem | NavSingleItem;
+export type NavType = NavItem[];
