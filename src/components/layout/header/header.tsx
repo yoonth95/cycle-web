@@ -124,15 +124,14 @@ const Header = () => {
     setActiveCategory(category);
   };
 
-  const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setActiveCategory(null);
-    }, 100);
+  // nav 영역 전체를 벗어날 때 드롭다운 닫기
+  const handleNavMouseLeave = () => {
+    const timeout = setTimeout(() => setActiveCategory(null), 100);
     setHoverTimeout(timeout);
   };
 
-  // 마우스가 nav/드롭다운 영역에 들어올 때 타임아웃 취소
-  const cancelMouseLeave = () => {
+  // nav 영역에 들어올 때 타임아웃 취소
+  const handleNavMouseEnter = () => {
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
@@ -147,11 +146,7 @@ const Header = () => {
 
   return (
     <>
-      <div
-        className="relative"
-        onMouseLeave={handleMouseLeave} // 전체 영역 이탈 → 드롭다운 닫기
-        onMouseEnter={cancelMouseLeave} // 영역 재진입 → 닫기 취소
-      >
+      <div className="relative">
         <motion.header
           className="bg-figma-alizarin-crimson text-white sticky top-0 z-50 shadow-lg"
           initial={{ y: 0 }}
@@ -161,18 +156,65 @@ const Header = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               <Logo />
-              <nav className="hidden lg:flex items-center">
-                {Object.keys(menuData).map((item) => (
-                  <motion.a
-                    key={item}
-                    href="#"
-                    className="duration-200 font-medium px-4 py-5 relative after:absolute after:left-2 after:bottom-3 after:h-[2px] after:w-0 hover:after:w-[calc(100%-1rem)] after:bg-white after:transition-all after:duration-300"
-                    onMouseEnter={() => handleCategoryHover(item)}
-                  >
-                    {item}
-                  </motion.a>
-                ))}
-              </nav>
+              <div onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
+                <nav className="hidden lg:flex items-center">
+                  {Object.keys(menuData).map((item) => (
+                    <motion.a
+                      key={item}
+                      href="#"
+                      className="duration-200 font-medium px-4 py-5 relative after:absolute after:left-2 after:bottom-3 after:h-[2px] after:w-0 hover:after:w-[calc(100%-1rem)] after:bg-white after:transition-all after:duration-300"
+                      onMouseEnter={() => handleCategoryHover(item)}
+                    >
+                      {item}
+                    </motion.a>
+                  ))}
+                </nav>
+
+                {/* Desktop Dropdown Menu */}
+                <AnimatePresence>
+                  {activeCategory && !isMenuOpen && (
+                    <motion.div
+                      className="absolute top-full left-0 w-full bg-white text-gray-800 shadow-lg lg:block z-40"
+                      initial={{ opacity: 0, y: 0 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="container mx-auto px-4 py-8">
+                        <div className="grid grid-cols-4 gap-8">
+                          {menuData[activeCategory as keyof typeof menuData].categories.map(
+                            (category, idx) => (
+                              <motion.div
+                                key={category.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: idx * 0.1 }}
+                              >
+                                <h3 className="font-bold text-figma-alizarin-crimson mb-4 text-lg">
+                                  {category.title}
+                                </h3>
+                                <ul className="space-y-2">
+                                  {category.items.map((item) => (
+                                    <li key={item}>
+                                      <a
+                                        href="#"
+                                        className="text-gray-600 hover:text-figma-alizarin-crimson transition-colors duration-200 block py-1"
+                                      >
+                                        {item}
+                                      </a>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </motion.div>
+                            ),
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               <div className="flex items-center space-x-4">
                 <motion.button
                   onClick={toggleMenu}
@@ -208,52 +250,6 @@ const Header = () => {
             </div>
           </div>
         </motion.header>
-
-        {/* Desktop Dropdown Menu */}
-        <AnimatePresence>
-          {activeCategory && !isMenuOpen && (
-            <motion.div
-              className="absolute top-full left-0 w-full bg-white text-gray-800 shadow-lg lg:block z-40"
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 0 }}
-              transition={{ duration: 0.3 }}
-              onMouseEnter={cancelMouseLeave} // 드롭다운 유지
-              onMouseLeave={handleMouseLeave} // 드롭다운 자체 이탈 시 닫기
-            >
-              <div className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-4 gap-8">
-                  {menuData[activeCategory as keyof typeof menuData].categories.map(
-                    (category, idx) => (
-                      <motion.div
-                        key={category.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: idx * 0.1 }}
-                      >
-                        <h3 className="font-bold text-figma-alizarin-crimson mb-4 text-lg">
-                          {category.title}
-                        </h3>
-                        <ul className="space-y-2">
-                          {category.items.map((item) => (
-                            <li key={item}>
-                              <a
-                                href="#"
-                                className="text-gray-600 hover:text-figma-alizarin-crimson transition-colors duration-200 block py-1"
-                              >
-                                {item}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </motion.div>
-                    ),
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Full Screen Mobile Menu */}
