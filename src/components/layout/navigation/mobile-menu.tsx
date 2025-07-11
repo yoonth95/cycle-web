@@ -1,6 +1,6 @@
 "use client";
 
-import { NavigationBar } from "@/components/layout/navigation";
+// import { NavigationBar } from "@/components/layout/navigation";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ export function MobileMenu({ isOpen, onItemClick }: MobileMenuProps) {
 
   return (
     <div className="border-t border-white/20 py-4">
-      <NavigationBar variant="mobile" onItemClick={onItemClick} />
+      {/* <NavigationBar variant="mobile" onItemClick={onItemClick} /> */}
     </div>
   );
 }
