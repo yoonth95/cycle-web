@@ -126,7 +126,7 @@ const Header = () => {
 
   // nav 영역 전체를 벗어날 때 드롭다운 닫기
   const handleNavMouseLeave = () => {
-    const timeout = setTimeout(() => setActiveCategory(null), 100);
+    const timeout = setTimeout(() => setActiveCategory(null), 50);
     setHoverTimeout(timeout);
   };
 
@@ -146,15 +146,15 @@ const Header = () => {
 
   return (
     <>
-      <div className="relative">
-        <motion.header
-          className="bg-figma-alizarin-crimson text-white sticky top-0 z-50 shadow-lg"
-          initial={{ y: 0 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-        >
-          <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
+      <motion.header
+        className="bg-figma-alizarin-crimson text-white sticky top-0 z-50 shadow-lg"
+        initial={{ y: 0 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-12">
               <Logo />
               <div onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
                 <nav className="hidden lg:flex items-center">
@@ -162,7 +162,7 @@ const Header = () => {
                     <motion.a
                       key={item}
                       href="#"
-                      className="duration-200 font-medium px-4 py-5 relative after:absolute after:left-2 after:bottom-3 after:h-[2px] after:w-0 hover:after:w-[calc(100%-1rem)] after:bg-white after:transition-all after:duration-300"
+                      className={`duration-200 font-medium px-4 py-5 relative after:absolute after:left-2 after:bottom-3 after:h-[2px] after:w-0 hover:after:w-[calc(100%-1rem)] after:bg-white after:transition-all after:duration-300 ${activeCategory === item ? "after:w-[calc(100%-1rem)]" : ""}`}
                       onMouseEnter={() => handleCategoryHover(item)}
                     >
                       {item}
@@ -214,55 +214,55 @@ const Header = () => {
                   )}
                 </AnimatePresence>
               </div>
+            </div>
 
-              <div className="flex items-center space-x-4">
-                <motion.button
-                  onClick={toggleMenu}
-                  className="p-2 hover:bg-red-700 rounded-md transition-colors duration-200"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <AnimatePresence mode="wait">
-                    {isMenuOpen ? (
-                      <motion.div
-                        key="close"
-                        initial={{ rotate: -90, opacity: 0 }}
-                        animate={{ rotate: 0, opacity: 1 }}
-                        exit={{ rotate: 90, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <X className="w-6 h-6" />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="menu"
-                        initial={{ rotate: 90, opacity: 0 }}
-                        animate={{ rotate: 0, opacity: 1 }}
-                        exit={{ rotate: -90, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Menu className="w-6 h-6" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.button>
-              </div>
+            <div className="flex items-center space-x-4">
+              <motion.button
+                onClick={toggleMenu}
+                className="p-2 hover:bg-red-700 rounded-md transition-colors duration-200"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <AnimatePresence mode="wait">
+                  {isMenuOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X className="w-6 h-6" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu className="w-6 h-6" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
             </div>
           </div>
-        </motion.header>
-      </div>
+        </div>
+      </motion.header>
 
       {/* Full Screen Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="fixed inset-0 bg-red-600 text-white z-40 overflow-y-auto"
+            className="fixed top-16 left-0 w-full bg-figma-alizarin-crimson text-white z-40 overflow-y-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="container mx-auto px-4 pt-20 pb-8">
+            <div className="container mx-auto px-4 py-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8">
                 {Object.entries(menuData).map(([mainCategory, data], mainIdx) => (
                   <motion.div
@@ -273,7 +273,7 @@ const Header = () => {
                     className="space-y-6"
                   >
                     <motion.h2
-                      className="text-xl font-bold border-b border-red-400 pb-2"
+                      className="text-xl font-bold border-b border-white pb-2"
                       whileHover={{ scale: 1.02 }}
                     >
                       {mainCategory}
