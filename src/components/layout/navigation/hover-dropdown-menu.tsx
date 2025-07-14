@@ -1,52 +1,54 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { sortSubItems } from "@/utils/navigation-utils";
-import { HoverDropdownMenuProps } from "@/types/navigation-props";
+import { NavigationItem } from "@/types/navigation-data";
 
-const HoverDropdownMenu = ({
-  activeCategory,
-  activeMenuItem,
-  isMenuOpen,
-}: HoverDropdownMenuProps) => {
+const HoverDropdownMenu = ({ menuItem }: { menuItem: NavigationItem }) => {
   return (
-    <AnimatePresence>
-      {activeCategory && !isMenuOpen && activeMenuItem && activeMenuItem.type === "group" && (
-        <motion.div
-          className="absolute top-full left-0 w-full bg-white text-gray-800 shadow-lg lg:block z-40"
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 0 }}
-          transition={{ duration: 0.3 }}
+    <>
+      {menuItem.type === "group" && (
+        <div
+          className={cn(
+            "absolute top-full left-0 w-full bg-white text-gray-800 shadow-lg z-40",
+            "transition-all duration-300 ease-out",
+            "opacity-0 pointer-events-none",
+            "group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto",
+            "cursor-default",
+          )}
         >
           <div className="container mx-auto px-4 py-8">
-            <div className="grid grid-cols-4 gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h3 className="font-bold text-figma-alizarin-crimson mb-4 text-lg">
-                  {activeMenuItem.slug}
-                </h3>
-                <ul className="space-y-2">
-                  {sortSubItems(activeMenuItem.items).map((subItem) => (
-                    <li key={subItem.id}>
-                      <a
-                        href={subItem.link}
-                        className="text-gray-600 hover:text-figma-alizarin-crimson transition-colors duration-200 block py-1"
-                      >
-                        {subItem.slug}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold border-b border-gray-200 pb-2">
+                  <Link
+                    href={menuItem.link}
+                    className="text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
+                  >
+                    {menuItem.slug}
+                  </Link>
+                </h2>
+                <div>
+                  <ul className="space-y-2">
+                    {sortSubItems(menuItem.items).map((item) => (
+                      <li key={item.id}>
+                        <Link
+                          href={item.link}
+                          className="text-gray-600 hover:text-figma-alizarin-crimson transition-colors duration-200 block my-4 text-sm border-l-2 border-transparent hover:border-figma-alizarin-crimson pl-3"
+                        >
+                          {item.slug}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

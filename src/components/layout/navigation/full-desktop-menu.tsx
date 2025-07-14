@@ -2,9 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { sortSubItems } from "@/utils/navigation-utils";
-import { FullDesktopMenuProps } from "@/types/navigation-props";
+import { FullMenuProps } from "@/types/navigation-props";
 
-const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullDesktopMenuProps) => {
+const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
   return (
     <AnimatePresence>
       {isMenuOpen && (
