@@ -1,42 +1,39 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import HoverDropdownMenu from "./hover-dropdown-menu";
+import { cn } from "@/lib/utils";
 import { sortMenuData } from "@/utils/navigation-utils";
-import { DesktopNavigationProps } from "@/types/navigation-props";
+import { NavigationProps } from "@/types/navigation-props";
+import { NavigationItem } from "@/types/navigation-data";
 
-const NavigationBar = ({
-  menuData,
-  activeCategory,
-  onCategoryHover,
-  onNavMouseEnter,
-  onNavMouseLeave,
-}: DesktopNavigationProps) => {
+const NavigationBar = ({ menuData }: NavigationProps) => {
+  const router = useRouter();
   const sortedMenuData = sortMenuData(menuData);
 
+  const handleMove = (item: NavigationItem) => {
+    if (item.type === "single") router.push(item.link);
+  };
+
   return (
-    <div onMouseEnter={onNavMouseEnter} onMouseLeave={onNavMouseLeave}>
-      <nav className="hidden lg:flex items-center">
+    <nav>
+      <ul className="hidden lg:flex items-center">
         {sortedMenuData.map((item) => (
-          <motion.a
+          <motion.li
             key={item.id}
-            href={item.link}
-            className={`duration-200 font-medium px-4 py-5 relative after:absolute after:left-2 after:bottom-3 after:h-[2px] after:w-0 hover:after:w-[calc(100%-1rem)] after:bg-white after:transition-all after:duration-300 ${
-              activeCategory === item.slug ? "after:w-[calc(100%-1rem)]" : ""
-            }`}
-            onMouseEnter={() => {
-              if (item.type === "group") {
-                onCategoryHover(item.slug);
-              } else {
-                onCategoryHover(null);
-              }
-            }}
-            onClick={item.type === "single" ? undefined : (e) => e.preventDefault()}
+            className={cn("group", "px-4 py-5", "duration-200 font-medium cursor-pointer")}
+            onClick={() => handleMove(item)}
           >
-            {item.slug}
-          </motion.a>
+            <h3 className="text-white group-hover:text-white transition-colors duration-300">
+              {item.slug}
+            </h3>
+            <div className="h-[2px] w-0 bg-white group-hover:w-full transition-all duration-300 relative top-[5px]"></div>
+            <HoverDropdownMenu menuItem={item} />
+          </motion.li>
         ))}
-      </nav>
-    </div>
+      </ul>
+    </nav>
   );
 };
 
