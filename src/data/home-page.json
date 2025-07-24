@@ -127,8 +127,8 @@
       { "iconName": "wifi", "label": "무선 인터넷", "order": 3 },
       { "iconName": "phone", "label": "남녀 화장실 구분", "order": 4 }
     ],
-    "lat": "37.488585842666005",
-    "lng": "126.76382865480218",
+    "lat": "37.4885818",
+    "lng": "126.763902",
     "seasonalHours": {
       "winter": {
         "time": "10:30-18:30",
