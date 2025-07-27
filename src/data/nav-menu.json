@@ -2,63 +2,138 @@
   {
     "id": 1,
     "slug": "자전거",
-    "link": "/bicycles",
+    "link": "/bicycles/style",
     "type": "group",
     "order": 1,
     "items": [
       {
         "id": 1,
-        "slug": "전기자전거",
-        "link": "/bicycles/electric",
-        "order": 1
+        "slug": "스타일",
+        "link": "/bicycles/style",
+        "type": "group",
+        "order": 1,
+        "items": [
+          {
+            "id": 1,
+            "slug": "스마트 모빌리티",
+            "link": "/bicycles/style/smart-mobility",
+            "type": "group",
+            "order": 1,
+            "items": [
+              {
+                "id": 1,
+                "slug": "전기자전거",
+                "link": "/bicycles/style/smart-mobility/electric",
+                "order": 1
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "slug": "스포츠",
+            "link": "/bicycles/style/sports",
+            "type": "group",
+            "order": 2,
+            "items": [
+              {
+                "id": 1,
+                "slug": "로드",
+                "link": "/bicycles/style/sports/road",
+                "order": 1
+              },
+              {
+                "id": 2,
+                "slug": "하이브리드",
+                "link": "/bicycles/style/sports/hybrid",
+                "order": 2
+              },
+              {
+                "id": 3,
+                "slug": "컴포트 산악형",
+                "link": "/bicycles/style/sports/comfort",
+                "order": 3
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "slug": "라이프스타일",
+            "link": "/bicycles/style/style/lifestyle",
+            "type": "group",
+            "order": 3,
+            "items": [
+              {
+                "id": 1,
+                "slug": "픽시",
+                "link": "/bicycles/style/lifestyle/fixie",
+                "order": 1
+              },
+              {
+                "id": 2,
+                "slug": "시티",
+                "link": "/bicycles/style/lifestyle/city",
+                "order": 2
+              },
+              {
+                "id": 3,
+                "slug": "폴딩",
+                "link": "/bicycles/style/lifestyle/folding",
+                "order": 3
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "slug": "주니어, 키즈",
+            "link": "/bicycles/style/junior-kids",
+            "type": "group",
+            "order": 4,
+            "items": [
+              {
+                "id": 1,
+                "slug": "주니어",
+                "link": "/bicycles/style/junior-kids/junior",
+                "order": 1
+              },
+              {
+                "id": 2,
+                "slug": "키즈",
+                "link": "/bicycles/style/junior-kids/kids",
+                "order": 2
+              }
+            ]
+          }
+        ]
       },
       {
         "id": 2,
-        "slug": "로드",
-        "link": "/bicycles/road",
-        "order": 2
-      },
-      {
-        "id": 3,
-        "slug": "하이브리드",
-        "link": "/bicycles/hybrid",
-        "order": 3
-      },
-      {
-        "id": 4,
-        "slug": "픽시",
-        "link": "/bicycles/city",
-        "order": 4
-      },
-      {
-        "id": 5,
-        "slug": "컴포트 산악형",
-        "link": "/bicycles/comfort",
-        "order": 5
-      },
-      {
-        "id": 6,
-        "slug": "시티",
-        "link": "/bicycles/city",
-        "order": 6
-      },
-      {
-        "id": 7,
-        "slug": "폴딩",
-        "link": "/bicycles/folding",
-        "order": 7
-      },
-      {
-        "id": 8,
-        "slug": "키즈",
-        "link": "/bicycles/kids",
-        "order": 8
-      },
-      {
-        "id": 9,
-        "slug": "주니어",
-        "link": "/bicycles/junior",
-        "order": 9
+        "slug": "브랜드",
+        "link": "/bicycles/brand",
+        "type": "group",
+        "order": 2,
+        "items": [
+          {
+            "id": 1,
+            "slug": "팬텀",
+            "link": "/bicycles/brand/phantom",
+            "type": "single",
+            "order": 1
+          },
+          {
+            "id": 2,
+            "slug": "아팔란치아",
+            "link": "/bicycles/brand/appalachian",
+            "type": "single",
+            "order": 2
+          },
+          {
+            "id": 3,
+            "slug": "레스포",
+            "link": "/bicycles/brand/lespo",
+            "type": "single",
+            "order": 3
+          }
+        ]
       }
     ]
   },
@@ -73,31 +148,29 @@
         "id": 1,
         "slug": "헬멧",
         "link": "/products/helmet",
+        "type": "single",
         "order": 1
       },
       {
         "id": 2,
         "slug": "자전거 보호대",
         "link": "/products/protective-gear",
+        "type": "single",
         "order": 2
       },
       {
         "id": 3,
         "slug": "자전거 바구니",
         "link": "/products/bicycle-basket",
+        "type": "single",
         "order": 3
       },
       {
         "id": 4,
         "slug": "자전거 체인",
         "link": "/products/bicycle-chain",
+        "type": "single",
         "order": 4
-      },
-      {
-        "id": 5,
-        "slug": "자전거 타이어",
-        "link": "/products/bicycle-tire",
-        "order": 5
       }
     ]
   },
@@ -112,12 +185,14 @@
         "id": 1,
         "slug": "블로그 리뷰",
         "link": "/blog",
+        "type": "single",
         "order": 1
       },
       {
         "id": 2,
         "slug": "공지사항",
         "link": "/notice",
+        "type": "single",
         "order": 2
       }
     ]
