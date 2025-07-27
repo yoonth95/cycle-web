@@ -64,48 +64,55 @@
       },
       {
         "order": 2,
-        "title": "로드",
-        "description": "빠른 속도와 효율적인 주행을 위한 자전거",
+        "title": "산악",
+        "description": "산악지형이나 험로에서 다이내믹한 라이딩이 가능한 오프로드 자전거",
         "image": "/bike.png"
       },
       {
         "order": 3,
+        "title": "로드",
+        "description": "빠른 속도와 효율적인 주행을 위한 자전거",
+        "image": "/bike.png"
+      },
+
+      {
+        "order": 4,
         "title": "하이브리드",
         "description": "도시와 자연을 모두 누릴 수 있는 다목적 자전거",
         "image": "/bike.png"
       },
       {
-        "order": 4,
+        "order": 5,
         "title": "픽시",
         "description": "심플하고 스타일리시한 고정기어 자전거",
         "image": "/bike.png"
       },
       {
-        "order": 5,
+        "order": 6,
         "title": "컴포트 산악형",
         "description": "편안한 승차감의 산악 자전거",
         "image": "/bike.png"
       },
       {
-        "order": 6,
+        "order": 7,
         "title": "시티",
         "description": "도심 주행에 최적화된 편리한 자전거",
         "image": "/bike.png"
       },
       {
-        "order": 7,
+        "order": 8,
         "title": "폴딩",
         "description": "휴대성이 뛰어난 접이식 자전거",
         "image": "/bike.png"
       },
       {
-        "order": 8,
+        "order": 9,
         "title": "키즈",
         "description": "아이들을 위한 안전하고 재미있는 자전거",
         "image": "/bike.png"
       },
       {
-        "order": 9,
+        "order": 10,
         "title": "주니어",
         "description": "청소년을 위한 성장기 맞춤 자전거",
         "image": "/bike.png"
