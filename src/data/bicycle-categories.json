@@ -1,0 +1,95 @@
+{
+  "smart-mobility": {
+    "title": "스마트 모빌리티",
+    "description": "친환경적이고 효율적인 미래의 이동수단",
+    "subcategories": [
+      {
+        "id": "all",
+        "name": "전체",
+        "description": "모든 스마트 모빌리티 제품",
+        "isDefault": true
+      },
+      {
+        "id": "electric",
+        "name": "전기자전거",
+        "description": "친환경 전기 자전거로 편리한 이동"
+      }
+    ]
+  },
+  "sports": {
+    "title": "스포츠",
+    "description": "활동적인 라이프스타일을 위한 고성능 자전거",
+    "subcategories": [
+      {
+        "id": "all",
+        "name": "전체",
+        "description": "모든 스포츠 자전거",
+        "isDefault": true
+      },
+      {
+        "id": "road",
+        "name": "로드",
+        "description": "빠른 속도와 효율적인 페달링을 위한 로드바이크"
+      },
+      {
+        "id": "hybrid",
+        "name": "하이브리드",
+        "description": "도심과 야외 모두에서 활용 가능한 만능 자전거"
+      },
+      {
+        "id": "comfort",
+        "name": "컴포트 산악형",
+        "description": "편안한 승차감의 산악 자전거"
+      }
+    ]
+  },
+  "lifestyle": {
+    "title": "라이프스타일",
+    "description": "일상을 더욱 특별하게 만드는 감성 자전거",
+    "subcategories": [
+      {
+        "id": "all",
+        "name": "전체",
+        "description": "모든 라이프스타일 자전거",
+        "isDefault": true
+      },
+      {
+        "id": "fixie",
+        "name": "픽시",
+        "description": "심플하고 세련된 고정기어 자전거"
+      },
+      {
+        "id": "city",
+        "name": "시티",
+        "description": "도시에서의 편리한 일상 이동수단"
+      },
+      {
+        "id": "folding",
+        "name": "폴딩",
+        "description": "접어서 보관하기 편리한 폴딩 자전거"
+      }
+    ]
+  },
+  "junior-kids": {
+    "title": "주니어, 키즈",
+    "description": "안전하고 재미있는 어린이 전용 자전거",
+    "subcategories": [
+      {
+        "id": "all",
+        "name": "전체",
+        "description": "모든 주니어, 키즈 자전거",
+        "isDefault": true
+      },
+      {
+        "id": "junior",
+        "name": "주니어",
+        "description": "성장하는 아이들을 위한 주니어 자전거"
+      },
+      {
+        "id": "kids",
+        "name": "키즈",
+        "description": "어린이의 안전을 최우선으로 하는 키즈 자전거"
+      }
+    ]
+  }
+}
