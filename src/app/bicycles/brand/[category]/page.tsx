@@ -211,19 +211,47 @@ export default function BrandCategoryPage({ params }: PageProps) {
 
       {/* Other Brands Quick Links */}
       <div className="rounded-lg bg-gray-50 p-4">
-        <h3 className="mb-3 font-bold text-gray-900">다른 브랜드</h3>
+        <h3 className="mb-3 font-bold text-gray-900">브랜드별 카테고리</h3>
         <div className="space-y-2">
-          {Object.entries(brandData)
-            .filter(([key]) => key !== params.category)
-            .map(([key, value]) => (
-              <Link
-                key={key}
-                href={`/bicycles/brand/${key}`}
-                className="block rounded-md p-2 text-sm text-gray-600 transition-colors hover:bg-white hover:text-gray-900"
-              >
-                {value.name}
-              </Link>
-            ))}
+          {Object.entries(brandData).map(([key, value]) => {
+            const isActive = key === params.category;
+
+            return (
+              <div key={key}>
+                {isActive ? (
+                  // 현재 활성화된 브랜드
+                  <div className="flex items-center justify-between rounded-lg border border-red-200 bg-red-50 p-3 shadow-sm">
+                    <div className="flex-1">
+                      <span className="font-medium text-red-700">{value.name}</span>
+                      <p className="mt-1 text-xs text-red-600">
+                        {value.description.slice(0, 30)}...
+                      </p>
+                    </div>
+                    <Badge variant="secondary" className="bg-red-100 text-xs text-red-700">
+                      현재
+                    </Badge>
+                  </div>
+                ) : (
+                  // 다른 브랜드 (링크)
+                  <Link href={`/bicycles/brand/${key}`} className="block">
+                    <div className="rounded-md p-3 text-sm text-gray-600 transition-colors hover:bg-white hover:text-red-600 hover:shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium text-gray-900">{value.name}</div>
+                          <div className="mt-1 text-xs text-gray-600">
+                            {value.description.slice(0, 30)}...
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {value.totalProducts}개
+                        </Badge>
+                      </div>
+                    </div>
+                  </Link>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
