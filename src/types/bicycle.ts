@@ -35,3 +35,14 @@ export interface BicycleData {
 export interface CategoryConfig {
   [key: string]: CategoryData;
 }
+
+// 필터 관련 타입들
+export interface PriceRange {
+  min: number;
+  max: number;
+  label: string;
+}
+
+export interface BicycleFilters {
+  priceRanges: string[];
+}
