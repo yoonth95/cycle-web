@@ -3,18 +3,20 @@ import Image from "next/image";
 
 export const Logo = () => {
   return (
-    <Link href="/" className="flex items-center gap-3 cursor-pointer">
-      <div className="w-10 h-10 rounded flex items-center justify-center">
+    <Link href="/" className="flex cursor-pointer items-center gap-3">
+      <div className="flex h-10 w-10 items-center justify-center rounded">
         <Image
           src="/logo-white.png"
           alt="삼천리 자전거 중동역점"
           width={40}
           height={40}
           priority
-          className="w-10 h-10 object-contain"
+          className="h-10 w-10 object-contain"
         />
       </div>
-      <h1 className="w-max heading-5 font-bold text-white">삼천리 자전거 중동역점</h1>
+      <h1 className="heading-5 hidden w-max font-bold text-white [@media(min-width:375px)]:block">
+        삼천리 자전거 중동역점
+      </h1>
     </Link>
   );
 };
