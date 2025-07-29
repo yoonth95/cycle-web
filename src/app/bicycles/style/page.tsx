@@ -63,7 +63,7 @@ export default function StylePage() {
                       {category.subcategories.map((sub, index) => (
                         <Link
                           key={index}
-                          href={`/bicycles/style/${category.slug}/${sub.slug}`}
+                          href={`/bicycles/style/${category.slug}?tab=${sub.slug}`}
                           className="hover:bg-figma-cinderella flex items-center justify-between rounded-lg bg-gray-50 p-2 transition-colors sm:p-3"
                         >
                           <span className="text-xs text-gray-700 sm:text-xs md:text-sm">
