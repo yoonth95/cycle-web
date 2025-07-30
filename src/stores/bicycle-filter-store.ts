@@ -1,36 +1,40 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { Bicycle, BicycleFilters } from "@/types/bicycle";
-import { applyFilters, getInitialFilters } from "@/utils/bicycle-data";
+import { Bicycle, BicycleFilters, FilterStats } from "@/types/bicycle";
+// import { applyFilters, getInitialFilters, checkHasActiveFilters } from "@/utils/bicycle-data";
 
 interface BicycleFilterState {
-  // 상태
-  filters: BicycleFilters;
+  // 기본 데이터
   initialBicycles: Record<string, Bicycle[]>;
-
-  // 계산된 값들
   currentBicycles: Bicycle[];
-  filteredBicycles: Bicycle[];
-  hasActiveFilters: boolean;
-  filterStats: { total: number; filtered: number; hidden: number };
 
-  // 액션들
+  // 필터 관련 (향후 확장용)
+  filters?: BicycleFilters;
+  filteredBicycles?: Bicycle[];
+  hasActiveFilters?: boolean;
+  filterStats?: FilterStats;
+
+  // 기본 액션들
   setInitialData: (bicycles: Record<string, Bicycle[]>) => void;
-  updateSubcategory: (subcategoryId: string) => void; // URL 변경에 반응
-  setPriceRanges: (priceRanges: string[]) => void;
-  resetFilters: () => void;
+  updateSubcategory: (subcategoryId: string) => void;
+
+  // 필터 액션들 (향후 확장용)
+  // setPriceRanges?: (priceRanges: string[]) => void;
+  // resetFilters?: () => void;
 }
 
 export const useBicycleFilterStore = create<BicycleFilterState>()(
   devtools(
     (set, get) => ({
       // 초기 상태
-      filters: getInitialFilters(),
       initialBicycles: {},
       currentBicycles: [],
-      filteredBicycles: [],
-      hasActiveFilters: false,
-      filterStats: { total: 0, filtered: 0, hidden: 0 },
+
+      // 필터 초기화 (향후 확장용 - 필요시 주석 해제)
+      // filters: getInitialFilters(),
+      // filteredBicycles: [],
+      // hasActiveFilters: false,
+      // filterStats: { total: 0, filtered: 0, hidden: 0 },
 
       // 초기 데이터 설정
       setInitialData: (bicycles) => {
@@ -43,20 +47,26 @@ export const useBicycleFilterStore = create<BicycleFilterState>()(
       updateSubcategory: (subcategoryId) => {
         const state = get();
         const currentBicycles = state.initialBicycles[subcategoryId] || [];
-        const filteredBicycles = applyFilters(currentBicycles, state.filters);
+
+        // 필터 적용 로직 (향후 활성화시 주석 해제)
+        // const filteredBicycles = state.filters
+        //   ? applyFilters(currentBicycles, state.filters)
+        //   : currentBicycles;
 
         set({
           currentBicycles,
-          filteredBicycles,
-          filterStats: {
-            total: currentBicycles.length,
-            filtered: filteredBicycles.length,
-            hidden: currentBicycles.length - filteredBicycles.length,
-          },
+          // 필터링 결과 업데이트 (향후 활성화시 주석 해제)
+          // filteredBicycles,
+          // filterStats: state.filters ? {
+          //   total: currentBicycles.length,
+          //   filtered: filteredBicycles.length,
+          //   hidden: currentBicycles.length - filteredBicycles.length,
+          // } : undefined,
         });
       },
 
-      // 가격 범위 설정
+      // 필터 액션들 (향후 확장시 주석 해제)
+      /*
       setPriceRanges: (priceRanges) => {
         const state = get();
         const newFilters = { ...state.filters, priceRanges };
@@ -74,7 +84,6 @@ export const useBicycleFilterStore = create<BicycleFilterState>()(
         });
       },
 
-      // 필터 초기화
       resetFilters: () => {
         const state = get();
         const newFilters = getInitialFilters();
@@ -91,6 +100,7 @@ export const useBicycleFilterStore = create<BicycleFilterState>()(
           },
         });
       },
+      */
     }),
     {
       name: "bicycle-filter-store",
@@ -98,8 +108,10 @@ export const useBicycleFilterStore = create<BicycleFilterState>()(
   ),
 );
 
-// 필터가 활성화되어 있는지 확인하는 헬퍼 함수
-const checkHasActiveFilters = (filters: BicycleFilters): boolean => {
-  const { priceRanges } = filters;
-  return priceRanges.length > 0;
-};
+// 필터 기능 활성화 가이드
+/*
+필터 기능을 활성화하려면:
+1. 위의 주석된 필터 관련 코드들을 해제
+2. utils/bicycle-data.ts의 필터 함수들 주석 해제
+3. 컴포넌트에서 필터 관련 props 활성화
+*/

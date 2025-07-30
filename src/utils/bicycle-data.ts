@@ -1,4 +1,4 @@
-import { Bicycle, BicycleData, CategoryConfig, BicycleFilters, PriceRange } from "@/types/bicycle";
+import { Bicycle, BicycleData, CategoryConfig } from "@/types/bicycle";
 import bicycleProducts from "@/data/bicycle-products.json";
 import bicycleCategories from "@/data/bicycle-categories.json";
 
@@ -53,6 +53,8 @@ export function getAllSubcategoriesWithCounts(category: string) {
   }));
 }
 
+// 필터 관련 유틸 함수들 (확장성을 위해 보존, 현재 주석 처리)
+/*
 // 가격 문자열을 숫자로 변환하는 함수
 export const parsePrice = (priceString: string): number => {
   return parseInt(priceString.replace(/[^0-9]/g, ""));
@@ -88,3 +90,10 @@ export const applyFilters = (bicycles: Bicycle[], filters: BicycleFilters): Bicy
 export const getInitialFilters = (): BicycleFilters => ({
   priceRanges: [],
 });
+
+// 필터가 활성화되어 있는지 확인하는 헬퍼 함수
+export const checkHasActiveFilters = (filters: BicycleFilters): boolean => {
+  const { priceRanges } = filters;
+  return priceRanges.length > 0;
+};
+*/

@@ -38,7 +38,6 @@ const BicycleCard = ({ bike }: { bike: Bicycle }) => (
         <h3 className="mb-2 text-lg font-bold transition-colors group-hover:text-red-600 lg:text-xl">
           {bike.name}
         </h3>
-        <p className="mb-2 text-xl font-bold text-gray-900 lg:text-2xl">{bike.price}</p>
 
         {/* Specifications */}
         <div className="mb-4 space-y-2">
