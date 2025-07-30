@@ -15,7 +15,7 @@
         "items": [
           {
             "id": 1,
-            "slug": "스마트 모빌리티",
+            "slug": "전기자전거",
             "link": "/bicycles/style/smart-mobility",
             "type": "group",
             "order": 1,
@@ -49,7 +49,7 @@
               },
               {
                 "id": 3,
-                "slug": "컴포트 산악형",
+                "slug": "생활용 MTB",
                 "link": "comfort",
                 "order": 3
               }
@@ -84,7 +84,7 @@
           },
           {
             "id": 4,
-            "slug": "주니어, 키즈",
+            "slug": "주니어, 아동용",
             "link": "/bicycles/style/junior-kids",
             "type": "group",
             "order": 4,
@@ -97,41 +97,11 @@
               },
               {
                 "id": 2,
-                "slug": "키즈",
+                "slug": "아동용",
                 "link": "kids",
                 "order": 2
               }
             ]
-          }
-        ]
-      },
-      {
-        "id": 2,
-        "slug": "브랜드",
-        "link": "/bicycles/brand",
-        "type": "group",
-        "order": 2,
-        "items": [
-          {
-            "id": 1,
-            "slug": "팬텀",
-            "link": "/bicycles/brand/phantom",
-            "type": "single",
-            "order": 1
-          },
-          {
-            "id": 2,
-            "slug": "아팔란치아",
-            "link": "/bicycles/brand/appalachian",
-            "type": "single",
-            "order": 2
-          },
-          {
-            "id": 3,
-            "slug": "레스포",
-            "link": "/bicycles/brand/lespo",
-            "type": "single",
-            "order": 3
           }
         ]
       }
@@ -146,31 +116,9 @@
     "items": [
       {
         "id": 1,
-        "slug": "헬멧",
-        "link": "/products/helmet",
-        "type": "single",
+        "slug": "악세사리",
+        "link": "accessories",
         "order": 1
-      },
-      {
-        "id": 2,
-        "slug": "자전거 보호대",
-        "link": "/products/protective-gear",
-        "type": "single",
-        "order": 2
-      },
-      {
-        "id": 3,
-        "slug": "자전거 바구니",
-        "link": "/products/bicycle-basket",
-        "type": "single",
-        "order": 3
-      },
-      {
-        "id": 4,
-        "slug": "자전거 체인",
-        "link": "/products/bicycle-chain",
-        "type": "single",
-        "order": 4
       }
     ]
   },

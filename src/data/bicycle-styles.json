@@ -3,7 +3,7 @@
     {
       "id": "smart-mobility",
       "slug": "smart-mobility",
-      "title": "스마트 모빌리티",
+      "title": "전기자전거",
       "description": "친환경적이고 효율적인 미래의 이동수단",
       "image": "/bike.png",
       "totalCount": 26,
@@ -34,7 +34,7 @@
           "slug": "hybrid"
         },
         {
-          "name": "컴포트 산악형",
+          "name": "생활용 MTB",
           "count": 15,
           "slug": "comfort"
         }
@@ -68,7 +68,7 @@
     {
       "id": "junior-kids",
       "slug": "junior-kids",
-      "title": "주니어, 키즈",
+      "title": "주니어, 아동용",
       "description": "안전하고 재미있는 어린이 전용 자전거",
       "image": "/bike.png",
       "totalCount": 25,
@@ -79,7 +79,7 @@
           "slug": "junior"
         },
         {
-          "name": "키즈",
+          "name": "아동용",
           "count": 10,
           "slug": "kids"
         }

@@ -17,23 +17,19 @@ import { Home } from "lucide-react";
 const pathLabels: Record<string, string> = {
   bicycles: "자전거",
   style: "스타일",
-  brand: "브랜드",
-  "smart-mobility": "스마트 모빌리티",
+  "smart-mobility": "전기자전거",
   sports: "스포츠",
   lifestyle: "라이프스타일",
-  "junior-kids": "주니어, 키즈",
-  phantom: "팬텀",
-  appalachian: "아팔란치아",
-  lespo: "레스포",
+  "junior-kids": "주니어, 아동용",
   electric: "전기자전거",
   road: "로드",
   hybrid: "하이브리드",
-  comfort: "컴포트 산악형",
+  comfort: "생활용 MTB",
   fixie: "픽시",
   city: "시티",
   folding: "폴딩",
   junior: "주니어",
-  kids: "키즈",
+  kids: "아동용",
 };
 
 const DynamicBreadcrumb = () => {
