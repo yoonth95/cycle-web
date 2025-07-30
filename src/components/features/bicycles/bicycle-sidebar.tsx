@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import bicycleStylesData from "@/data/bicycle-styles.json";
-import bicycleBrandsData from "@/data/bicycle-brands.json";
 
 interface BicycleSidebarProps {
   pageType: "style";
@@ -18,8 +17,7 @@ interface BicycleSidebarProps {
 
 const BicycleSidebar = ({ pageType, currentCategory }: BicycleSidebarProps) => {
   // 페이지 타입에 따라 적절한 카테고리 데이터 가져오기
-  const categories =
-    pageType === "style" ? bicycleStylesData.styleCategories : bicycleBrandsData.brandCategories;
+  const categories = bicycleStylesData.styleCategories;
 
   return (
     <div className="flex flex-col gap-4">
