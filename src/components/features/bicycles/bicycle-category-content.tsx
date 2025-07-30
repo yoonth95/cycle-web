@@ -11,7 +11,7 @@ interface BicycleCategoryContentProps {
   categoryData: CategoryData;
   subcategories: SubcategoryInfo[];
   initialBicycles: Record<string, Bicycle[]>;
-  pageType: "style" | "brand";
+  pageType: "style";
 }
 
 export default function BicycleCategoryContent({
@@ -36,16 +36,7 @@ export default function BicycleCategoryContent({
   const activeSubcategory = searchParams.get("tab") || defaultSubcategory;
 
   // Zustand 스토어 사용
-  const {
-    filters,
-    filteredBicycles,
-    hasActiveFilters,
-    filterStats,
-    setInitialData,
-    updateSubcategory,
-    setPriceRanges,
-    resetFilters,
-  } = useBicycleFilterStore();
+  const { currentBicycles, setInitialData, updateSubcategory } = useBicycleFilterStore();
 
   // 컴포넌트 마운트 시 초기 데이터 설정
   useEffect(() => {
@@ -62,27 +53,15 @@ export default function BicycleCategoryContent({
       <div className="flex gap-8">
         {/* Mobile Filter Button */}
         <div className="fixed right-6 bottom-6 z-50 lg:hidden">
-          <MobileBicycleSidebar
-            pageType={pageType}
-            currentCategory={category}
-            filters={filters}
-            hasActiveFilters={hasActiveFilters}
-            onPriceRangeChange={setPriceRanges}
-            onResetFilters={resetFilters}
-          />
+          {/* 필터 props는 나중에 활성화시 추가 예정 */}
+          <MobileBicycleSidebar pageType={pageType} currentCategory={category} />
         </div>
 
         {/* Desktop Sidebar */}
         <div className="hidden w-80 flex-shrink-0 lg:block">
           <div className="sticky top-24">
-            <BicycleSidebar
-              pageType={pageType}
-              currentCategory={category}
-              filters={filters}
-              hasActiveFilters={hasActiveFilters}
-              onPriceRangeChange={setPriceRanges}
-              onResetFilters={resetFilters}
-            />
+            {/* 필터 props는 나중에 활성화시 추가 예정 */}
+            <BicycleSidebar pageType={pageType} currentCategory={category} />
           </div>
         </div>
 
@@ -100,10 +79,8 @@ export default function BicycleCategoryContent({
           <BicycleSubcategoryTab
             subcategories={subcategories}
             initialBicycles={initialBicycles}
-            filteredBicycles={filteredBicycles}
+            currentBicycles={currentBicycles}
             activeSubcategory={activeSubcategory}
-            hasActiveFilters={hasActiveFilters}
-            filterStats={filterStats}
           />
         </div>
       </div>

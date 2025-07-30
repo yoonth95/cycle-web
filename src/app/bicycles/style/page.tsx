@@ -35,13 +35,6 @@ export default function StylePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-                  {/* Total Count Badge */}
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-white/90 text-xs text-gray-900 sm:text-sm">
-                      총 {category.totalCount}개
-                    </Badge>
-                  </div>
-
                   {/* Category Title on Image */}
                   <div className="absolute right-4 bottom-4 left-4">
                     <h2 className="mb-1 text-sm font-bold text-white sm:text-base lg:text-lg">
@@ -64,12 +57,11 @@ export default function StylePage() {
                         <Link
                           key={index}
                           href={`/bicycles/style/${category.slug}?tab=${sub.slug}`}
-                          className="hover:bg-figma-cinderella flex items-center justify-between rounded-lg bg-gray-50 p-2 transition-colors sm:p-3"
+                          className="hover:bg-figma-cinderella flex items-center justify-center rounded-lg bg-gray-50 p-2 transition-colors sm:p-3"
                         >
                           <span className="text-xs text-gray-700 sm:text-xs md:text-sm">
                             {sub.name}
                           </span>
-                          <span className="text-[10px] sm:text-xs">{sub.count}개</span>
                         </Link>
                       ))}
                     </div>

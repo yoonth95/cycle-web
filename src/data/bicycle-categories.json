@@ -1,12 +1,12 @@
 {
   "smart-mobility": {
-    "title": "스마트 모빌리티",
+    "title": "전기자전거",
     "description": "친환경적이고 효율적인 미래의 이동수단",
     "subcategories": [
       {
         "id": "all",
         "name": "전체",
-        "description": "모든 스마트 모빌리티 제품",
+        "description": "모든 전기자전거 제품",
         "isDefault": true
       },
       {
@@ -38,7 +38,7 @@
       },
       {
         "id": "comfort",
-        "name": "컴포트 산악형",
+        "name": "생활용 MTB",
         "description": "편안한 승차감의 산악 자전거"
       }
     ]
@@ -71,13 +71,13 @@
     ]
   },
   "junior-kids": {
-    "title": "주니어, 키즈",
+    "title": "주니어, 아동용",
     "description": "안전하고 재미있는 어린이 전용 자전거",
     "subcategories": [
       {
         "id": "all",
         "name": "전체",
-        "description": "모든 주니어, 키즈 자전거",
+        "description": "모든 주니어, 아동용 자전거",
         "isDefault": true
       },
       {
@@ -87,8 +87,8 @@
       },
       {
         "id": "kids",
-        "name": "키즈",
-        "description": "어린이의 안전을 최우선으로 하는 키즈 자전거"
+        "name": "아동용",
+        "description": "어린이의 안전을 최우선으로 하는 아동용 자전거"
       }
     ]
   }
