@@ -15,23 +15,10 @@ export default function BicyclesPage() {
       link: "/bicycles/style",
       image: "/main-image.png",
       items: [
-        { name: "스마트 모빌리티", count: 26 },
+        { name: "전기자전거", count: 26 },
         { name: "스포츠", count: 50 },
         { name: "라이프스타일", count: 40 },
-        { name: "주니어, 키즈", count: 25 },
-      ],
-    },
-    {
-      id: "brand",
-      title: "브랜드별",
-      description: "신뢰할 수 있는 브랜드의 자전거를 만나보세요",
-      icon: Award,
-      link: "/bicycles/brand",
-      image: "/bike.png",
-      items: [
-        { name: "팬텀", count: 48 },
-        { name: "아팔란치아", count: 32 },
-        { name: "레스포", count: 31 },
+        { name: "주니어, 아동용", count: 25 },
       ],
     },
   ];
@@ -44,7 +31,8 @@ export default function BicyclesPage() {
       />
 
       {/* Categories */}
-      <div className="grid gap-8 lg:grid-cols-2">
+      {/* <div className="grid gap-8 lg:grid-cols-2"> */}
+      <div className="flex items-center justify-center">
         {categories.map((category) => (
           <Card
             key={category.id}
@@ -57,29 +45,32 @@ export default function BicyclesPage() {
                   alt={category.title}
                   width={600}
                   height={300}
-                  className="h-64 w-full object-cover transition-transform group-hover:scale-105"
+                  className="h-64 w-[30rem] object-cover transition-transform group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/30 transition-opacity group-hover:bg-black/40" />
                 <div className="absolute top-6 left-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90">
-                    <category.icon className="h-6 w-6 text-red-600" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 sm:h-12 sm:w-12">
+                    <category.icon className="h-4 w-4 text-red-600 sm:h-6 sm:w-6" />
                   </div>
                 </div>
               </div>
 
               <div className="p-6">
-                <h2 className="mb-2 text-2xl font-bold text-gray-900">{category.title}</h2>
-                <p className="mb-4 text-gray-600">{category.description}</p>
+                <h2 className="mb-2 text-xl font-bold text-gray-900 sm:text-2xl">
+                  {category.title}
+                </h2>
+                <p className="mb-4 text-xs text-gray-600 sm:text-base">{category.description}</p>
 
                 {/* Category Items */}
                 <div className="mb-6 grid grid-cols-2 gap-3">
                   {category.items.map((item, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
+                      className="flex items-center justify-center rounded-lg bg-gray-50 p-3"
                     >
-                      <span className="text-sm font-medium text-gray-700">{item.name}</span>
-                      <span className="text-xs text-gray-500">{item.count}개</span>
+                      <span className="text-xs font-medium text-gray-700 sm:text-sm">
+                        {item.name}
+                      </span>
                     </div>
                   ))}
                 </div>
