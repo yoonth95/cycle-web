@@ -23,7 +23,7 @@
               {
                 "id": 1,
                 "slug": "전기자전거",
-                "link": "/bicycles/style/smart-mobility/electric",
+                "link": "electric",
                 "order": 1
               }
             ]
@@ -38,19 +38,19 @@
               {
                 "id": 1,
                 "slug": "로드",
-                "link": "/bicycles/style/sports/road",
+                "link": "road",
                 "order": 1
               },
               {
                 "id": 2,
                 "slug": "하이브리드",
-                "link": "/bicycles/style/sports/hybrid",
+                "link": "hybrid",
                 "order": 2
               },
               {
                 "id": 3,
                 "slug": "컴포트 산악형",
-                "link": "/bicycles/style/sports/comfort",
+                "link": "comfort",
                 "order": 3
               }
             ]
@@ -58,26 +58,26 @@
           {
             "id": 3,
             "slug": "라이프스타일",
-            "link": "/bicycles/style/style/lifestyle",
+            "link": "/bicycles/style/lifestyle",
             "type": "group",
             "order": 3,
             "items": [
               {
                 "id": 1,
                 "slug": "픽시",
-                "link": "/bicycles/style/lifestyle/fixie",
+                "link": "fixie",
                 "order": 1
               },
               {
                 "id": 2,
                 "slug": "시티",
-                "link": "/bicycles/style/lifestyle/city",
+                "link": "city",
                 "order": 2
               },
               {
                 "id": 3,
                 "slug": "폴딩",
-                "link": "/bicycles/style/lifestyle/folding",
+                "link": "folding",
                 "order": 3
               }
             ]
@@ -92,13 +92,13 @@
               {
                 "id": 1,
                 "slug": "주니어",
-                "link": "/bicycles/style/junior-kids/junior",
+                "link": "junior",
                 "order": 1
               },
               {
                 "id": 2,
                 "slug": "키즈",
-                "link": "/bicycles/style/junior-kids/kids",
+                "link": "kids",
                 "order": 2
               }
             ]
