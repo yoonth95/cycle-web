@@ -3,9 +3,17 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { sortSubItems } from "@/utils/navigation-utils";
-import { NavigationItem, NavigationCategoryItem, NavigationSubItem } from "@/types/navigation-data";
+import { useNavigationStore } from "@/stores/navigation-store";
+import { NavigationItem, NavigationCategoryItem } from "@/types/navigation-data";
 
-const HoverDropdownMenu = ({ menuItem }: { menuItem: NavigationItem }) => {
+interface HoverDropdownMenuProps {
+  menuItem: NavigationItem;
+}
+
+const HoverDropdownMenu = ({ menuItem }: HoverDropdownMenuProps) => {
+  const activeDropdownId = useNavigationStore((state) => state.activeDropdownId);
+  const isActive = activeDropdownId === menuItem.id.toString();
+
   return (
     <>
       {menuItem.type === "group" && (
@@ -13,8 +21,9 @@ const HoverDropdownMenu = ({ menuItem }: { menuItem: NavigationItem }) => {
           className={cn(
             "absolute top-full left-0 z-40 w-full bg-white text-gray-800 shadow-lg",
             "transition-all duration-300 ease-out",
-            "pointer-events-none opacity-0",
-            "group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100",
+            isActive
+              ? "pointer-events-auto translate-y-0 opacity-100"
+              : "pointer-events-none opacity-0",
             "cursor-default",
           )}
         >
@@ -51,16 +60,24 @@ const HoverDropdownMenu = ({ menuItem }: { menuItem: NavigationItem }) => {
                             </h3>
                             <ul className="ml-4 space-y-1">
                               {subCategoryItem.items &&
-                                sortSubItems(subCategoryItem.items).map((item) => (
-                                  <li key={item.id}>
-                                    <Link
-                                      href={item.link}
-                                      className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-1 pl-2 text-sm text-gray-600 transition-colors duration-200"
-                                    >
-                                      {item.slug}
-                                    </Link>
-                                  </li>
-                                ))}
+                                sortSubItems(subCategoryItem.items).map((item) => {
+                                  // URL 생성 시 안전한 방식 사용
+                                  const baseUrl = subCategoryItem.link || "";
+                                  const tabParam = item.link || "";
+                                  const href =
+                                    baseUrl && tabParam ? `${baseUrl}?tab=${tabParam}` : "#";
+
+                                  return (
+                                    <li key={item.id}>
+                                      <Link
+                                        href={href}
+                                        className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-1 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                                      >
+                                        {item.slug}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
                             </ul>
                           </div>
                         ))}
