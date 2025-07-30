@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { sortSubItems } from "@/utils/navigation-utils";
 import { FullMenuProps } from "@/types/navigation-props";
-import { NavigationCategoryItem, NavigationSubItem } from "@/types/navigation-data";
+import { NavigationCategoryItem } from "@/types/navigation-data";
 
 const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
   return (
@@ -31,12 +32,12 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                       className="border-b border-gray-200 pb-1 text-lg font-bold"
                       whileHover={{ scale: 1.02 }}
                     >
-                      <a
+                      <Link
                         href={mainCategory.link}
                         className="text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
                       >
                         {mainCategory.slug}
-                      </a>
+                      </Link>
                     </motion.h1>
                     {mainCategory.type === "single" ? (
                       // 단일 메뉴 (오시는길, 문의사항)
@@ -46,13 +47,14 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                         transition={{ duration: 0.3, delay: mainIdx * 0.1 }}
                         className="mt-2"
                       >
-                        <motion.a
-                          href={mainCategory.link}
-                          className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
-                          whileHover={{ x: 2 }}
-                        >
-                          바로가기 →
-                        </motion.a>
+                        <motion.div whileHover={{ x: 2 }}>
+                          <Link
+                            href={mainCategory.link}
+                            className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                          >
+                            바로가기 →
+                          </Link>
+                        </motion.div>
                       </motion.div>
                     ) : (
                       mainCategory.type === "group" &&
@@ -86,12 +88,12 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                     className="text-figma-alizarin-crimson text-base font-semibold"
                                     whileHover={{ x: 2 }}
                                   >
-                                    <a
+                                    <Link
                                       href={categoryItem.link || "#"}
                                       className="hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
                                     >
                                       {categoryItem.slug}
-                                    </a>
+                                    </Link>
                                   </motion.h2>
                                   <div className="ml-3 flex flex-col gap-3">
                                     {categoryItem.items &&
@@ -111,12 +113,12 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                               className="text-sm font-medium text-gray-800"
                                               whileHover={{ x: 2 }}
                                             >
-                                              <a
+                                              <Link
                                                 href={subCategoryItem.link}
                                                 className="hover:text-figma-alizarin-crimson transition-colors duration-200"
                                               >
                                                 {subCategoryItem.slug}
-                                              </a>
+                                              </Link>
                                             </motion.h3>
                                             <ul className="ml-2 flex flex-col gap-0.5">
                                               {subCategoryItem.items &&
@@ -135,13 +137,14 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                                           itemIdx * 0.01,
                                                       }}
                                                     >
-                                                      <motion.a
-                                                        href={item.link}
-                                                        className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
-                                                        whileHover={{ x: 2 }}
-                                                      >
-                                                        {item.slug}
-                                                      </motion.a>
+                                                      <motion.div whileHover={{ x: 2 }}>
+                                                        <Link
+                                                          href={`${subCategoryItem.link}?tab=${item.link}`}
+                                                          className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                                                        >
+                                                          {item.slug}
+                                                        </Link>
+                                                      </motion.div>
                                                     </motion.li>
                                                   ),
                                                 )}
@@ -167,13 +170,14 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                       delay: mainIdx * 0.1 + itemIdx * 0.02,
                                     }}
                                   >
-                                    <motion.a
-                                      href={item.link || "#"}
-                                      className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
-                                      whileHover={{ x: 2 }}
-                                    >
-                                      {item.slug}
-                                    </motion.a>
+                                    <motion.div whileHover={{ x: 2 }}>
+                                      <Link
+                                        href={item.link || "#"}
+                                        className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                                      >
+                                        {item.slug}
+                                      </Link>
+                                    </motion.div>
                                   </motion.li>
                                 ),
                               )}

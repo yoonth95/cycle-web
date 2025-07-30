@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { sortSubItems } from "@/utils/navigation-utils";
 import { FullMenuProps } from "@/types/navigation-props";
-import { NavigationCategoryItem, NavigationSubItem } from "@/types/navigation-data";
+import { NavigationCategoryItem } from "@/types/navigation-data";
 
 const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
   const defaultAccordionValue = sortedMenuData?.[0]?.id.toString();
@@ -79,7 +79,7 @@ const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                               sortSubItems(subCategoryItem.items).map((item) => (
                                                 <Link
                                                   key={item.id}
-                                                  href={item.link}
+                                                  href={`${subCategoryItem.link}?tab=${item.link}`}
                                                   className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-1 pl-2 text-sm text-gray-600 transition-colors duration-200"
                                                 >
                                                   {item.slug}

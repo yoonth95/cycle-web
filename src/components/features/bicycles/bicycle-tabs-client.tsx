@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface BicycleTabsClientProps {
@@ -10,32 +9,23 @@ interface BicycleTabsClientProps {
 }
 
 const BicycleTabsClient = ({ subcategories, children }: BicycleTabsClientProps) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
-  // 기본 탭 결정: 데이터의 isDefault 값을 우선 고려, 없으면 "all"로 fallback
-  const defaultTab = useMemo(() => {
-    return (
-      subcategories.find((sub) => sub.isDefault)?.id ||
-      subcategories.find((sub) => sub.id === "all")?.id ||
-      subcategories[0]?.id ||
-      "all"
-    );
-  }, [subcategories]);
+  // 기본 탭 결정: isDefault 우선, 없으면 "all", 그 다음 첫 번째 값, 최종적으로 "all"
+  const defaultTab =
+    subcategories.find((sub) => sub.isDefault)?.id ??
+    subcategories.find((sub) => sub.id === "all")?.id ??
+    subcategories[0]?.id ??
+    "all";
 
   // URL 쿼리스트링에서 현재 탭 가져오기, 기본값은 defaultTab
   const currentTab = searchParams.get("tab") || defaultTab;
 
-  // 탭 변경 시 URL 업데이트
-  const handleTabChange = useCallback(
-    (value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("tab", value);
-      const newUrl = `?${params.toString()}`;
-      router.push(newUrl, { scroll: false });
-    },
-    [router, searchParams],
-  );
+  const handleTabChange = (value: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("tab", value);
+    window.history.pushState(null, "", `?${params.toString()}`);
+  };
 
   return (
     <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
