@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { BicycleTabsClient, BicycleCard } from ".";
+import { BicycleTabsClient, BicycleCard } from "@/components/features/bicycles/category";
 import { Bicycle, SubcategoryInfo } from "@/types/bicycle";
 import { TabsContent } from "@/components/ui/tabs";
 

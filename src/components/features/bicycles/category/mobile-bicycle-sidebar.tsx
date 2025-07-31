@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { BicycleSidebar } from ".";
+import { BicycleSidebar } from "@/components/features/bicycles/category";
 import { Funnel } from "lucide-react";
 
 interface MobileBicycleSidebarProps {
