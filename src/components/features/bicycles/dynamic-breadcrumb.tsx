@@ -12,6 +12,7 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { Home } from "lucide-react";
+import { getBicycleById } from "@/utils/bicycle-data";
 
 // 경로 세그먼트를 한국어 라벨로 매핑
 const pathLabels: Record<string, string> = {
@@ -41,8 +42,17 @@ const DynamicBreadcrumb = () => {
   // breadcrumb 항목들 생성
   const breadcrumbItems = segments.map((segment, index) => {
     const href = "/" + segments.slice(0, index + 1).join("/");
-    const label = pathLabels[segment] || segment;
+    let label = pathLabels[segment] || segment;
     const isLast = index === segments.length - 1;
+
+    // 마지막 세그먼트가 숫자(자전거 ID)인 경우 자전거 이름으로 변경
+    if (isLast && !isNaN(Number(segment))) {
+      const bicycleId = Number(segment);
+      const bicycle = getBicycleById(bicycleId);
+      if (bicycle) {
+        label = bicycle.name;
+      }
+    }
 
     return {
       href,

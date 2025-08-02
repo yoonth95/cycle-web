@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export const Logo = () => {
+const Logo = () => {
   return (
     <Link href="/" className="flex cursor-pointer items-center gap-3">
       <div className="flex h-10 w-10 items-center justify-center rounded">
@@ -20,3 +20,5 @@ export const Logo = () => {
     </Link>
   );
 };
+
+export default Logo;

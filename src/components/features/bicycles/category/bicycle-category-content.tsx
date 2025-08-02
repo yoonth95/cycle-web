@@ -2,7 +2,11 @@
 
 import { useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { BicycleSidebar, BicycleSubcategoryTab, MobileBicycleSidebar } from ".";
+import {
+  BicycleSidebar,
+  BicycleSubcategoryTab,
+  MobileBicycleSidebar,
+} from "@/components/features/bicycles/category";
 import { useBicycleFilterStore } from "@/stores/bicycle-filter-store";
 import { Bicycle, SubcategoryInfo, CategoryData } from "@/types/bicycle";
 
@@ -14,13 +18,13 @@ interface BicycleCategoryContentProps {
   pageType: "style";
 }
 
-export default function BicycleCategoryContent({
+const BicycleCategoryContent = ({
   category,
   categoryData,
   subcategories,
   initialBicycles,
   pageType,
-}: BicycleCategoryContentProps) {
+}: BicycleCategoryContentProps) => {
   const searchParams = useSearchParams();
 
   // URL에서 현재 활성 탭 가져오기
@@ -86,4 +90,6 @@ export default function BicycleCategoryContent({
       </div>
     </div>
   );
-}
+};
+
+export default BicycleCategoryContent;

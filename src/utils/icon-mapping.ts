@@ -11,6 +11,10 @@ import {
   Navigation,
   Map,
   CircleQuestionMark,
+  Home,
+  Search,
+  Bike,
+  ArrowLeft,
   type LucideIcon,
 } from "lucide-react";
 
@@ -33,6 +37,12 @@ const iconMap: Record<string, LucideIcon> = {
   navigation: Navigation,
   map: Map,
   questionMark: CircleQuestionMark,
+
+  // Not Found 페이지 아이콘
+  home: Home,
+  search: Search,
+  bike: Bike,
+  arrowLeft: ArrowLeft,
 };
 
 /**

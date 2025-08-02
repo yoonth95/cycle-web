@@ -53,6 +53,87 @@ export function getAllSubcategoriesWithCounts(category: string) {
   }));
 }
 
+// 매핑 캐시 (성능 최적화)
+let categoryNameToKeyCache: Record<string, string> | null = null;
+let subcategoryNameToKeyCache: Record<string, string> | null = null;
+
+// 동적으로 카테고리 이름을 URL 키로 매핑 (캐시 적용)
+function getCategoryNameToKeyMap(): Record<string, string> {
+  if (!categoryNameToKeyCache) {
+    const config = getCategoryConfig();
+    const mapping: Record<string, string> = {};
+
+    Object.entries(config).forEach(([key, categoryData]) => {
+      mapping[categoryData.title] = key;
+    });
+
+    categoryNameToKeyCache = mapping;
+  }
+
+  return categoryNameToKeyCache;
+}
+
+// 동적으로 서브카테고리 이름을 URL 키로 매핑 (캐시 적용)
+function getSubcategoryNameToKeyMap(): Record<string, string> {
+  if (!subcategoryNameToKeyCache) {
+    const config = getCategoryConfig();
+    const mapping: Record<string, string> = {};
+
+    Object.values(config).forEach((categoryData) => {
+      categoryData.subcategories.forEach((subcategory) => {
+        if (subcategory.id !== "all") {
+          mapping[subcategory.name] = subcategory.id;
+        }
+      });
+    });
+
+    subcategoryNameToKeyCache = mapping;
+  }
+
+  return subcategoryNameToKeyCache;
+}
+
+// 자전거 ID로 자전거 데이터 찾기
+export function getBicycleById(id: number): Bicycle | null {
+  const data = getBicycleData();
+
+  for (const categoryKey in data) {
+    for (const subcategoryKey in data[categoryKey]) {
+      const bicycle = data[categoryKey][subcategoryKey].find((bike) => bike.id === id);
+      if (bicycle) {
+        return bicycle;
+      }
+    }
+  }
+
+  return null;
+}
+
+// 카테고리 이름을 URL 키로 변환 (동적으로 JSON에서 매핑)
+export function getCategoryKey(categoryName: string): string {
+  const categoryMap = getCategoryNameToKeyMap();
+  return categoryMap[categoryName] || categoryName;
+}
+
+// 서브카테고리 이름을 URL 키로 변환 (동적으로 JSON에서 매핑)
+export function getSubcategoryKey(subcategoryName: string): string {
+  const subcategoryMap = getSubcategoryNameToKeyMap();
+  return subcategoryMap[subcategoryName] || subcategoryName;
+}
+
+// 자전거 객체에서 URL path 생성
+export function getBicycleUrlPath(bicycle: Bicycle): string {
+  const categoryKey = getCategoryKey(bicycle.category);
+  const subcategoryKey = getSubcategoryKey(bicycle.subcategory);
+  return `${categoryKey}/${bicycle.id}`;
+}
+
+// 매핑 캐시 초기화 (새로운 데이터 추가 시 사용)
+export function clearMappingCache(): void {
+  categoryNameToKeyCache = null;
+  subcategoryNameToKeyCache = null;
+}
+
 // 필터 관련 유틸 함수들 (확장성을 위해 보존, 현재 주석 처리)
 /*
 // 가격 문자열을 숫자로 변환하는 함수

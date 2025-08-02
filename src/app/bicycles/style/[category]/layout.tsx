@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getCategoryInfo } from "@/utils/bicycle-data";
 
 export async function generateMetadata({
@@ -30,7 +31,7 @@ export default async function StyleCategoryLayout({
   const categoryData = getCategoryInfo(category);
 
   if (!categoryData) {
-    return <div>카테고리를 찾을 수 없습니다.</div>;
+    notFound();
   }
 
   return <>{children}</>;

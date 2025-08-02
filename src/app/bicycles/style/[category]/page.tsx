@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import BicycleCategoryContent from "@/components/features/bicycles/bicycle-category-content";
+import { BicycleCategoryContent } from "@/components/features/bicycles/category";
 import {
   getCategoryInfo,
   getAllSubcategoriesWithCounts,

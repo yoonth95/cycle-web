@@ -58,3 +58,25 @@ export interface FilterStats {
   filtered: number;
   hidden: number;
 }
+
+// 자전거 상세 정보 타입 (bicycle-details.json용)
+export interface BicycleDetail {
+  id: number;
+  name: string;
+  category: string;
+  subcategory: string;
+  mainImages: string[];
+  mainSpecs: string[];
+  fullSpecs: Record<string, string>;
+  features: string[];
+  description: string;
+  productImages: string[];
+  sizeImages: string[];
+  availableSizes: string[];
+  availableColors: string[];
+}
+
+// 자전거 상세 데이터 컬렉션 타입
+export interface BicycleDetailsData {
+  [id: string]: BicycleDetail;
+}
