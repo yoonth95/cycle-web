@@ -1,10 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import Image from "next/image";
-import { Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import {
   Carousel,
@@ -13,27 +11,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import bicycleDetailsData from "@/data/bicycle-details.json";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { BicycleDetail } from "@/types/bicycle";
 
-const DetailContent = () => {
-  const params = useParams();
-  const bicycleId = params.id as string;
+interface DetailContentProps {
+  bicycleData: BicycleDetail;
+}
 
-  // JSON 데이터에서 자전거 정보 가져오기
-  const bicycleData = bicycleDetailsData[bicycleId as keyof typeof bicycleDetailsData];
-
-  if (!bicycleData) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="mb-2 text-2xl font-bold text-gray-900">자전거를 찾을 수 없습니다</h1>
-          <p className="text-gray-600">요청하신 자전거 정보가 존재하지 않습니다.</p>
-        </div>
-      </div>
-    );
-  }
-
+const DetailContent = ({ bicycleData }: DetailContentProps) => {
   // 전체 스펙을 표 형태로 변환
   const specifications = [
     {
@@ -57,7 +41,7 @@ const DetailContent = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       <div className="mx-auto max-w-7xl p-4 lg:p-6">
         <div className="mb-8 grid gap-8 lg:grid-cols-2">
           {/* Image Section */}
@@ -82,8 +66,6 @@ const DetailContent = () => {
                           className="object-cover"
                         />
                       </AspectRatio>
-                      {/* <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-white shadow-sm">
-                      </div> */}
                     </CarouselItem>
                   ))}
                 </CarouselContent>
@@ -96,33 +78,6 @@ const DetailContent = () => {
                 )}
               </Carousel>
             </div>
-
-            {/* Thumbnail Navigation */}
-            {/* {bicycleData.mainImages.length > 1 && (
-              <Carousel
-                opts={{
-                  align: "start",
-                  dragFree: true,
-                }}
-                className="w-full"
-              >
-                <CarouselContent className="-ml-2">
-                  {bicycleData.mainImages.map((image, index) => (
-                    <CarouselItem key={index} className="basis-auto pl-2">
-                      <div className="h-16 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 transition-colors hover:border-red-500">
-                        <Image
-                          src={image}
-                          alt={`썸네일 ${index + 1}`}
-                          width={80}
-                          height={64}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            )} */}
           </div>
 
           {/* Product Info */}
@@ -133,19 +88,6 @@ const DetailContent = () => {
               </div>
               <h1 className="mb-2 text-3xl font-bold text-gray-900">{bicycleData.name}</h1>
               <p className="text-gray-600">{bicycleData.description}</p>
-            </div>
-
-            {/* Key Specifications */}
-            <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h3 className="mb-4 text-lg font-semibold">주요 사양</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {bicycleData.mainSpecs.map((spec, index) => (
-                  <div key={index} className="flex flex-col">
-                    <span className="text-sm text-gray-500">{spec.split(": ")[0]}</span>
-                    <span className="font-medium text-gray-900">{spec.split(": ")[1]}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Features */}
