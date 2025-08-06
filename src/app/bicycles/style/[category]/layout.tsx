@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCategoryInfo } from "@/utils/bicycle-data";
+import { getCategoryInfoSync } from "@/utils/bicycle-data";
 
 export async function generateMetadata({
   params,
@@ -8,7 +8,7 @@ export async function generateMetadata({
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
   const { category } = await params;
-  const categoryData = getCategoryInfo(category);
+  const categoryData = getCategoryInfoSync(category);
 
   if (!categoryData) {
     return { title: "카테고리를 찾을 수 없음" };
@@ -28,7 +28,7 @@ export default async function StyleCategoryLayout({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const categoryData = getCategoryInfo(category);
+  const categoryData = getCategoryInfoSync(category);
 
   if (!categoryData) {
     notFound();

@@ -1,10 +1,20 @@
 import { notFound } from "next/navigation";
-import { BicycleCategoryContent } from "@/components/features/bicycles/category";
-import {
-  getCategoryInfo,
-  getAllSubcategoriesWithCounts,
-  getBicyclesByCategory,
-} from "@/utils/bicycle-data";
+import { CategoryLayoutRenderer } from "@/components/features/bicycles/category";
+import bicyclesCategoryLayoutData from "@/data/bicycles-category-layout.json";
+import sportsData from "@/data/category-pages/sports-category.json";
+import lifestyleData from "@/data/category-pages/lifestyle-category.json";
+import smartMobilityData from "@/data/category-pages/smart-mobility-category.json";
+import juniorKidsData from "@/data/category-pages/junior-kids-category.json";
+import bicyclesCategoryListData from "@/data/bicycles-category-list.json";
+import type { CategoryLayoutData, CategoryPageData, CategoryListItem } from "@/types/bicycle";
+
+// 카테고리별 데이터 매핑
+const categoryDataMap: Record<string, CategoryPageData> = {
+  sports: sportsData,
+  lifestyle: lifestyleData,
+  "smart-mobility": smartMobilityData,
+  "junior-kids": juniorKidsData,
+};
 
 export default async function StyleCategoryPage({
   params,
@@ -12,26 +22,24 @@ export default async function StyleCategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const categoryData = getCategoryInfo(category);
 
-  if (!categoryData) notFound();
+  // 카테고리 데이터 가져오기
+  const categoryPageData = categoryDataMap[category];
 
-  // 모든 서브카테고리 정보와 개수 가져오기
-  const subcategories = getAllSubcategoriesWithCounts(category);
+  if (!categoryPageData) notFound();
 
-  // 각 서브카테고리별 자전거 데이터 미리 로드
-  const initialBicycles: Record<string, any[]> = {};
-  subcategories.forEach((sub) => {
-    initialBicycles[sub.id] = getBicyclesByCategory(category, sub.id);
-  });
+  const layoutData = bicyclesCategoryLayoutData as CategoryLayoutData;
+  const categoryList = bicyclesCategoryListData as CategoryListItem[];
 
   return (
-    <BicycleCategoryContent
-      category={category}
-      categoryData={categoryData}
-      subcategories={subcategories}
-      initialBicycles={initialBicycles}
-      pageType="style"
-    />
+    <div className="bg-gray-50">
+      <div className="container mx-auto px-4 py-8 lg:max-w-[80rem]">
+        <CategoryLayoutRenderer
+          layoutData={layoutData}
+          categoryPageData={categoryPageData}
+          categoryList={categoryList}
+        />
+      </div>
+    </div>
   );
 }

@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "section": "header",
+    "order": 1,
+    "title": "스타일별 자전거",
+    "description": "당신의 라이프스타일에 맞는 자전거를 스타일별로 찾아보세요. 각 카테고리별로 다양한 옵션을 제공합니다."
+  },
+  {
+    "id": 2,
+    "section": "cardListSection",
+    "order": 2,
+    "cardList": [
+      {
+        "id": 1,
+        "order": 1,
+        "title": "전기자전거",
+        "description": "친환경적이고 효율적인 미래의 이동수단",
+        "link": "/bicycles/style/smart-mobility",
+        "image": "/bike.png",
+        "items": [
+          {
+            "id": 1,
+            "title": "전기자전거",
+            "link": "/bicycles/style/smart-mobility?tab=electric",
+            "order": 1
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "order": 2,
+        "title": "스포츠",
+        "description": "활동적인 라이프스타일을 위한 고성능 자전거",
+        "link": "/bicycles/style/sports",
+        "image": "/bike.png",
+        "items": [
+          {
+            "id": 1,
+            "title": "로드",
+            "link": "/bicycles/style/sports?tab=road",
+            "order": 1
+          },
+          {
+            "id": 2,
+            "title": "하이브리드",
+            "link": "/bicycles/style/sports?tab=hybrid",
+            "order": 2
+          },
+          {
+            "id": 3,
+            "title": "생활용 MTB",
+            "link": "/bicycles/style/sports?tab=comfort",
+            "order": 3
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "order": 3,
+        "title": "라이프스타일",
+        "description": "일상을 더욱 특별하게 만드는 감성 자전거거",
+        "link": "/bicycles/style/lifestyle",
+        "image": "/bike.png",
+        "items": [
+          {
+            "id": 1,
+            "title": "픽시",
+            "link": "/bicycles/style/lifestyle?tab=fixie",
+            "order": 1
+          },
+          {
+            "id": 2,
+            "title": "시티",
+            "link": "/bicycles/style/lifestyle?tab=city",
+            "order": 2
+          },
+          {
+            "id": 3,
+            "title": "폴딩",
+            "link": "/bicycles/style/lifestyle?tab=folding",
+            "order": 3
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "order": 4,
+        "title": "주니어, 아동용",
+        "description": "안전하고 재미있는 어린이 전용 자전거거",
+        "link": "/bicycles/style/junior-kids",
+        "image": "/bike.png",
+        "items": [
+          {
+            "id": 1,
+            "title": "주니어",
+            "link": "/bicycles/style/junior-kids?tab=junior",
+            "order": 1
+          },
+          {
+            "id": 2,
+            "title": "아동용",
+            "link": "/bicycles/style/junior-kids?tab=kids",
+            "order": 2
+          }
+        ]
+      }
+    ]
+  }
+]

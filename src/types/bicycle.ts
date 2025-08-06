@@ -1,62 +1,7 @@
-export interface Bicycle {
-  id: number;
-  name: string;
-  // price: string;
-  image: string;
-  tags: string[];
-  category: string;
-  subcategory: string;
-  specs: string[];
-  features: string[];
-  // rating: number;
-  // reviews: number;
-}
-
-export interface CategoryData {
-  title: string;
-  description: string;
-  subcategories: SubcategoryInfo[];
-}
-
 export interface SubcategoryInfo {
   id: string;
   name: string;
-  description?: string;
-  count?: number;
-  isDefault?: boolean;
-}
-
-export interface BicycleData {
-  [category: string]: {
-    [subcategory: string]: Bicycle[];
-  };
-}
-
-export interface CategoryConfig {
-  [key: string]: CategoryData;
-}
-
-// 필터 관련 타입들 (확장성을 위해 보존)
-export interface PriceRange {
-  min: number;
-  max: number;
-  label: string;
-}
-
-export interface BicycleFilters {
-  priceRanges: string[];
-  // TODO: 향후 추가 가능한 필터들
-  // brands?: string[];
-  // colors?: string[];
-  // ratings?: number;
-  // availability?: boolean;
-}
-
-// 필터 상태 관련 타입
-export interface FilterStats {
-  total: number;
-  filtered: number;
-  hidden: number;
+  description: string;
 }
 
 // 자전거 상세 정보 타입 (bicycle-details.json용)
@@ -76,7 +21,124 @@ export interface BicycleDetail {
   availableColors: string[];
 }
 
-// 자전거 상세 데이터 컬렉션 타입
-export interface BicycleDetailsData {
-  [id: string]: BicycleDetail;
+// Bicycles 페이지 관련 타입들
+export interface BicyclePageSection {
+  id: number;
+  section: string;
+  order: number;
+  title: string;
+  description: string;
+  image?: string;
+  cardList?: BicycleCard[];
+}
+
+export interface BicycleCard {
+  id: number;
+  order: number;
+  title: string;
+  description: string;
+  icon: string;
+  link: string;
+  image: string;
+  items: BicycleCardItem[];
+}
+
+export interface BicycleCardItem {
+  id: number;
+  title: string;
+  link: string;
+  order: number;
+}
+
+export type BicyclePageData = BicyclePageSection[];
+
+// 카테고리 페이지 레이아웃 관련 타입들
+export interface CategoryLayoutData {
+  layout: CategoryLayout;
+}
+
+export interface CategoryLayout {
+  type: "sidebar-content";
+  className: string;
+  sidebar: CategorySidebar;
+  content: CategoryContent;
+}
+
+export interface CategorySidebar {
+  position: "left" | "right";
+  className: string;
+  mobileClassName?: string;
+  section: string;
+}
+
+export interface CategoryContent {
+  className: string;
+  sections: CategoryContentSection[];
+}
+
+export interface CategoryContentSection {
+  id: number;
+  section: string;
+  order: number;
+  className: string;
+  placeholder?: CategoryPlaceholder;
+}
+
+export interface CategoryPlaceholder {
+  title: string;
+  description: string;
+}
+
+// 카테고리 페이지 데이터 타입들
+export interface CategoryPageData {
+  category: CategoryInfo;
+  subcategories: SubcategoryInfo[];
+  bicycles: BicyclesBySubcategory;
+}
+
+// 카테고리 리스트 아이템 타입
+export interface CategoryListItem {
+  id: number;
+  title: string;
+  description: string;
+  slug: string;
+}
+
+export interface CategoryInfo {
+  id: string;
+  title: string;
+  description: string;
+  slug: string;
+}
+
+export interface BicycleTag {
+  label: string;
+  color: string;
+  variant: string;
+}
+
+export interface BicycleItem {
+  id: number;
+  name: string;
+  image: string;
+  tags: BicycleTag[];
+  category: string;
+  subcategory: string;
+  specs: string[];
+  features: string[];
+}
+
+export interface BicyclesBySubcategory {
+  [subcategory: string]: BicycleItem[];
+}
+
+// Detail page specification types
+export interface SpecificationCategory {
+  category: string;
+  items: SpecificationItem[];
+}
+
+export interface SpecificationItem {
+  spec: string;
+  value: string;
 }
