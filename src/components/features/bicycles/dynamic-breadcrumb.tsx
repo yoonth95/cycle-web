@@ -12,29 +12,13 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { Home } from "lucide-react";
-import { getBicycleById } from "@/utils/bicycle-data";
-
-// 경로 세그먼트를 한국어 라벨로 매핑
-const pathLabels: Record<string, string> = {
-  bicycles: "자전거",
-  style: "스타일",
-  "smart-mobility": "전기자전거",
-  sports: "스포츠",
-  lifestyle: "라이프스타일",
-  "junior-kids": "주니어, 아동용",
-  electric: "전기자전거",
-  road: "로드",
-  hybrid: "하이브리드",
-  comfort: "생활용 MTB",
-  fixie: "픽시",
-  city: "시티",
-  folding: "폴딩",
-  junior: "주니어",
-  kids: "아동용",
-};
+import { getBicycleById, generatePathLabels } from "@/utils/bicycle-data";
 
 const DynamicBreadcrumb = () => {
   const pathname = usePathname();
+
+  // 동적으로 path 라벨 생성
+  const pathLabels = generatePathLabels();
 
   // pathname을 세그먼트로 분할
   const segments = pathname.split("/").filter(Boolean);
