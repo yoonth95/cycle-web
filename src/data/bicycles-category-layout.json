@@ -1,0 +1,47 @@
+{
+  "layout": {
+    "type": "sidebar-content",
+    "className": "flex gap-8 lg:gap-12",
+    "sidebar": {
+      "position": "left",
+      "className": "w-80 shrink-0",
+      "mobileClassName": "hidden lg:block",
+      "section": "sidebar"
+    },
+    "content": {
+      "className": "flex-1 min-w-0",
+      "sections": [
+        {
+          "id": 1,
+          "section": "header",
+          "order": 1,
+          "className": "mb-6",
+          "placeholder": {
+            "title": "카테고리 제목",
+            "description": "카테고리 설명이 여기에 표시됩니다."
+          }
+        },
+        {
+          "id": 2,
+          "section": "tabs",
+          "order": 2,
+          "className": "mb-8",
+          "placeholder": {
+            "title": "필터 탭",
+            "description": "전체, 로드, 하이브리드 등의 탭이 여기에 표시됩니다."
+          }
+        },
+        {
+          "id": 3,
+          "section": "bicycleList",
+          "order": 3,
+          "className": "",
+          "placeholder": {
+            "title": "자전거 리스트",
+            "description": "선택된 카테고리의 자전거 목록이 여기에 표시됩니다."
+          }
+        }
+      ]
+    }
+  }
+}
