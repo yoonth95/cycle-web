@@ -15,6 +15,7 @@ import {
   Search,
   Bike,
   ArrowLeft,
+  Palette,
   type LucideIcon,
 } from "lucide-react";
 
@@ -43,6 +44,9 @@ const iconMap: Record<string, LucideIcon> = {
   search: Search,
   bike: Bike,
   arrowLeft: ArrowLeft,
+
+  // 자전거 페이지 아이콘
+  Palette: Palette,
 };
 
 /**
@@ -68,3 +72,8 @@ export function getAvailableIcons(): Array<{ name: string; icon: LucideIcon }> {
 export function isValidIconName(iconName: string): boolean {
   return iconName in iconMap;
 }
+
+/**
+ * 아이콘 매핑 객체 (컴포넌트에서 직접 사용)
+ */
+export const iconMapping = iconMap;
