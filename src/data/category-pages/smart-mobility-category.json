@@ -1,0 +1,102 @@
+{
+  "category": {
+    "id": "smart-mobility",
+    "title": "전기자전거",
+    "description": "친환경적이고 효율적인 미래의 이동수단으로, 전기 모터의 도움을 받아 더욱 편리하고 즐거운 라이딩을 경험할 수 있습니다.",
+    "slug": "smart-mobility"
+  },
+  "subcategories": [
+    {
+      "id": "all",
+      "name": "전체",
+      "description": "모든 전기자전거를 확인하세요"
+    },
+    {
+      "id": "electric",
+      "name": "전기자전거",
+      "description": "도심 출퇴근에 최적화된 전기자전거"
+    }
+  ],
+  "bicycles": {
+    "all": [
+      {
+        "id": 1,
+        "name": "이-커뮤터 프로",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "신제품", "color": "blue", "variant": "secondary" },
+          { "label": "인기", "color": "red", "variant": "destructive" }
+        ],
+        "category": "smart-mobility",
+        "subcategory": "electric",
+        "specs": [
+          "배터리: 48V 14Ah 리튬이온",
+          "주행거리: 최대 80km",
+          "모터: 350W 브러시리스",
+          "충전시간: 4-6시간"
+        ],
+        "features": ["스마트 디스플레이", "USB 충전포트", "LED 헤드라이트", "후미등 자동점등"]
+      },
+      {
+        "id": 2,
+        "name": "어반 이-바이크",
+        "image": "/bike.png",
+        "tags": [{ "label": "추천", "color": "green", "variant": "secondary" }],
+        "category": "smart-mobility",
+        "subcategory": "electric",
+        "specs": ["배터리: 36V 10Ah", "주행거리: 최대 50km", "모터: 250W", "무게: 22kg"],
+        "features": ["경량 프레임", "7단 변속", "편안한 승차감", "도난방지 잠금"]
+      },
+      {
+        "id": 3,
+        "name": "트레일 이-MTB",
+        "image": "/bike.png",
+        "tags": [{ "label": "고성능", "color": "purple", "variant": "secondary" }],
+        "category": "smart-mobility",
+        "subcategory": "electric",
+        "specs": [
+          "배터리: 48V 17.5Ah",
+          "주행거리: 최대 100km",
+          "모터: 750W 미드 드라이브",
+          "서스펜션: 풀 서스펜션"
+        ],
+        "features": ["토크 센서", "21단 변속", "유압 디스크 브레이크", "오프로드 타이어"]
+      }
+    ],
+    "electric": [
+      {
+        "id": 1,
+        "name": "팬텀 FS PRO",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "신제품", "color": "blue", "variant": "secondary" },
+          { "label": "인기", "color": "red", "variant": "destructive" }
+        ],
+        "category": "smart-mobility",
+        "subcategory": "electric",
+        "specs": ["배터리: 48V 21Ah", "주행거리: 최대 100km", "무게: 24kg", "모터: 250W"],
+        "features": ["LED 조명 내장", "USB 충전 포트", "스마트 디스플레이"]
+      },
+      {
+        "id": 2,
+        "name": "팬텀 HX PLUS",
+        "image": "/bike.png",
+        "tags": [{ "label": "추천", "color": "green", "variant": "secondary" }],
+        "category": "smart-mobility",
+        "subcategory": "electric",
+        "specs": ["배터리: 36V 15Ah", "주행거리: 최대 70km", "무게: 22kg", "모터: 250W"],
+        "features": ["접이식 페달", "후방 반사경", "안전 벨 포함"]
+      },
+      {
+        "id": 3,
+        "name": "스마트 시티 DELUXE",
+        "image": "/bike.png",
+        "tags": [{ "label": "고성능", "color": "purple", "variant": "secondary" }],
+        "category": "smart-mobility",
+        "subcategory": "electric",
+        "specs": ["배터리: 36V 12Ah", "주행거리: 최대 60km", "무게: 20kg", "모터: 200W"],
+        "features": ["바구니 포함", "후미등 자동", "3단 변속"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "category": {
+    "id": "sports",
+    "title": "스포츠",
+    "description": "활동적인 라이프스타일을 위한 고성능 자전거",
+    "slug": "sports"
+  },
+  "subcategories": [
+    {
+      "id": "all",
+      "name": "전체",
+      "description": "모든 스포츠 자전거"
+    },
+    {
+      "id": "road",
+      "name": "로드",
+      "description": "빠른 속도와 효율적인 페달링을 위한 로드바이크"
+    },
+    {
+      "id": "hybrid",
+      "name": "하이브리드",
+      "description": "도심과 야외 모두에서 활용 가능한 만능 자전거"
+    },
+    {
+      "id": "comfort",
+      "name": "생활용 MTB",
+      "description": "편안한 승차감의 산악 자전거"
+    }
+  ],
+  "bicycles": {
+    "all": [
+      {
+        "id": 4,
+        "name": "스피드 마스터 R1",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "700C", "color": "red", "variant": "default" },
+          { "label": "NEW", "color": "green", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "로드",
+        "specs": ["무게: 8.5kg", "기어: 22단", "프레임: 카본"],
+        "features": ["에어로 휠셋", "카본 포크", "프로급 변속기"]
+      },
+      {
+        "id": 5,
+        "name": "레이싱 엣지 PRO",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "700C", "color": "red", "variant": "default" },
+          { "label": "POPULAR", "color": "blue", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "로드",
+        "specs": ["무게: 7.8kg", "기어: 24단", "프레임: 울트라 카본"],
+        "features": ["에어로 바", "디스크 브레이크", "전자식 변속"]
+      },
+      {
+        "id": 6,
+        "name": "올라운드 하이브리드",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "26", "color": "red", "variant": "default" },
+          { "label": "BEST", "color": "purple", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "하이브리드",
+        "specs": ["무게: 13kg", "기어: 21단", "프레임: 알루미늄"],
+        "features": ["서스펜션 포크", "LED 라이트", "짐받이 포함"]
+      },
+      {
+        "id": 7,
+        "name": "시티 트레킹 X7",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "28", "color": "red", "variant": "default" },
+          { "label": "NEW", "color": "green", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "하이브리드",
+        "specs": ["무게: 12.5kg", "기어: 24단", "프레임: 알루미늄 합금"],
+        "features": ["에르고 그립", "V브레이크", "반사판 포함"]
+      },
+      {
+        "id": 8,
+        "name": "컴포트 마운틴 S1",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "26", "color": "red", "variant": "default" },
+          { "label": "COMFORT", "color": "gray", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "생활용 MTB",
+        "specs": ["무게: 15kg", "기어: 21단", "프레임: 스틸"],
+        "features": ["풀 서스펜션", "넓은 안장", "그립 시프터"]
+      }
+    ],
+    "road": [
+      {
+        "id": 4,
+        "name": "스피드 마스터 R1",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "700C", "color": "red", "variant": "default" },
+          { "label": "NEW", "color": "green", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "로드",
+        "specs": ["무게: 8.5kg", "기어: 22단", "프레임: 카본"],
+        "features": ["에어로 휠셋", "카본 포크", "프로급 변속기"]
+      },
+      {
+        "id": 5,
+        "name": "레이싱 엣지 PRO",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "700C", "color": "red", "variant": "default" },
+          { "label": "POPULAR", "color": "blue", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "로드",
+        "specs": ["무게: 7.8kg", "기어: 24단", "프레임: 울트라 카본"],
+        "features": ["에어로 바", "디스크 브레이크", "전자식 변속"]
+      }
+    ],
+    "hybrid": [
+      {
+        "id": 6,
+        "name": "올라운드 하이브리드",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "26", "color": "red", "variant": "default" },
+          { "label": "BEST", "color": "purple", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "하이브리드",
+        "specs": ["무게: 13kg", "기어: 21단", "프레임: 알루미늄"],
+        "features": ["서스펜션 포크", "LED 라이트", "짐받이 포함"]
+      },
+      {
+        "id": 7,
+        "name": "시티 트레킹 X7",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "28", "color": "red", "variant": "default" },
+          { "label": "NEW", "color": "green", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "하이브리드",
+        "specs": ["무게: 12.5kg", "기어: 24단", "프레임: 알루미늄 합금"],
+        "features": ["에르고 그립", "V브레이크", "반사판 포함"]
+      }
+    ],
+    "comfort": [
+      {
+        "id": 8,
+        "name": "컴포트 마운틴 S1",
+        "image": "/bike.png",
+        "tags": [
+          { "label": "26", "color": "red", "variant": "default" },
+          { "label": "COMFORT", "color": "gray", "variant": "secondary" }
+        ],
+        "category": "스포츠",
+        "subcategory": "생활용 MTB",
+        "specs": ["무게: 15kg", "기어: 21단", "프레임: 스틸"],
+        "features": ["풀 서스펜션", "넓은 안장", "그립 시프터"]
+      }
+    ]
+  }
+}
