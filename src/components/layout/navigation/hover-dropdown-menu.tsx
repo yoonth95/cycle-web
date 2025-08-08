@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { sortSubItems } from "@/utils/navigation-utils";
 import { useNavigationStore } from "@/stores/navigation-store";
-import { NavigationItem, NavigationCategoryItem } from "@/types/navigation-data";
+import { NavigationItem, NavigationCategoryItem } from "@/types/navigation";
 
 interface HoverDropdownMenuProps {
   menuItem: NavigationItem;

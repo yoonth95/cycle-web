@@ -7,8 +7,7 @@ import { HoverDropdownMenu } from "@/components/layout/navigation";
 import { cn } from "@/lib/utils";
 import { sortMenuData } from "@/utils/navigation-utils";
 import { useNavigationStore } from "@/stores/navigation-store";
-import { NavigationProps } from "@/types/navigation-props";
-import { NavigationItem } from "@/types/navigation-data";
+import { NavigationProps, NavigationItem } from "@/types/navigation";
 
 const NavigationBar = ({ menuData }: NavigationProps) => {
   const router = useRouter();
