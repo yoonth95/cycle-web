@@ -1,14 +1,6 @@
 import { notFound } from "next/navigation";
 
-interface InvalidRoutePageProps {
-  params: Promise<{
-    slug: string[];
-  }>;
-}
-
-export default async function InvalidRoutePage({ params }: InvalidRoutePageProps) {
-  const { slug } = await params;
-
+export default async function InvalidRoutePage() {
   // 허용된 경로가 아니면 not-found로 리다이렉트
   // 현재 유효한 경로들:
   // - /bicycles (이미 page.tsx에서 처리)
