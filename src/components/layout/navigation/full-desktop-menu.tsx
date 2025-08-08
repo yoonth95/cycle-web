@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { sortSubItems } from "@/utils/navigation-utils";
-import { FullMenuProps } from "@/types/navigation-props";
-import { NavigationCategoryItem } from "@/types/navigation-data";
+import { FullMenuProps, NavigationCategoryItem } from "@/types/navigation";
 
 const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
   return (
