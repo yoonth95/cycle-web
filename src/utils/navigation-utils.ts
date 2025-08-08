@@ -1,17 +1,13 @@
-import {
-  NavigationDataType,
-  NavigationCategoryItem,
-  NavigationSubItem,
-} from "@/types/navigation-data";
+import { NavigationDataType, NavigationCategoryItem, NavigationSubItem } from "@/types/navigation";
 
 /**
- * 메뉴 데이터를 order 기준으로 정렬
+ * 메뉴 데이터를 order_index 기준으로 정렬
  */
 export const sortMenuData = (menuData: NavigationDataType | undefined): NavigationDataType => {
   if (!menuData || !Array.isArray(menuData)) {
     return [];
   }
-  return [...menuData].sort((a, b) => a.order - b.order);
+  return [...menuData].sort((a, b) => a.order_index - b.order_index);
 };
 
 /**
@@ -22,7 +18,7 @@ export const findMenuItemBySlug = (menuData: NavigationDataType, slug: string) =
 };
 
 /**
- * 메뉴 아이템의 서브 아이템들을 order 기준으로 정렬
+ * 메뉴 아이템의 서브 아이템들을 order_index 기준으로 정렬
  */
 export const sortSubItems = <T extends NavigationCategoryItem | NavigationSubItem>(
   items: T[] | undefined,
@@ -30,5 +26,5 @@ export const sortSubItems = <T extends NavigationCategoryItem | NavigationSubIte
   if (!items || !Array.isArray(items)) {
     return [];
   }
-  return items.sort((a, b) => a.order - b.order);
+  return [...items].sort((a, b) => a.order_index - b.order_index);
 };
