@@ -1,14 +1,14 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { HamburgerButtonProps } from "@/types/navigation-props";
+import { HamburgerButtonProps } from "@/types/navigation";
 import { Menu, X } from "lucide-react";
 
 const HamburgerButton = ({ isMenuOpen, onToggle }: HamburgerButtonProps) => {
   return (
     <motion.button
       onClick={onToggle}
-      className="p-2 rounded-md transition-colors duration-200 cursor-pointer"
+      className="cursor-pointer rounded-md p-2 transition-colors duration-200"
       whileHover={{ scale: 1.1 }}
     >
       <AnimatePresence mode="wait">
@@ -20,7 +20,7 @@ const HamburgerButton = ({ isMenuOpen, onToggle }: HamburgerButtonProps) => {
             exit={{ rotate: 90, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <X className="w-6 h-6" />
+            <X className="h-6 w-6" />
           </motion.div>
         ) : (
           <motion.div
@@ -30,7 +30,7 @@ const HamburgerButton = ({ isMenuOpen, onToggle }: HamburgerButtonProps) => {
             exit={{ rotate: -90, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="h-6 w-6" />
           </motion.div>
         )}
       </AnimatePresence>

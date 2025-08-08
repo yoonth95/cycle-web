@@ -12,7 +12,7 @@ import {
 import { useMobile } from "@/hooks/use-mobile";
 import { sortMenuData } from "@/utils/navigation-utils";
 import { useNavigationStore } from "@/stores/navigation-store";
-import { NavigationProps } from "@/types/navigation-props";
+import { NavigationProps } from "@/types/navigation";
 
 const NavigationContainer = ({ menuData }: NavigationProps) => {
   const pathname = usePathname();

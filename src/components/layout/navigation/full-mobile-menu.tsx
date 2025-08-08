@@ -9,8 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { sortSubItems } from "@/utils/navigation-utils";
-import { FullMenuProps } from "@/types/navigation-props";
-import { NavigationCategoryItem } from "@/types/navigation-data";
+import { FullMenuProps, NavigationCategoryItem } from "@/types/navigation";
 
 const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
   const defaultAccordionValue = sortedMenuData?.[0]?.id.toString();
