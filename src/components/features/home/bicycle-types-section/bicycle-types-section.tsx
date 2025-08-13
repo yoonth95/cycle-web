@@ -7,7 +7,7 @@ export function BicycleTypesSection({ data }: BicycleTypesSectionProps) {
   return (
     <section className="pt-16 lg:pt-20">
       <div className="container mx-auto px-4 lg:px-8">
-        <SectionHeader title={data.title} description={data.description as string} />
+        <SectionHeader title={data.title} description={data.description} />
         <div className="hidden sm:block">
           <DesktopBicycleTypes data={data.bicycleTypes} />
         </div>
