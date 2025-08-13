@@ -114,6 +114,6 @@ async function getNavigationDataFromDB(): Promise<NavigationDataType> {
  * 5분간 캐시되며 'navigation' 태그로 관리
  */
 export const getNavigationData = unstable_cache(getNavigationDataFromDB, ["navigation-data"], {
-  revalidate: 300, // 5분 (300초)
+  revalidate: 60, // 1분 (60초)
   tags: ["navigation"],
 });

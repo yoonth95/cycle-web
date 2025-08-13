@@ -1,75 +1,77 @@
-// 기본 네비게이션 타입 (공통 필드)
-export type NavigationMenuType = "group" | "single";
+/**
+ * Navigation 타입 정의
+ */
 
-// 공통 필드 정의
-interface BaseNavigationFields {
+import { z } from "zod";
+
+// =============================================================================
+// DB 스키마
+// =============================================================================
+
+export const NavigationMenuSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  link: z.string().nullable(),
+  type: z.enum(["group", "single"]),
+  order_index: z.number(),
+});
+
+export const NavigationMenuItemSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  menu_id: z.string(),
+  parent_id: z.string().nullable(),
+  link: z.string().nullable(),
+  type: z.enum(["group", "single"]),
+  order_index: z.number(),
+});
+
+// =============================================================================
+// 타입 정의
+// =============================================================================
+
+export interface NavigationSubItem {
   id: string;
   slug: string;
-}
-
-/**
- * 데이터베이스 스키마 타입
- * Supabase에서 직접 가져오는 데이터 구조
- */
-export interface NavigationMenu extends BaseNavigationFields {
-  link: string | null;
-  type: NavigationMenuType;
-  order_index: number;
-}
-
-export interface NavigationMenuItem extends BaseNavigationFields {
-  menu_id: string;
-  parent_id: string | null;
-  link: string | null;
-  type: NavigationMenuType;
-  order_index: number;
-}
-
-/**
- * 프론트엔드에서 사용하는 네비게이션 타입
- * DB 데이터를 가공한 후 사용하는 구조
- */
-
-// 재귀적 구조를 위한 하위 아이템
-export interface NavigationSubItem extends BaseNavigationFields {
   link: string;
   order_index: number;
-  type?: NavigationMenuType;
+  type?: "group" | "single";
   items?: NavigationSubItem[];
 }
 
-// 카테고리 아이템 (link는 선택적)
-export interface NavigationCategoryItem extends BaseNavigationFields {
+export interface NavigationCategoryItem {
+  id: string;
+  slug: string;
   link?: string;
   order_index: number;
-  type?: NavigationMenuType;
+  type?: "group" | "single";
   items?: NavigationSubItem[];
 }
 
-// 메인 네비게이션 아이템들 (그룹 타입)
-interface NavigationGroupItem extends BaseNavigationFields {
-  link: string;
-  type: "group";
-  order_index: number;
-  items: NavigationCategoryItem[];
-}
+export type NavigationItem =
+  | {
+      id: string;
+      slug: string;
+      link: string;
+      type: "group";
+      order_index: number;
+      items: NavigationCategoryItem[];
+    }
+  | {
+      id: string;
+      slug: string;
+      link: string;
+      type: "single";
+      order_index: number;
+    };
 
-// 메인 네비게이션 아이템들 (단일 타입)
-interface NavigationSingleItem extends BaseNavigationFields {
-  link: string;
-  type: "single";
-  order_index: number;
-}
-
-// 유니온 타입으로 메인 네비게이션 아이템 정의
-export type NavigationItem = NavigationGroupItem | NavigationSingleItem;
-
-// 전체 네비게이션 데이터 타입
 export type NavigationDataType = NavigationItem[];
 
-/**
- * 컴포넌트에서 사용하는 Props 타입
- */
+// DB 타입들
+export type NavigationMenu = z.infer<typeof NavigationMenuSchema>;
+export type NavigationMenuItem = z.infer<typeof NavigationMenuItemSchema>;
+
+// Props 타입들
 export interface NavigationProps {
   menuData: NavigationDataType;
 }
