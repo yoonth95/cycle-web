@@ -7,13 +7,13 @@ import type { BicycleTypesSectionType } from "@/types/home";
 
 const DesktopBicycleTypes = ({ data }: { data: BicycleTypesSectionType["bicycleTypes"] }) => {
   return (
-    <div className="grid grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-3 gap-6 xl:grid-cols-4">
       {data
         .sort((a, b) => a.order - b.order)
         .map((bicycle) => (
           <Card
             key={bicycle.order}
-            className="group overflow-hidden transition-all duration-300 cursor-pointer border-none"
+            className="group cursor-pointer overflow-hidden border-none transition-all duration-300"
           >
             <AspectRatio ratio={3 / 4} className="relative overflow-hidden">
               <Image
@@ -26,11 +26,11 @@ const DesktopBicycleTypes = ({ data }: { data: BicycleTypesSectionType["bicycleT
                 className={cn(
                   "absolute inset-x-0 bottom-0",
                   "flex flex-col justify-end",
-                  "py-[10px] px-6 md:py-4",
+                  "px-6 py-[10px] md:py-4",
                   "bg-black/60 group-hover:bg-black/70",
                   "text-white",
                   "overflow-hidden",
-                  "h-[2.75rem] md:h-[3.7rem] lg:h-[3.9rem] group-hover:h-full",
+                  "h-[2.75rem] group-hover:h-full md:h-[3.7rem] lg:h-[3.9rem]",
                   "transition-all duration-500",
                 )}
               >
@@ -46,7 +46,7 @@ const DesktopBicycleTypes = ({ data }: { data: BicycleTypesSectionType["bicycleT
                   <h3
                     className={cn(
                       "heading-5 text-white",
-                      "text-base lg:text-[20px] md:text-[18px]",
+                      "text-base md:text-[18px] lg:text-[20px]",
                     )}
                   >
                     {bicycle.title}
@@ -54,14 +54,16 @@ const DesktopBicycleTypes = ({ data }: { data: BicycleTypesSectionType["bicycleT
                 </div>
 
                 {/* 설명 - 호버 시에만 나타남 */}
-                <div className="absolute bottom-20 left-6 right-6 opacity-0 h-3/8 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-100">
-                  <p className={cn("body-large text-white", "text-sm md:text-base")}>
-                    {bicycle.description}
-                  </p>
+                <div className="absolute right-6 bottom-20 left-6 h-3/8 translate-y-4 opacity-0 transition-all delay-100 duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <div
+                    className={cn("body-large text-white", "text-sm md:text-base")}
+                    dangerouslySetInnerHTML={{ __html: bicycle.description }}
+                    suppressHydrationWarning
+                  />
                 </div>
 
                 {/* 버튼 - 호버 시에만 나타남 */}
-                <div className="absolute bottom-6 left-6 right-6 flex justify-end opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-100">
+                <div className="absolute right-6 bottom-6 left-6 flex translate-y-4 justify-end opacity-0 transition-all delay-100 duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                   <Button
                     variant="outline"
                     className="bg-transparent hover:bg-transparent hover:text-white"
