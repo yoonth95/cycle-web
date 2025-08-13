@@ -59,7 +59,7 @@ export const ServicesSectionSchema = z.object({
   id: z.number(),
   section: z.literal("services"),
   title: z.string(),
-  description: z.string(),
+  description: z.union([z.string(), z.record(z.string(), z.unknown())]),
   serviceTypes: z.array(ServiceItemSchema),
 });
 
@@ -67,7 +67,7 @@ export const BicycleTypesSectionSchema = z.object({
   id: z.number(),
   section: z.literal("bicycleTypes"),
   title: z.string(),
-  description: z.string(),
+  description: z.union([z.string(), z.record(z.string(), z.unknown())]),
   bicycleTypes: z.array(BicycleTypeItemSchema),
 });
 
@@ -75,7 +75,7 @@ export const LocationSectionSchema = z.object({
   id: z.number(),
   section: z.literal("location"),
   title: z.string(),
-  description: z.string(),
+  description: z.union([z.string(), z.record(z.string(), z.unknown())]),
   storeInfo: z.array(StoreInfoItemSchema),
   lat: z.string(),
   lng: z.string(),
