@@ -1,38 +1,17 @@
-import {
-  HeroSection,
-  ServicesSection,
-  BicycleTypesSection,
-  LocationSection,
-} from "@/components/features/home";
-import type {
-  HeroSectionType,
-  ServicesSectionType,
-  BicycleTypesSectionType,
-  LocationSectionType,
-} from "@/types/home";
-import homePageData from "@/data/home-page.json";
+import { HomeLayoutRenderer } from "@/components/features/home";
+import { getHomeLayout, getHomeContent } from "@/lib/home/server";
+import type { HomeLayoutData, HomePageContentData } from "@/types/home";
 
 export default async function Home() {
-  const orderedSections = [...homePageData].sort((a, b) => a.order - b.order);
+  const [layoutData, contentData] = (await Promise.all([getHomeLayout(), getHomeContent()])) as [
+    HomeLayoutData | null,
+    HomePageContentData | null,
+  ];
 
-  return (
-    <>
-      {orderedSections.map((section) => {
-        switch (section.section) {
-          case "hero":
-            return <HeroSection key={section.id} data={section as HeroSectionType} />;
-          case "services":
-            return <ServicesSection key={section.id} data={section as ServicesSectionType} />;
-          case "bicycleTypes":
-            return (
-              <BicycleTypesSection key={section.id} data={section as BicycleTypesSectionType} />
-            );
-          case "location":
-            return <LocationSection key={section.id} data={section as LocationSectionType} />;
-          default:
-            return null;
-        }
-      })}
-    </>
-  );
+  if (!layoutData || !contentData) {
+    // TODO: 필요 시 로딩/플레이스홀더 처리
+    return null;
+  }
+
+  return <HomeLayoutRenderer layoutData={layoutData} contentData={contentData} />;
 }

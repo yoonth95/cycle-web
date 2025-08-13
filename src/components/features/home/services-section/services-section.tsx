@@ -10,20 +10,20 @@ export function ServicesSection({ data }: ServicesSectionProps) {
         <SectionHeader title={data.title} description={data.description} />
 
         {/* 서비스 카드 그리드 */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-3">
           {data.serviceTypes
             .sort((a, b) => a.order - b.order)
             .map((service) => (
               <Card
                 key={service.order}
-                className="text-center p-8 border hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group"
+                className="group border p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
                 <CardContent className="space-y-4">
                   {/* 아이콘 */}
-                  <div className="w-16 h-16 bg-figma-your-pink rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="bg-figma-your-pink mx-auto flex h-16 w-16 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110">
                     {(() => {
                       const IconComponent = getIconComponent(service.iconName);
-                      return <IconComponent className="w-8 h-8 text-figma-old-brick" />;
+                      return <IconComponent className="text-figma-old-brick h-8 w-8" />;
                     })()}
                   </div>
 
@@ -31,9 +31,11 @@ export function ServicesSection({ data }: ServicesSectionProps) {
                   <h3 className="heading-5 text-foreground">{service.title}</h3>
 
                   {/* 설명 */}
-                  <p className="body-medium text-muted-foreground leading-relaxed">
-                    {service.description}
-                  </p>
+                  <div
+                    className="body-medium text-muted-foreground leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: service.description }}
+                    suppressHydrationWarning
+                  />
                 </CardContent>
               </Card>
             ))}
