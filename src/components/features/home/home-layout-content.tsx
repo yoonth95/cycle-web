@@ -7,7 +7,6 @@ import type {
   ServicesSectionType,
   BicycleTypesSectionType,
   LocationSectionType,
-  HomeContentSection,
 } from "@/types/home";
 
 interface HomeLayoutContentProps {
