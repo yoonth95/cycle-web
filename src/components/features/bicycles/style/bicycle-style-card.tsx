@@ -3,10 +3,10 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
-import type { BicycleCard } from "@/types/bicycle";
+import type { BicycleCardType } from "@/types/bicycle";
 
 interface BicycleStyleCardProps {
-  card: BicycleCard;
+  card: BicycleCardType;
 }
 
 const BicycleStyleCard = ({ card }: BicycleStyleCardProps) => {

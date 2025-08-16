@@ -1,8 +1,8 @@
-import BicycleStyleCard from "./bicycle-style-card";
-import type { BicyclePageSection } from "@/types/bicycle";
+import { BicycleStyleCard } from "@/components/features/bicycles/style";
+import type { BicycleCardListSectionType } from "@/types/bicycle";
 
 interface BicycleStyleCardListSectionProps {
-  section: BicyclePageSection;
+  section: BicycleCardListSectionType;
 }
 
 const BicycleStyleCardListSection = ({ section }: BicycleStyleCardListSectionProps) => {

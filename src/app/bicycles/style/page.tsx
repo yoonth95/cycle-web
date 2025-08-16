@@ -1,18 +1,14 @@
-import { BicycleStylePageSectionRenderer } from "@/components/features/bicycles/style";
-import bicyclesStylePageData from "@/data/bicycles-style-page.json";
-import type { BicyclePageData } from "@/types/bicycle";
+import { notFound } from "next/navigation";
+import { BicycleStylePageLayoutRenderer } from "@/components/features/bicycles/style";
+import { getBicycleStyleLayout, getBicycleStyleContent } from "@/lib/bicycle";
 
-export default function StylePage() {
-  const pageData = bicyclesStylePageData as BicyclePageData;
-  const orderedSections = [...pageData].sort((a, b) => a.order - b.order);
+export default async function StylePage() {
+  const [layoutData, contentData] = await Promise.all([
+    getBicycleStyleLayout(),
+    getBicycleStyleContent(),
+  ]);
 
-  return (
-    <div className="bg-gray-50">
-      <div className="container mx-auto px-2 py-8 sm:px-4 lg:max-w-[70rem]">
-        {orderedSections.map((section) => (
-          <BicycleStylePageSectionRenderer key={section.id} section={section} />
-        ))}
-      </div>
-    </div>
-  );
+  if (!layoutData || !contentData) notFound();
+
+  return <BicycleStylePageLayoutRenderer layoutData={layoutData} contentData={contentData} />;
 }
