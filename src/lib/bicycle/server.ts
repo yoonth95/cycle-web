@@ -1,122 +1,63 @@
 import "server-only";
 
-import { unstable_cache } from "next/cache";
-import { supabase } from "@/lib/supabase";
+import {
+  fetchPageData,
+  transformPageSections,
+  invalidatePageCache,
+} from "@/lib/common/page-server";
 import { normalizeBicycleSectionsFromDB } from "@/lib/bicycle/transform";
-import type {
-  BicycleLayoutData,
-  BicyclePageContentData,
-  BicycleDbPageRow,
-  BicycleDbPageLayoutRow,
-  BicycleDbPageSectionRow,
-  BicycleNormalizationInput,
-} from "@/types/bicycle";
+import type { BicycleLayoutData, BicyclePageContentData } from "@/types/bicycle";
 
-async function fetchBicycleLayoutFromDB(slug: string): Promise<BicycleLayoutData | null> {
-  const { data: page, error: pageErr } = await supabase
-    .from("pages")
-    .select("id, slug")
-    .eq("slug", slug)
-    .maybeSingle<BicycleDbPageRow>();
-  if (pageErr || !page) {
-    console.error("[pages] fetch error", pageErr);
-    return null;
-  }
+// =============================================================================
+// 사용자용 API (Edge + ISR 캐싱)
+// =============================================================================
 
-  const { data, error } = await supabase
-    .from("page_layouts")
-    .select("id, page_id, layout")
-    .eq("page_id", page.id)
-    .maybeSingle<BicycleDbPageLayoutRow>();
-
-  if (error) {
-    console.error("[bicycle_layout] fetch error", error);
-    return null;
-  }
-  if (!data || !data.layout || typeof data.layout !== "object") return null;
-
-  // 신뢰 가능한 형태로 저장된다고 가정. 런타임 파싱은 렌더 단계에서 수행.
-  return data.layout as BicycleLayoutData;
+/**
+ * 자전거 페이지 레이아웃 조회
+ */
+export async function getBicycleLayout(): Promise<BicycleLayoutData | null> {
+  const data = await fetchPageData<BicycleLayoutData>("bicycles");
+  return data?.layout || null;
 }
 
-async function fetchBicycleSectionsFromDB(slug: string): Promise<BicyclePageContentData | null> {
-  const { data: page, error: pageErr } = await supabase
-    .from("pages")
-    .select("id, slug")
-    .eq("slug", slug)
-    .maybeSingle<BicycleDbPageRow>();
-  if (pageErr || !page) {
-    console.error("[pages] fetch error", pageErr);
-    return null;
-  }
+/**
+ * 자전거 페이지 콘텐츠 조회
+ */
+export async function getBicycleContent(): Promise<BicyclePageContentData | null> {
+  const data = await fetchPageData("bicycles");
+  return transformPageSections(data, normalizeBicycleSectionsFromDB);
+}
 
-  const { data, error } = await supabase
-    .from("page_sections")
-    .select("id, page_id, section_type, data, order_index")
-    .eq("page_id", page.id);
+/**
+ * 자전거 스타일 페이지 레이아웃 조회
+ */
+export async function getBicycleStyleLayout(): Promise<BicycleLayoutData | null> {
+  const data = await fetchPageData<BicycleLayoutData>("bicycles-style");
+  return data?.layout || null;
+}
 
-  if (error) {
-    console.error("[bicycle_sections] fetch error", error);
-    return null;
-  }
-  if (!data) return null;
-
-  // 정렬 우선: 섹션 고유 order_index가 있으면 우선 적용
-  const rows = (data as BicycleDbPageSectionRow[]).slice().sort((a, b) => {
-    const ao = a.order_index ?? 0;
-    const bo = b.order_index ?? 0;
-    return ao - bo;
-  });
-
-  // transform expects { section: string } field; map section_type -> section
-  const normalizedInput: BicycleNormalizationInput[] = rows.map((r) => ({
-    id: r.id,
-    slug: page.slug,
-    section: r.section_type,
-    data: r.data,
-    order_index: r.order_index,
-  }));
-  return normalizeBicycleSectionsFromDB(normalizedInput);
+/**
+ * 자전거 스타일 페이지 콘텐츠 조회
+ */
+export async function getBicycleStyleContent(): Promise<BicyclePageContentData | null> {
+  const data = await fetchPageData("bicycles-style");
+  return transformPageSections(data, normalizeBicycleSectionsFromDB);
 }
 
 // =============================================================================
-// bicycles 페이지 (메인 자전거 페이지)
+// 관리자용 API (캐시 우회 + 무효화)
 // =============================================================================
-export const getBicycleLayout = unstable_cache(
-  () => fetchBicycleLayoutFromDB("bicycles"),
-  ["bicycle-layout"],
-  {
-    revalidate: 60, // 1분 (60초)
-    tags: ["bicycle-layout"],
-  },
-);
 
-export const getBicycleContent = unstable_cache(
-  () => fetchBicycleSectionsFromDB("bicycles"),
-  ["bicycle-content"],
-  {
-    revalidate: 60, // 1분 (60초)
-    tags: ["bicycle-content"],
-  },
-);
+/**
+ * 관리자 미리보기용 - 항상 최신 데이터
+ */
+export async function getBicyclePreviewData(slug: string) {
+  return await fetchPageData<BicycleLayoutData>(slug, { isPreview: true });
+}
 
-// =============================================================================
-// bicycles/style 페이지 (스타일별 자전거 페이지)
-// =============================================================================
-export const getBicycleStyleLayout = unstable_cache(
-  () => fetchBicycleLayoutFromDB("bicycles-style"),
-  ["bicycle-style-layout"],
-  {
-    revalidate: 60, // 1분 (60초)
-    tags: ["bicycle-style-layout"],
-  },
-);
-
-export const getBicycleStyleContent = unstable_cache(
-  () => fetchBicycleSectionsFromDB("bicycles-style"),
-  ["bicycle-style-content"],
-  {
-    revalidate: 60, // 1분 (60초)
-    tags: ["bicycle-style-content"],
-  },
-);
+/**
+ * 관리자 발행 후 캐시 무효화
+ */
+export async function invalidateBicyclePage(slug: string) {
+  return await invalidatePageCache(slug);
+}

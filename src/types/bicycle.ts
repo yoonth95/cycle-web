@@ -158,25 +158,15 @@ export const BicycleSectionSchema = z.discriminatedUnion("section", [
 ]);
 
 // DB 관련 스키마 (서버에서만 사용)
-export const BicycleDbPageRowSchema = z.object({
-  id: z.string(),
-  slug: z.string(),
-});
+// 공통 타입 import
+export type {
+  DbPageRow,
+  DbPageLayoutRow,
+  DbPageSectionRow,
+  NormalizationInput,
+} from "@/types/common";
 
-export const BicycleDbPageLayoutRowSchema = z.object({
-  id: z.string(),
-  page_id: z.string(),
-  layout: z.unknown(),
-});
-
-export const BicycleDbPageSectionRowSchema = z.object({
-  id: z.string(),
-  page_id: z.string(),
-  section_type: z.string(),
-  data: z.unknown(),
-  order_index: z.number().nullable().optional(),
-});
-
+// 자전거 특화 정규화 입력 타입 (공통 타입과 동일하지만 명시적 구분)
 export const BicycleNormalizationInputSchema = z.object({
   id: z.string(),
   slug: z.string(),
@@ -225,9 +215,7 @@ export type BicycleLayoutData = z.infer<typeof BicycleLayoutDataSchema>;
 export type BicyclePageContentData = z.infer<typeof BicyclePageContentDataSchema>;
 
 // DB 타입들 (서버에서만 사용)
-export type BicycleDbPageRow = z.infer<typeof BicycleDbPageRowSchema>;
-export type BicycleDbPageLayoutRow = z.infer<typeof BicycleDbPageLayoutRowSchema>;
-export type BicycleDbPageSectionRow = z.infer<typeof BicycleDbPageSectionRowSchema>;
+// 공통 DB 타입들은 위에서 이미 export됨
 export type BicycleNormalizationInput = z.infer<typeof BicycleNormalizationInputSchema>;
 
 // 컴포넌트 Props 타입들
