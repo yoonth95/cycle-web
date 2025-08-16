@@ -2,6 +2,8 @@ import { HomeLayoutRenderer } from "@/components/features/home";
 import { getHomeLayout, getHomeContent } from "@/lib/home/server";
 import type { HomeLayoutData, HomePageContentData } from "@/types/home";
 
+export const revalidate = 300;
+
 export default async function Home() {
   const [layoutData, contentData] = (await Promise.all([getHomeLayout(), getHomeContent()])) as [
     HomeLayoutData | null,

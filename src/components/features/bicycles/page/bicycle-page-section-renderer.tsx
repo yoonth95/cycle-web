@@ -1,21 +1,20 @@
-import BicyclePageHeader from "./bicycle-page-header";
-import BicycleCardListSection from "./bicycle-card-list-section";
-import type { BicyclePageSection } from "@/types/bicycle";
+import SectionHeader from "@/components/common/section-header";
+import { BicycleCardListSection } from "@/components/features/bicycles/page";
+import type { BicycleContentSection } from "@/types/bicycle";
 
 interface BicyclePageSectionRendererProps {
-  section: BicyclePageSection;
+  section: BicycleContentSection;
 }
 
-const BicyclePageSectionRenderer = ({ section }: BicyclePageSectionRendererProps) => {
+export const BicyclePageSectionRenderer = ({ section }: BicyclePageSectionRendererProps) => {
   switch (section.section) {
     case "header":
-      return <BicyclePageHeader key={section.id} section={section} />;
+      return <SectionHeader title={section.title} description={section.description} />;
 
     case "cardListSection":
       return <BicycleCardListSection key={section.id} section={section} />;
 
     default:
-      console.warn(`Unknown section type: ${section.section}`);
       return null;
   }
 };

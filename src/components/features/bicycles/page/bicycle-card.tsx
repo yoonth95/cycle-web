@@ -1,18 +1,16 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { iconMapping } from "@/utils/icon-mapping";
-import type { BicycleCard as BicycleCardType } from "@/types/bicycle";
+import type { BicycleCardType } from "@/types/bicycle";
 
 interface BicycleCardProps {
   card: BicycleCardType;
 }
 
 const BicycleCard = ({ card }: BicycleCardProps) => {
-  const IconComponent = iconMapping[card.icon];
+  const IconComponent = iconMapping[card.icon as keyof typeof iconMapping];
 
   return (
     <Card className="group overflow-hidden transition-shadow hover:shadow-lg">
