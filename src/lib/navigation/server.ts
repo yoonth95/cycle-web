@@ -37,7 +37,7 @@ async function getNavigationDataFromDB(): Promise<NavigationDataType> {
         slug: m.slug,
         link: m.link ?? "#",
         type: "single" as const,
-        order_index: m.order_index ?? 0,
+        order_index: m.order_index ?? 1,
       }));
   }
 
@@ -53,7 +53,7 @@ async function getNavigationDataFromDB(): Promise<NavigationDataType> {
   }
 
   const sortByOrder = <T extends { order_index: number | null }>(a: T, b: T) =>
-    (a.order_index ?? 0) - (b.order_index ?? 0);
+    (a.order_index ?? 1) - (b.order_index ?? 1);
 
   const buildChildren = (parentId: string): NavigationSubItem[] => {
     const children = (byParent.get(parentId) ?? []).slice().sort(sortByOrder);
@@ -79,7 +79,7 @@ async function getNavigationDataFromDB(): Promise<NavigationDataType> {
           slug: m.slug,
           link: m.link ?? "#",
           type: "single" as const,
-          order_index: m.order_index ?? 0,
+          order_index: m.order_index ?? 1,
         };
       }
 
@@ -101,7 +101,7 @@ async function getNavigationDataFromDB(): Promise<NavigationDataType> {
         slug: m.slug,
         link: m.link ?? "#",
         type: "group" as const,
-        order_index: m.order_index ?? 0,
+        order_index: m.order_index ?? 1,
         items: level2,
       };
     });
@@ -114,6 +114,6 @@ async function getNavigationDataFromDB(): Promise<NavigationDataType> {
  * 5분간 캐시되며 'navigation' 태그로 관리
  */
 export const getNavigationData = unstable_cache(getNavigationDataFromDB, ["navigation-data"], {
-  revalidate: 60, // 1분 (60초)
+  revalidate: 300, // 1분 (60초)
   tags: ["navigation"],
 });

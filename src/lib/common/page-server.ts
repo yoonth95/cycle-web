@@ -141,8 +141,8 @@ export function transformPageSections<TOutput>(
   if (!pageData?.sections?.length) return null;
 
   const sortedSections = pageData.sections.slice().sort((a, b) => {
-    const ao = a.order_index ?? 0;
-    const bo = b.order_index ?? 0;
+    const ao = a.order_index ?? 1;
+    const bo = b.order_index ?? 1;
     return ao - bo;
   });
 

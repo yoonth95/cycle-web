@@ -137,7 +137,6 @@ export const BicycleCardSchema = z.object({
 export const BicycleHeaderSectionSchema = z.object({
   id: z.number(),
   section: z.literal("header"),
-  order: z.number(),
   title: z.string(),
   description: z.union([z.string(), z.record(z.string(), z.unknown())]),
   image: z.string().optional(),
@@ -146,7 +145,6 @@ export const BicycleHeaderSectionSchema = z.object({
 export const BicycleCardListSectionSchema = z.object({
   id: z.number(),
   section: z.literal("cardListSection"),
-  order: z.number(),
   title: z.string().optional(),
   description: z.union([z.string(), z.record(z.string(), z.unknown())]).optional(),
   cardList: z.array(BicycleCardSchema),
@@ -172,7 +170,7 @@ export const BicycleNormalizationInputSchema = z.object({
   slug: z.string(),
   section: z.string(),
   data: z.unknown(),
-  order_index: z.number().nullable().optional(),
+  order_index: z.number(),
 });
 
 // 레이아웃 스키마
