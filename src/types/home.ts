@@ -89,36 +89,13 @@ export const SectionSchema = z.discriminatedUnion("section", [
   LocationSectionSchema,
 ]);
 
-// =============================================================================
-// DB 관련 스키마 (서버에서만 사용)
-// =============================================================================
-
-export const DbPageRowSchema = z.object({
-  id: z.string(),
-  slug: z.string(),
-});
-
-export const DbPageLayoutRowSchema = z.object({
-  id: z.string(),
-  page_id: z.string(),
-  layout: z.unknown(),
-});
-
-export const DbPageSectionRowSchema = z.object({
-  id: z.string(),
-  page_id: z.string(),
-  section_type: z.string(),
-  data: z.unknown(),
-  order_index: z.number().nullable().optional(),
-});
-
-export const NormalizationInputSchema = z.object({
-  id: z.string(),
-  slug: z.string(),
-  section: z.string(),
-  data: z.unknown(),
-  order_index: z.number().nullable().optional(),
-});
+// 공통 타입은 @/types/common에서 import
+export type {
+  DbPageRow,
+  DbPageLayoutRow,
+  DbPageSectionRow,
+  NormalizationInput,
+} from "@/types/common";
 
 // =============================================================================
 // 레이아웃 스키마
@@ -174,12 +151,6 @@ export type HomeContentSectionLayoutBase = z.infer<typeof HomeContentSectionLayo
 export type HomeContentLayout = z.infer<typeof HomeContentLayoutSchema>;
 export type HomeLayoutData = z.infer<typeof HomeLayoutDataSchema>;
 export type HomePageContentData = z.infer<typeof HomePageContentDataSchema>;
-
-// DB 타입들 (서버에서만 사용)
-export type DbPageRow = z.infer<typeof DbPageRowSchema>;
-export type DbPageLayoutRow = z.infer<typeof DbPageLayoutRowSchema>;
-export type DbPageSectionRow = z.infer<typeof DbPageSectionRowSchema>;
-export type NormalizationInput = z.infer<typeof NormalizationInputSchema>;
 
 // 컴포넌트 Props 타입들
 export interface HeroSectionProps {
