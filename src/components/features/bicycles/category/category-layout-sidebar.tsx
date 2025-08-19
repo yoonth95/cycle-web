@@ -1,9 +1,9 @@
 import Link from "next/link";
-import type { CategorySidebar, CategoryListItem } from "@/types/bicycle";
+import type { CategoryListItemType, BicycleCategorySidebar } from "@/types/bicycle";
 
 interface CategoryLayoutSidebarProps {
-  sidebar: CategorySidebar;
-  categoryList?: CategoryListItem[];
+  sidebar: BicycleCategorySidebar;
+  categoryList?: CategoryListItemType[];
   currentCategorySlug?: string;
 }
 
@@ -31,8 +31,8 @@ const CategoryLayoutSidebar = ({
                 href={`/bicycles/style/${category.slug}`}
                 className={`block rounded-lg p-3 transition-colors ${
                   isActive
-                    ? "border border-red-200 bg-red-50 font-medium text-red-700"
-                    : "text-gray-700 hover:bg-gray-50"
+                    ? "border-figma-cinderella bg-figma-cinderella text-figma-thunderbird border font-medium"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 <span className="text-sm font-medium">{category.title}</span>
