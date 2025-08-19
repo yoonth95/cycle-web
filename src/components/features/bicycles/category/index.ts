@@ -8,3 +8,4 @@ export { default as CategoryLayoutRenderer } from "./category-layout-renderer";
 export { default as CategoryLayoutTab } from "./category-layout-tab";
 export { default as CategoryLayoutTabButton } from "./category-layout-tab-button";
 export { default as CategoryLayoutBicycleSkeleton } from "./category-layout-bicycle-skeleton";
+export { default as CategoryLayoutBicycleListSection } from "./category-layout-bicycle-list-section";

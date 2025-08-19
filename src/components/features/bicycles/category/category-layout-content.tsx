@@ -2,7 +2,7 @@ import {
   CategoryLayoutHeader,
   CategoryMobileSidebar,
   CategoryLayoutTab,
-  CategoryLayoutBicycleList,
+  CategoryLayoutBicycleListSection,
 } from "@/components/features/bicycles/category";
 import type {
   BicycleCategoryContentLayout,
@@ -45,7 +45,7 @@ const CategoryLayoutContent = ({
             );
           case "bicycleList":
             return (
-              <CategoryLayoutBicycleList
+              <CategoryLayoutBicycleListSection
                 key={section.section}
                 section={section}
                 currentCategory={currentCategoryData}
