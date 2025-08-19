@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}): Promise<Metadata> {
-  const { category } = await params;
-
-  return {
-    title: `${category} | 삼천리자전거`,
-    description: `${category} 자전거 목록`,
-  };
-}
+export const metadata: Metadata = {
+  title: `삼천리자전거`,
+  description: `자전거 목록`,
+};
 
 export default async function StyleCategoryLayout({
   children,
