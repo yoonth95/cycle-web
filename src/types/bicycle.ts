@@ -77,9 +77,10 @@ export const BicycleFromDBSchema = z.object({
   order_index: z.number(),
   specs: z.record(z.string()),
   contents: z.array(z.string()),
+  features: z.array(z.string()),
   tags: z.array(BicycleTagSchema),
   images: z.array(z.string()),
-  subcategories: z.string(),
+  subcategory: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
 });

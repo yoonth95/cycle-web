@@ -228,8 +228,8 @@ export async function fetchBicyclesGroupedBySubcategory(
 
     // 자전거를 서브카테고리별로 분류
     bicycles.forEach((bicycle) => {
-      if (bicycle.subcategories && grouped[bicycle.subcategories]) {
-        grouped[bicycle.subcategories].push(bicycle);
+      if (bicycle.subcategory && grouped[bicycle.subcategory]) {
+        grouped[bicycle.subcategory].push(bicycle);
       }
     });
 

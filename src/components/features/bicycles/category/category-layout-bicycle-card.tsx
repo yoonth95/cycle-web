@@ -63,19 +63,19 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
       <div className="flex h-full flex-col justify-between gap-10 rounded-b border-x border-b border-gray-200 p-4">
         <div className="flex flex-col gap-4">
           <h3 className="text-lg font-semibold text-gray-900">{bicycle.name}</h3>
-          <p className="line-clamp-2 text-sm text-gray-600">{bicycle.description}</p>
+          <p className="line-clamp-2 h-11 text-sm text-gray-600">{bicycle.description}</p>
 
           {/* 특징 */}
           <div>
             <div className="flex flex-wrap gap-1">
-              {bicycle.contents.slice(0, 3).map((content, index) => (
+              {(bicycle.features || []).slice(0, 3).map((content, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">
                   {content}
                 </Badge>
               ))}
-              {bicycle.contents.length > 3 && (
+              {bicycle.features.length > 3 && (
                 <Badge variant="secondary" className="text-xs">
-                  +{bicycle.contents.length - 3}
+                  +{bicycle.features.length - 3}
                 </Badge>
               )}
             </div>
