@@ -1,60 +1,54 @@
 import {
   CategoryLayoutHeader,
-  CategoryLayoutTabsWrapper,
   CategoryMobileSidebar,
+  CategoryLayoutTab,
+  CategoryLayoutBicycleListSection,
 } from "@/components/features/bicycles/category";
 import type {
-  CategoryContent,
-  CategoryInfo,
-  SubcategoryInfo,
-  BicyclesBySubcategory,
-  CategoryListItem,
+  BicycleCategoryContentLayout,
+  BicycleCategoryItemType,
+  CategoryListItemType,
 } from "@/types/bicycle";
 
 interface CategoryLayoutContentProps {
-  content: CategoryContent;
-  categoryData?: CategoryInfo;
-  subcategories?: SubcategoryInfo[];
-  bicycles?: BicyclesBySubcategory;
-  categoryList?: CategoryListItem[];
-  currentCategorySlug?: string;
+  content: BicycleCategoryContentLayout;
+  currentCategoryData: BicycleCategoryItemType;
+  categoryList: CategoryListItemType[];
 }
 
 const CategoryLayoutContent = ({
   content,
-  categoryData,
-  subcategories = [],
-  bicycles = {},
-  categoryList = [],
-  currentCategorySlug,
+  currentCategoryData,
+  categoryList,
 }: CategoryLayoutContentProps) => {
   const orderedSections = [...content.sections].sort((a, b) => a.order - b.order);
 
-  // tabs와 bicycleList 섹션 찾기
-  const tabSection = orderedSections.find((section) => section.section === "tabs");
-  const listSection = orderedSections.find((section) => section.section === "bicycleList");
-  const otherSections = orderedSections.filter(
-    (section) => section.section !== "tabs" && section.section !== "bicycleList",
-  );
-
   return (
     <div className={content.className}>
-      {/* 모바일 사이드바 버튼 */}
-      <div className="lg:hidden">
-        <CategoryMobileSidebar
-          categoryList={categoryList}
-          currentCategorySlug={currentCategorySlug}
-        />
-      </div>
-
-      {otherSections.map((section) => {
+      {orderedSections.map((section) => {
         switch (section.section) {
           case "header":
             return (
               <CategoryLayoutHeader
-                key={section.id}
+                key={section.section}
                 section={section}
-                categoryData={categoryData}
+                categoryData={currentCategoryData}
+              />
+            );
+          case "tabs":
+            return (
+              <CategoryLayoutTab
+                key={section.section}
+                section={section}
+                subcategories={currentCategoryData.subcategories}
+              />
+            );
+          case "bicycleList":
+            return (
+              <CategoryLayoutBicycleListSection
+                key={section.section}
+                section={section}
+                currentCategory={currentCategoryData}
               />
             );
           default:
@@ -62,16 +56,13 @@ const CategoryLayoutContent = ({
             return null;
         }
       })}
-
-      {tabSection && listSection && (
-        <CategoryLayoutTabsWrapper
-          tabSection={tabSection}
-          listSection={listSection}
-          subcategories={subcategories}
-          bicycles={bicycles}
-          categorySlug={currentCategorySlug}
+      {/* 모바일 사이드바 */}
+      <div className="block lg:hidden">
+        <CategoryMobileSidebar
+          categoryList={categoryList}
+          currentCategorySlug={currentCategoryData.slug}
         />
-      )}
+      </div>
     </div>
   );
 };

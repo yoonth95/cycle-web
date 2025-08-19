@@ -1,7 +1,11 @@
-export { default as CategoryLayoutRenderer } from "./category-layout-renderer";
 export { default as CategoryLayoutHeader } from "./category-layout-header";
-export { default as CategoryLayoutTabsWrapper } from "./category-layout-tabs-wrapper";
 export { default as CategoryLayoutBicycleList } from "./category-layout-bicycle-list";
 export { default as CategoryLayoutSidebar } from "./category-layout-sidebar";
-export { default as CategoryLayoutContent } from "./category-layout-content";
 export { default as CategoryMobileSidebar } from "./category-mobile-sidebar";
+export { default as CategoryLayoutBicycleCard } from "./category-layout-bicycle-card";
+export { default as CategoryLayoutContent } from "./category-layout-content";
+export { default as CategoryLayoutRenderer } from "./category-layout-renderer";
+export { default as CategoryLayoutTab } from "./category-layout-tab";
+export { default as CategoryLayoutTabButton } from "./category-layout-tab-button";
+export { default as CategoryLayoutBicycleSkeleton } from "./category-layout-bicycle-skeleton";
+export { default as CategoryLayoutBicycleListSection } from "./category-layout-bicycle-list-section";

@@ -1,24 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCategoryInfoSync } from "@/utils/bicycle-data";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}): Promise<Metadata> {
-  const { category } = await params;
-  const categoryData = getCategoryInfoSync(category);
-
-  if (!categoryData) {
-    return { title: "카테고리를 찾을 수 없음" };
-  }
-
-  return {
-    title: `${categoryData.title} | 삼천리자전거`,
-    description: categoryData.description,
-  };
-}
+export const metadata: Metadata = {
+  title: `삼천리자전거`,
+  description: `자전거 목록`,
+};
 
 export default async function StyleCategoryLayout({
   children,
@@ -28,9 +14,8 @@ export default async function StyleCategoryLayout({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const categoryData = getCategoryInfoSync(category);
 
-  if (!categoryData) {
+  if (!category) {
     notFound();
   }
 

@@ -1,38 +1,112 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import type { CategoryContentSection, BicycleItem } from "@/types/bicycle";
+"use client";
+
+import { useRef, useEffect, useMemo, useCallback } from "react";
+import { useBicyclesInfinite } from "@/lib/bicycle/client";
+import {
+  CategoryLayoutBicycleCard,
+  CategoryLayoutBicycleSkeleton,
+} from "@/components/features/bicycles/category";
+import type {
+  BicycleCategoryContentSectionBase,
+  BicycleCategoryItemType,
+  BicycleFromDB,
+} from "@/types/bicycle";
 
 interface CategoryLayoutBicycleListProps {
-  section: CategoryContentSection;
-  bicycles?: BicycleItem[];
-  categorySlug?: string;
+  section: BicycleCategoryContentSectionBase;
+  currentCategory: BicycleCategoryItemType;
+  currentTab: string;
 }
-
-const getTagColor = (color: string) => {
-  const colorMap: Record<string, string> = {
-    red: "bg-red-500 text-white",
-    green: "bg-green-500 text-white",
-    blue: "bg-blue-500 text-white",
-    yellow: "bg-yellow-500 text-white",
-    purple: "bg-purple-500 text-white",
-    orange: "bg-orange-500 text-white",
-    gray: "bg-gray-500 text-white",
-  };
-  return colorMap[color] || "bg-gray-500 text-white";
-};
 
 const CategoryLayoutBicycleList = ({
   section,
-  bicycles = [],
-  categorySlug,
+  currentCategory,
+  currentTab,
 }: CategoryLayoutBicycleListProps) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
+    useBicyclesInfinite<BicycleFromDB>(currentCategory.id, currentTab);
+
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // IntersectionObserver 콜백 최적화
+  const handleIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const first = entries[0];
+      if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    [hasNextPage, isFetchingNextPage, fetchNextPage],
+  );
+
+  // IntersectionObserver 설정 최적화
+  useEffect(() => {
+    const element = sentinelRef.current;
+    if (!element) return;
+
+    const io = new IntersectionObserver(handleIntersection, {
+      // 성능 최적화를 위한 옵션
+      rootMargin: "100px", // 뷰포트에서 100px 전에 미리 로드
+      threshold: 0.1,
+    });
+
+    io.observe(element);
+    return () => io.unobserve(element);
+  }, [handleIntersection]);
+
+  // 데이터 플래튼 최적화
+  const bicycles = useMemo(() => data?.pages.flatMap((p) => p.items) ?? [], [data?.pages]);
+
+  // 에러 상태 처리
+  if (error) {
+    return (
+      <div className={section.className}>
+        <div className="rounded-lg border border-red-200 bg-red-50 p-8 text-center">
+          <p className="text-red-600">데이터를 불러오는 중 오류가 발생했습니다.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-2 text-sm text-red-500 underline hover:text-red-700"
+          >
+            새로고침
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 로딩 상태 - 스켈레톤 개수 최적화
+  if (isLoading) {
+    return (
+      <div className={section.className}>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {Array.from({ length: 6 }, (_, i) => (
+            <CategoryLayoutBicycleSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // 빈 상태
   if (bicycles.length === 0) {
     return (
       <div className={section.className}>
         <div className="rounded-lg border bg-white p-8 text-center shadow-sm">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+            <svg
+              className="h-6 w-6 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33"
+              />
+            </svg>
+          </div>
           <p className="text-gray-500">해당 카테고리에 자전거가 없습니다.</p>
         </div>
       </div>
@@ -41,74 +115,29 @@ const CategoryLayoutBicycleList = ({
 
   return (
     <div className={section.className}>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+      {/* 그리드 레이아웃 개선 - 반응형 최적화 */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {bicycles.map((bicycle) => (
-          <div
+          <CategoryLayoutBicycleCard
             key={bicycle.id}
-            className="flex flex-col rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md"
-          >
-            {/* 자전거 이미지 */}
-            <AspectRatio ratio={26 / 15} className="relative rounded-t">
-              <Image
-                src={bicycle.image}
-                alt={bicycle.name}
-                fill
-                className="rounded-t object-cover"
-              />
-
-              {/* 태그들 */}
-              <div className="absolute top-2 left-2 flex gap-1">
-                {bicycle.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className={`rounded px-2 py-1 text-xs font-medium ${getTagColor(tag.color)}`}
-                  >
-                    {tag.label}
-                  </span>
-                ))}
-              </div>
-            </AspectRatio>
-
-            {/* 자전거 정보 */}
-            <div className="flex h-full flex-col justify-between gap-4 rounded-b border-x border-b border-gray-200 p-4">
-              <div className="flex flex-col gap-4">
-                <h3 className="text-lg font-semibold text-gray-900">{bicycle.name}</h3>
-
-                {/* 사양 */}
-                <div>
-                  <p className="mb-2 text-sm font-medium text-gray-900">주요 사양</p>
-                  <ul className="space-y-1 text-sm text-gray-700">
-                    {bicycle.specs.map((spec, index) => (
-                      <div key={index} className="flex items-center text-sm text-gray-600">
-                        <div className="mr-2 ml-3 h-1 w-1 rounded-full bg-gray-400"></div>
-                        {spec}
-                      </div>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* 특징 */}
-                <div>
-                  <p className="mb-2 text-sm font-medium text-gray-900">특징</p>
-                  <div className="flex flex-wrap gap-1">
-                    {bicycle.features.map((feature, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {feature}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* 버튼 */}
-              <Link
-                href={`/bicycles/style/${categorySlug || bicycle.category.toLowerCase()}/${bicycle.id}`}
-              >
-                <Button className="w-full bg-red-500 hover:bg-red-600">자세히 보기</Button>
-              </Link>
-            </div>
-          </div>
+            bicycle={bicycle}
+            categorySlug={currentCategory.slug}
+          />
         ))}
+      </div>
+
+      {/* 무한 스크롤 트리거 */}
+      <div
+        ref={sentinelRef}
+        className="flex justify-center py-8"
+        style={{ minHeight: "1px" }} // 감지를 위한 최소 높이
+      >
+        {isFetchingNextPage && (
+          <div className="flex items-center space-x-2">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+            <span className="text-sm text-gray-500">더 많은 자전거를 불러오는 중...</span>
+          </div>
+        )}
       </div>
     </div>
   );

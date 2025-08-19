@@ -1,8 +1,4 @@
-export interface SubcategoryInfo {
-  id: string;
-  name: string;
-  description: string;
-}
+// SubcategoryInfo는 SubcategoryItemSchema로 대체됨
 
 // 자전거 상세 정보 타입 (bicycle-details.json용)
 export interface BicycleDetail {
@@ -58,13 +54,6 @@ export interface CategoryPlaceholder {
   description: string;
 }
 
-// 카테고리 페이지 데이터 타입들
-export interface CategoryPageData {
-  category: CategoryInfo;
-  subcategories: SubcategoryInfo[];
-  bicycles: BicyclesBySubcategory;
-}
-
 // 카테고리 리스트 아이템 타입
 export interface CategoryListItem {
   id: number;
@@ -73,32 +62,31 @@ export interface CategoryListItem {
   slug: string;
 }
 
-export interface CategoryInfo {
-  id: string;
-  title: string;
-  description: string;
-  slug: string;
-}
+// DB에서 가져오는 자전거 데이터 (Zod 스키마)
+export const BicycleTagSchema = z.object({
+  label: z.string(),
+  color: z.string(),
+  variant: z.enum(["default", "secondary", "destructive", "outline"]),
+});
 
-export interface BicycleTag {
-  label: string;
-  color: string;
-  variant: string;
-}
-
-export interface BicycleItem {
-  id: number;
-  name: string;
-  image: string;
-  tags: BicycleTag[];
-  category: string;
-  subcategory: string;
-  specs: string[];
-  features: string[];
-}
+export const BicycleFromDBSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  category_id: z.string(),
+  description: z.string(),
+  order_index: z.number(),
+  specs: z.record(z.string()),
+  contents: z.array(z.string()),
+  features: z.array(z.string()),
+  tags: z.array(BicycleTagSchema),
+  images: z.array(z.string()),
+  subcategory: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
 
 export interface BicyclesBySubcategory {
-  [subcategory: string]: BicycleItem[];
+  [subcategory: string]: BicycleFromDB[];
 }
 
 // Detail page specification types
@@ -137,7 +125,6 @@ export const BicycleCardSchema = z.object({
 export const BicycleHeaderSectionSchema = z.object({
   id: z.number(),
   section: z.literal("header"),
-  order: z.number(),
   title: z.string(),
   description: z.union([z.string(), z.record(z.string(), z.unknown())]),
   image: z.string().optional(),
@@ -146,7 +133,6 @@ export const BicycleHeaderSectionSchema = z.object({
 export const BicycleCardListSectionSchema = z.object({
   id: z.number(),
   section: z.literal("cardListSection"),
-  order: z.number(),
   title: z.string().optional(),
   description: z.union([z.string(), z.record(z.string(), z.unknown())]).optional(),
   cardList: z.array(BicycleCardSchema),
@@ -156,6 +142,40 @@ export const BicycleSectionSchema = z.discriminatedUnion("section", [
   BicycleHeaderSectionSchema,
   BicycleCardListSectionSchema,
 ]);
+
+export const SubcategoryItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+  order: z.number(),
+});
+
+// 카테고리 리스트 타입
+export const CategoryListItemSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  slug: z.string(),
+});
+
+// 카테고리에 대한 자전거 타입
+export const BicycleCategoryItemSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  title: z.string(),
+  description: z.string(),
+  subcategories: z.array(SubcategoryItemSchema),
+});
+
+export const BicycleCategoryOptionsSchema = z.object({
+  categories: z.array(BicycleCategoryItemSchema),
+  currentCategory: BicycleCategoryItemSchema,
+});
+
+export const CategoryPageDataSchema = z.object({
+  categoryList: z.array(BicycleCategoryItemSchema),
+  category: BicycleCategoryItemSchema,
+  subcategories: z.array(SubcategoryItemSchema),
+});
 
 // DB 관련 스키마 (서버에서만 사용)
 // 공통 타입 import
@@ -172,10 +192,10 @@ export const BicycleNormalizationInputSchema = z.object({
   slug: z.string(),
   section: z.string(),
   data: z.unknown(),
-  order_index: z.number().nullable().optional(),
+  order_index: z.number(),
 });
 
-// 레이아웃 스키마
+// 자전거, 스타일 페이지 레이아웃 스키마
 export const BicycleContentSectionLayoutBaseSchema = z.object({
   id: z.number(),
   section: z.enum(["header", "cardListSection"]),
@@ -200,9 +220,48 @@ export const BicyclePageContentDataSchema = z.object({
   sections: z.array(BicycleSectionSchema),
 });
 
+// 카테고리 페이지 레이아웃 스키마
+export const BicycleCategorySidebarSchema = z.object({
+  section: z.literal("sidebar"),
+  position: z.enum(["left", "right"]),
+  className: z.string().optional(),
+  mobileClassName: z.string().optional(),
+});
+
+export const BicycleCategoryContentSectionBaseSchema = z.object({
+  id: z.number(),
+  section: z.enum(["header", "tabs", "bicycleList"]),
+  order: z.number(),
+  className: z.string().optional(),
+  placeholder: z
+    .object({
+      title: z.string(),
+      description: z.string(),
+    })
+    .optional(),
+});
+
+export const BicycleCategoryContentLayoutSchema = z.object({
+  className: z.string().optional(),
+  sections: z.array(BicycleCategoryContentSectionBaseSchema),
+});
+
+export const BicycleCategoryLayoutDataSchema = z.object({
+  layout: z.object({
+    type: z.string(),
+    className: z.string().optional(),
+    content: BicycleCategoryContentLayoutSchema,
+    sidebar: BicycleCategorySidebarSchema,
+  }),
+});
+
 // 기본 타입들
 export type BicycleCardItemType = z.infer<typeof BicycleCardItemSchema>;
 export type BicycleCardType = z.infer<typeof BicycleCardSchema>;
+export type CategoryListItemType = z.infer<typeof CategoryListItemSchema>;
+export type SubcategoryItemType = z.infer<typeof SubcategoryItemSchema>;
+export type BicycleCategoryItemType = z.infer<typeof BicycleCategoryItemSchema>;
+export type BicycleCategoryOptionsType = z.infer<typeof BicycleCategoryOptionsSchema>;
 
 // 섹션 타입들
 export type BicycleHeaderSectionType = z.infer<typeof BicycleHeaderSectionSchema>;
@@ -213,6 +272,17 @@ export type BicycleContentSectionLayoutBase = z.infer<typeof BicycleContentSecti
 export type BicycleContentLayout = z.infer<typeof BicycleContentLayoutSchema>;
 export type BicycleLayoutData = z.infer<typeof BicycleLayoutDataSchema>;
 export type BicyclePageContentData = z.infer<typeof BicyclePageContentDataSchema>;
+
+// 카테고리 레이아웃 타입들
+export type BicycleCategoryLayoutData = z.infer<typeof BicycleCategoryLayoutDataSchema>;
+export type BicycleCategorySidebar = z.infer<typeof BicycleCategorySidebarSchema>;
+export type BicycleCategoryContentLayout = z.infer<typeof BicycleCategoryContentLayoutSchema>;
+export type BicycleCategoryContentSectionBase = z.infer<
+  typeof BicycleCategoryContentSectionBaseSchema
+>;
+
+// 카테고리 페이지 데이터 타입
+export type CategoryPageData = z.infer<typeof CategoryPageDataSchema>;
 
 // DB 타입들 (서버에서만 사용)
 // 공통 DB 타입들은 위에서 이미 export됨
@@ -226,6 +296,10 @@ export interface BicycleHeaderSectionProps {
 export interface BicycleCardListSectionProps {
   data: BicycleCardListSectionType;
 }
+
+// 타입 추론
+export type BicycleTag = z.infer<typeof BicycleTagSchema>;
+export type BicycleFromDB = z.infer<typeof BicycleFromDBSchema>;
 
 // 유틸리티 타입들
 export interface BicycleSectionMap {

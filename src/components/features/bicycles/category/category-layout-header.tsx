@@ -1,7 +1,7 @@
-import type { CategoryContentSection } from "@/types/bicycle";
+import type { BicycleCategoryContentSectionBase } from "@/types/bicycle";
 
 interface CategoryLayoutHeaderProps {
-  section: CategoryContentSection;
+  section: BicycleCategoryContentSectionBase;
   categoryData?: {
     title: string;
     description: string;

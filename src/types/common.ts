@@ -20,7 +20,7 @@ export const DbPageSectionRowSchema = z.object({
   page_id: z.string(),
   section_type: z.string(),
   data: z.unknown(),
-  order_index: z.number().nullable().optional(),
+  order_index: z.number(),
 });
 
 export const NormalizationInputSchema = z.object({
@@ -28,7 +28,7 @@ export const NormalizationInputSchema = z.object({
   slug: z.string(),
   section: z.string(),
   data: z.unknown(),
-  order_index: z.number().nullable().optional(),
+  order_index: z.number(),
 });
 
 // =============================================================================
