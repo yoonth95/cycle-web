@@ -15,6 +15,7 @@ import type {
   BicycleCategoryOptionsType,
   BicycleFromDB,
   BicyclesBySubcategory,
+  BicycleCategoryItemType,
 } from "@/types/bicycle";
 import { PageCacheOptions } from "@/types/common";
 
@@ -122,7 +123,7 @@ export async function fetchBicycleCategoriesAllOptions(
 
     const categories = await response.json();
     const currentCategory = currentSlug
-      ? categories.find((cat: any) => cat.slug === currentSlug)
+      ? categories.find((cat: BicycleCategoryItemType) => cat.slug === currentSlug)
       : null;
 
     return {
