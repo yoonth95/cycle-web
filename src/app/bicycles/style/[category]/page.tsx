@@ -1,20 +1,9 @@
 import { notFound } from "next/navigation";
 import { CategoryLayoutRenderer } from "@/components/features/bicycles/category";
-import bicyclesCategoryLayoutData from "@/data/bicycles-category-layout.json";
-import sportsData from "@/data/category-pages/sports-category.json";
-import lifestyleData from "@/data/category-pages/lifestyle-category.json";
-import smartMobilityData from "@/data/category-pages/smart-mobility-category.json";
-import juniorKidsData from "@/data/category-pages/junior-kids-category.json";
-import bicyclesCategoryListData from "@/data/bicycles-category-list.json";
-import type { CategoryLayoutData, CategoryPageData, CategoryListItem } from "@/types/bicycle";
+import { getBicycleCategoriesOptions, getBicycleCategoryLayout } from "@/lib/bicycle/server";
+import type { CategoryPageData } from "@/types/bicycle";
 
-// 카테고리별 데이터 매핑
-const categoryDataMap: Record<string, CategoryPageData> = {
-  sports: sportsData,
-  lifestyle: lifestyleData,
-  "smart-mobility": smartMobilityData,
-  "junior-kids": juniorKidsData,
-};
+export const revalidate = 300;
 
 export default async function StyleCategoryPage({
   params,
@@ -23,23 +12,29 @@ export default async function StyleCategoryPage({
 }) {
   const { category } = await params;
 
-  // 카테고리 데이터 가져오기
-  const categoryPageData = categoryDataMap[category];
+  // 먼저 레이아웃과 카테고리 정보를 가져옴
+  const [layoutData, { categories, currentCategory }] = await Promise.all([
+    getBicycleCategoryLayout(),
+    getBicycleCategoriesOptions(category),
+  ]);
 
-  if (!categoryPageData) notFound();
+  // 현재 카테고리 정보가 없으면 404
+  if (!layoutData || !currentCategory) notFound();
 
-  const layoutData = bicyclesCategoryLayoutData as CategoryLayoutData;
-  const categoryList = bicyclesCategoryListData as CategoryListItem[];
+  // CategoryPageData 구성
+  const categoryPageData: CategoryPageData = {
+    categoryList: categories,
+    category: currentCategory,
+    subcategories: currentCategory.subcategories,
+  };
 
   return (
-    <div className="bg-gray-50">
-      <div className="container mx-auto px-4 py-8 lg:max-w-[80rem]">
-        <CategoryLayoutRenderer
-          layoutData={layoutData}
-          categoryPageData={categoryPageData}
-          categoryList={categoryList}
-        />
+    <>
+      <div className="bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <CategoryLayoutRenderer layoutData={layoutData} categoryPageData={categoryPageData} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

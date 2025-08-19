@@ -12,7 +12,7 @@ import type {
 // =============================================================================
 // Supabase API 설정
 // =============================================================================
-function getSupabaseConfig() {
+export function getSupabaseConfig() {
   const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const apiKey = process.env.SUPABASE_ANON_KEY;
 
@@ -33,7 +33,7 @@ function getSupabaseConfig() {
 // =============================================================================
 // 캐시 옵션 생성
 // =============================================================================
-function createCacheOptions(slug: string, options: PageCacheOptions) {
+export function createCacheOptions(slug: string, options: PageCacheOptions) {
   const { isPreview, revalidateTime = 300 } = options;
 
   return isPreview
@@ -41,7 +41,7 @@ function createCacheOptions(slug: string, options: PageCacheOptions) {
     : { next: { revalidate: revalidateTime, tags: [`page-${slug}`] } }; // Edge Cache
 }
 
-function createDetailedCacheOptions(
+export function createDetailedCacheOptions(
   slug: string,
   options: PageCacheOptions,
   type: "layout" | "content",
