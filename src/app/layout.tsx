@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
+import QueryProvider from "@/providers/QueryProvider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
@@ -45,7 +46,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${noto.className} font-sans antialiased`}>
         <Header />
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Footer />
       </body>
     </html>
