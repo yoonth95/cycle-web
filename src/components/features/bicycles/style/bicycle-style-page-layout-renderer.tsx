@@ -1,5 +1,4 @@
 import { BicycleStylePageSectionRenderer } from "@/components/features/bicycles/style";
-import { PerformanceTracker } from "@/components/common/performance-tracker";
 import type {
   BicycleLayoutData,
   BicyclePageContentData,
@@ -31,9 +30,6 @@ export function BicycleStylePageLayoutRenderer({
 
   return (
     <div className={layout.className}>
-      {/* 성능 측정 컴포넌트 - UI를 렌더링하지 않음 */}
-      <PerformanceTracker currentPath="/bicycles/style" />
-
       <div className={layout.content.className}>
         {orderedSections.map((section: BicycleContentSection) => (
           <BicycleStylePageSectionRenderer key={section.id} section={section} />

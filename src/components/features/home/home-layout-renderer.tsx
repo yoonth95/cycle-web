@@ -1,12 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { markNavigationEnd } from "@/utils/performance-tracker";
 import HomeLayoutContent from "./home-layout-content";
 import { HomeContentSkeleton } from "./skeletons/home-content-skeleton";
 import { HomeContentError } from "./home-content-error";
 import type { HomeLayoutData, HomePageContentData } from "@/types/home";
-import { useEffect } from "react";
 
 interface HomeLayoutRendererProps {
   layoutData: HomeLayoutData;
@@ -36,14 +34,6 @@ const HomeLayoutRenderer = ({ layoutData, pageId, slug }: HomeLayoutRendererProp
       return failureCount < 2;
     },
   });
-
-  // 페이지 로드 완료 시점 측정
-  useEffect(() => {
-    // 데이터 로딩이 완료되고 에러가 없을 때 성능 측정
-    if (!isLoading && !error && contentData) {
-      markNavigationEnd("/");
-    }
-  }, [isLoading, error, contentData]);
 
   const { layout } = layoutData;
   const { content } = layout;
