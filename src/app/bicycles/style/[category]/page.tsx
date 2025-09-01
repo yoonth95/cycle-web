@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { CategoryLayoutRenderer } from "@/components/features/bicycles/category";
 import { getBicycleCategoriesOptions, getBicycleCategoryLayout } from "@/lib/bicycle/server";
-import type { CategoryPageData } from "@/types/bicycle";
+import type { BicycleCategoryLayoutData, CategoryPageData } from "@/types/bicycle";
 
 export const revalidate = 300;
 
@@ -79,14 +80,53 @@ export default async function StyleCategoryPage({
 }) {
   const { category } = await params;
 
-  // 먼저 레이아웃과 카테고리 정보를 가져옴
-  const [layoutData, { categories, currentCategory }] = await Promise.all([
-    getBicycleCategoryLayout(),
-    getBicycleCategoriesOptions(category),
-  ]);
+  // 레이아웃을 먼저 빠르게 로드
+  const layoutData = await getBicycleCategoryLayout();
+  if (!layoutData) notFound();
 
-  // 현재 카테고리 정보가 없으면 404
-  if (!layoutData || !currentCategory) notFound();
+  return (
+    <div className="bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+              {/* 사이드바 스켈레톤 */}
+              <div className="space-y-4 lg:col-span-1">
+                <div className="h-8 animate-pulse rounded bg-gray-200"></div>
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="h-6 animate-pulse rounded bg-gray-200"></div>
+                ))}
+              </div>
+              {/* 콘텐츠 스켈레톤 */}
+              <div className="space-y-6 lg:col-span-3">
+                <div className="h-12 animate-pulse rounded bg-gray-200"></div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {[...Array(9)].map((_, i) => (
+                    <div key={i} className="h-64 animate-pulse rounded bg-gray-200"></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          }
+        >
+          <CategoryPageContent layoutData={layoutData} category={category} />
+        </Suspense>
+      </div>
+    </div>
+  );
+}
+
+// 카테고리 데이터를 별도 컴포넌트로 분리하여 스트리밍
+async function CategoryPageContent({
+  layoutData,
+  category,
+}: {
+  layoutData: BicycleCategoryLayoutData;
+  category: string;
+}) {
+  const { categories, currentCategory } = await getBicycleCategoriesOptions(category);
+
+  if (!currentCategory) notFound();
 
   // CategoryPageData 구성
   const categoryPageData: CategoryPageData = {
@@ -95,13 +135,5 @@ export default async function StyleCategoryPage({
     subcategories: currentCategory.subcategories,
   };
 
-  return (
-    <>
-      <div className="bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          <CategoryLayoutRenderer layoutData={layoutData} categoryPageData={categoryPageData} />
-        </div>
-      </div>
-    </>
-  );
+  return <CategoryLayoutRenderer layoutData={layoutData} categoryPageData={categoryPageData} />;
 }

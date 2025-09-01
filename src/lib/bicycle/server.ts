@@ -2,7 +2,6 @@ import "server-only";
 
 import {
   fetchPageData,
-  transformPageSections,
   invalidatePageCache,
   getSupabaseConfig,
   createCacheOptions,
@@ -17,17 +16,20 @@ import type {
   BicyclesBySubcategory,
   BicycleCategoryItemType,
 } from "@/types/bicycle";
-import { PageCacheOptions } from "@/types/common";
+import type { PageCacheOptions, NormalizationInput } from "@/types/common";
 
 // =============================================================================
 // 사용자용 API (Edge + ISR 캐싱)
 // =============================================================================
 
 /**
- * 자전거 페이지 레이아웃 조회
+ * 자전거 페이지 레이아웃 조회 (더 긴 캐시 시간 적용)
  */
 export async function getBicycleLayout(): Promise<BicycleLayoutData | null> {
-  const data = await fetchPageData<BicycleLayoutData>("bicycles");
+  const data = await fetchPageData<BicycleLayoutData>("bicycles", {
+    isPreview: false,
+    revalidateTime: 3600, // 1시간 캐시 (레이아웃은 거의 변하지 않음)
+  });
   return data?.layout || null;
 }
 
@@ -36,14 +38,27 @@ export async function getBicycleLayout(): Promise<BicycleLayoutData | null> {
  */
 export async function getBicycleContent(): Promise<BicyclePageContentData | null> {
   const data = await fetchPageData("bicycles");
-  return transformPageSections(data, normalizeBicycleSectionsFromDB);
+  if (!data?.sections?.length) return null;
+
+  const normalizedInput: NormalizationInput[] = data.sections.map((section) => ({
+    id: section.id,
+    slug: data.page.slug,
+    section: section.section_type,
+    data: section.data,
+    order_index: section.order_index,
+  }));
+
+  return normalizeBicycleSectionsFromDB(normalizedInput);
 }
 
 /**
- * 자전거 스타일 페이지 레이아웃 조회
+ * 자전거 스타일 페이지 레이아웃 조회 (더 긴 캐시 시간 적용)
  */
 export async function getBicycleStyleLayout(): Promise<BicycleLayoutData | null> {
-  const data = await fetchPageData<BicycleLayoutData>("bicycles-style");
+  const data = await fetchPageData<BicycleLayoutData>("bicycles-style", {
+    isPreview: false,
+    revalidateTime: 3600, // 1시간 캐시
+  });
   return data?.layout || null;
 }
 
@@ -52,16 +67,26 @@ export async function getBicycleStyleLayout(): Promise<BicycleLayoutData | null>
  */
 export async function getBicycleStyleContent(): Promise<BicyclePageContentData | null> {
   const data = await fetchPageData("bicycles-style");
-  return transformPageSections(data, normalizeBicycleSectionsFromDB);
+  if (!data?.sections?.length) return null;
+
+  const normalizedInput: NormalizationInput[] = data.sections.map((section) => ({
+    id: section.id,
+    slug: data.page.slug,
+    section: section.section_type,
+    data: section.data,
+    order_index: section.order_index,
+  }));
+
+  return normalizeBicycleSectionsFromDB(normalizedInput);
 }
 
 /**
- * 자전거 카테고리 페이지 레이아웃 조회
+ * 자전거 카테고리 페이지 레이아웃 조회 (최적화된 캐시 시간)
  */
 export async function getBicycleCategoryLayout(): Promise<BicycleCategoryLayoutData> {
   const data = await fetchPageData<BicycleCategoryLayoutData>("bicycles-category", {
     isPreview: false,
-    revalidateTime: 60 * 60,
+    revalidateTime: 7200, // 2시간 캐시 (카테고리 레이아웃은 매우 안정적)
   });
 
   // 기본 레이아웃 반환 (데이터가 없을 경우)
@@ -103,10 +128,10 @@ export async function getBicycleCategoryLayout(): Promise<BicycleCategoryLayoutD
   return data?.layout || defaultLayout;
 }
 
-// 자전거 카테고리 사이드바, 탭 목록 조회
+// 자전거 카테고리 사이드바, 탭 목록 조회 (최적화된 캐시)
 export async function fetchBicycleCategoriesAllOptions(
   currentSlug?: string,
-  options: PageCacheOptions = { isPreview: false },
+  options: PageCacheOptions = { isPreview: false, revalidateTime: 1800 }, // 30분 기본 캐시
 ) {
   const { baseUrl, headers } = getSupabaseConfig();
   const cacheOption = createCacheOptions("bicycle-categories-options", options);

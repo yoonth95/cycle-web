@@ -1,19 +1,21 @@
 import { HomeLayoutRenderer } from "@/components/features/home";
-import { getHomeLayout, getHomeContent } from "@/lib/home/server";
-import type { HomeLayoutData, HomePageContentData } from "@/types/home";
+import { getHomeLayoutStatic } from "@/lib/home/server";
 
-export const revalidate = 300;
+export const dynamic = "force-static";
 
 export default async function Home() {
-  const [layoutData, contentData] = (await Promise.all([getHomeLayout(), getHomeContent()])) as [
-    HomeLayoutData | null,
-    HomePageContentData | null,
-  ];
+  // 빌드 타임에 레이아웃 순서만 가져오기
+  const result = await getHomeLayoutStatic();
 
-  if (!layoutData || !contentData) {
-    // TODO: 필요 시 로딩/플레이스홀더 처리
-    return null;
+  if (!result) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-muted-foreground">페이지를 찾을 수 없습니다</p>
+      </div>
+    );
   }
 
-  return <HomeLayoutRenderer layoutData={layoutData} contentData={contentData} />;
+  const { pageId, slug, layoutData } = result;
+
+  return <HomeLayoutRenderer layoutData={layoutData} pageId={pageId} slug={slug} />;
 }

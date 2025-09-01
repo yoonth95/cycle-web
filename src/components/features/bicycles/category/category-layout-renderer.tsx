@@ -2,6 +2,7 @@ import {
   CategoryLayoutSidebar,
   CategoryLayoutContent,
 } from "@/components/features/bicycles/category";
+import { AutoPerformanceTracker } from "@/components/common/performance-tracker";
 import type { BicycleCategoryLayoutData, CategoryPageData } from "@/types/bicycle";
 
 interface CategoryLayoutRendererProps {
@@ -15,6 +16,9 @@ const CategoryLayoutRenderer = ({ layoutData, categoryPageData }: CategoryLayout
 
   return (
     <div className={layout.className}>
+      {/* 성능 측정 컴포넌트 - UI를 렌더링하지 않음 */}
+      <AutoPerformanceTracker />
+
       {/* 사이드바 위치에 따른 순서 조정 */}
       {sidebar.position === "left" && (
         <CategoryLayoutSidebar
