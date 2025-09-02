@@ -1,41 +1,23 @@
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { PageSuspenseWrapper, ErrorBoundaryWrapper } from "@/components/common";
 import { BicyclePageLayoutRenderer } from "@/components/features/bicycles/page";
 import { getBicycleLayout, getBicycleContent } from "@/lib/bicycle";
 import { BicycleLayoutData } from "@/types/bicycle";
 
 export const revalidate = 300;
 
-// // 빠른 레이아웃 컴포넌트
-// async function BicycleLayoutShell() {
-//   const layoutData = await getBicycleLayout();
-//   if (!layoutData) notFound();
-//   return layoutData;
-// }
-
-// // 느린 콘텐츠 컴포넌트
-// async function BicycleContentShell() {
-//   const contentData = await getBicycleContent();
-//   if (!contentData) notFound();
-//   return contentData;
-// }
-
 export default async function BicyclesPage() {
   // 레이아웃을 먼저 로드하고 콘텐츠는 스트리밍
   const layoutData = await getBicycleLayout();
-  if (!layoutData) notFound();
 
   return (
-    <Suspense
-      fallback={
-        <div className="animate-pulse">
-          <div className="mb-4 h-8 rounded bg-gray-200"></div>
-          <div className="h-64 rounded bg-gray-200"></div>
-        </div>
-      }
-    >
-      <BicyclePageContent layoutData={layoutData} />
-    </Suspense>
+    <ErrorBoundaryWrapper data={layoutData}>
+      {(validLayoutData) => (
+        <PageSuspenseWrapper loadingMessage="자전거 목록을 불러오는 중...">
+          <BicyclePageContent layoutData={validLayoutData} />
+        </PageSuspenseWrapper>
+      )}
+    </ErrorBoundaryWrapper>
   );
 }
 

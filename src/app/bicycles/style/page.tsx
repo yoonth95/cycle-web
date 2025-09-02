@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { PageSuspenseWrapper, ErrorBoundaryWrapper } from "@/components/common";
 import { BicycleStylePageLayoutRenderer } from "@/components/features/bicycles/style";
 import { getBicycleStyleLayout, getBicycleStyleContent } from "@/lib/bicycle";
 import { BicycleLayoutData } from "@/types/bicycle";
@@ -9,23 +9,15 @@ export const revalidate = 300;
 export default async function StylePage() {
   // 레이아웃을 먼저 로드하고 콘텐츠는 스트리밍
   const layoutData = await getBicycleStyleLayout();
-  if (!layoutData) notFound();
 
   return (
-    <Suspense
-      fallback={
-        <div className="animate-pulse space-y-4">
-          <div className="h-12 rounded bg-gray-200"></div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-48 rounded bg-gray-200"></div>
-            ))}
-          </div>
-        </div>
-      }
-    >
-      <StylePageContent layoutData={layoutData} />
-    </Suspense>
+    <ErrorBoundaryWrapper data={layoutData}>
+      {(validLayoutData) => (
+        <PageSuspenseWrapper loadingMessage="스타일 카테고리를 불러오는 중...">
+          <StylePageContent layoutData={validLayoutData} />
+        </PageSuspenseWrapper>
+      )}
+    </ErrorBoundaryWrapper>
   );
 }
 

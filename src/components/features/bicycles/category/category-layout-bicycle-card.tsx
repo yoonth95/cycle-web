@@ -5,19 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BicycleFromDB } from "@/types/bicycle";
 
-const getTagColor = (color: string) => {
-  const colorMap: Record<string, string> = {
-    red: "bg-red-500 text-white",
-    green: "bg-green-500 text-white",
-    blue: "bg-blue-500 text-white",
-    yellow: "bg-yellow-500 text-white",
-    purple: "bg-purple-500 text-white",
-    orange: "bg-orange-500 text-white",
-    gray: "bg-gray-500 text-white",
-  };
-  return colorMap[color] || "bg-gray-500 text-white";
-};
-
 interface CategoryLayoutBicycleCardProps {
   bicycle: BicycleFromDB;
   categorySlug?: string;
@@ -45,7 +32,7 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
               <Badge
                 key={index}
                 variant={tag.variant}
-                className={`rounded px-2 py-1 text-xs font-medium ${getTagColor(tag.color)}`}
+                className={`rounded px-2 py-1 text-xs font-medium text-white bg-${tag.color}-500`}
               >
                 {tag.label}
               </Badge>
