@@ -1,21 +1,30 @@
+import { notFound } from "next/navigation";
+import { PageSuspenseWrapper, ErrorBoundaryWrapper } from "@/components/common";
 import { HomeLayoutRenderer } from "@/components/features/home";
-import { getHomeLayoutStatic } from "@/lib/home/server";
+import { getHomeLayout, getHomeContent } from "@/lib/home/server";
+import { HomeLayoutData } from "@/types/home";
 
-export const dynamic = "force-static";
+export const revalidate = 300;
 
 export default async function Home() {
-  // 빌드 타임에 레이아웃 순서만 가져오기
-  const result = await getHomeLayoutStatic();
+  // 레이아웃을 먼저 로드하고 콘텐츠는 스트리밍
+  const layoutData = await getHomeLayout();
 
-  if (!result) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground">페이지를 찾을 수 없습니다</p>
-      </div>
-    );
-  }
+  return (
+    <ErrorBoundaryWrapper data={layoutData}>
+      {(validLayoutData) => (
+        <PageSuspenseWrapper loadingMessage="홈페이지 콘텐츠를 불러오는 중...">
+          <HomePageContent layoutData={validLayoutData} />
+        </PageSuspenseWrapper>
+      )}
+    </ErrorBoundaryWrapper>
+  );
+}
 
-  const { pageId, slug, layoutData } = result;
+// 콘텐츠를 별도 컴포넌트로 분리하여 스트리밍
+async function HomePageContent({ layoutData }: { layoutData: HomeLayoutData }) {
+  const contentData = await getHomeContent();
+  if (!contentData) notFound();
 
-  return <HomeLayoutRenderer layoutData={layoutData} pageId={pageId} slug={slug} />;
+  return <HomeLayoutRenderer layoutData={layoutData} contentData={contentData} />;
 }

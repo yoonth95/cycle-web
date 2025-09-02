@@ -11,7 +11,44 @@ import type { HomeLayoutData, HomePageContentData } from "@/types/home";
 import type { NormalizationInput } from "@/types/common";
 
 // =============================================================================
-// 하이브리드 접근 방식 (새로 추가)
+// 사용자용 API (Edge + ISR 캐싱) - bicycles 패턴과 동일
+// =============================================================================
+
+/**
+ * 홈 페이지 레이아웃 조회 (더 긴 캐시 시간 적용)
+ */
+export async function getHomeLayout(): Promise<HomeLayoutData | null> {
+  const data = await fetchPageLayout<HomeLayoutData>("home", {
+    isPreview: false,
+    revalidateTime: 3600, // 1시간 캐시 (레이아웃은 거의 변하지 않음)
+  });
+  return data?.layout || null;
+}
+
+/**
+ * 홈 페이지 콘텐츠 조회
+ */
+export async function getHomeContent(): Promise<HomePageContentData | null> {
+  const data = await fetchPageData<HomeLayoutData>("home", {
+    isPreview: false,
+    revalidateTime: 300, // 5분 ISR
+  });
+
+  if (!data?.sections?.length) return null;
+
+  const normalizedInput: NormalizationInput[] = data.sections.map((section) => ({
+    id: section.id,
+    slug: data.page.slug,
+    section: section.section_type,
+    data: section.data,
+    order_index: section.order_index,
+  }));
+
+  return normalizeHomeSectionsFromDB(normalizedInput);
+}
+
+// =============================================================================
+// 하이브리드 접근 방식 (기존 API 라우트용 - 유지)
 // =============================================================================
 
 /**
