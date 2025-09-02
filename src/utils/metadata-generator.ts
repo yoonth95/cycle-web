@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { getBicycleCategoriesOptions } from "@/lib/bicycle/server";
 
 interface GenerateMetadataOptions {
   category: string;
