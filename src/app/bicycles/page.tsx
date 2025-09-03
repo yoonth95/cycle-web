@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageSuspenseWrapper, ErrorBoundaryWrapper } from "@/components/common";
+import { PageSuspenseWrapper, DataValidationWrapper } from "@/components/common";
 import { BicyclePageLayoutRenderer } from "@/components/features/bicycles/page";
 import { getBicycleLayout, getBicycleContent } from "@/lib/bicycle";
 import { BicycleLayoutData } from "@/types/bicycle";
@@ -11,13 +11,13 @@ export default async function BicyclesPage() {
   const layoutData = await getBicycleLayout();
 
   return (
-    <ErrorBoundaryWrapper data={layoutData}>
+    <DataValidationWrapper data={layoutData}>
       {(validLayoutData) => (
         <PageSuspenseWrapper loadingMessage="자전거 목록을 불러오는 중...">
           <BicyclePageContent layoutData={validLayoutData} />
         </PageSuspenseWrapper>
       )}
-    </ErrorBoundaryWrapper>
+    </DataValidationWrapper>
   );
 }
 

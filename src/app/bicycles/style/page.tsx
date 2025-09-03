@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageSuspenseWrapper, ErrorBoundaryWrapper } from "@/components/common";
+import { PageSuspenseWrapper, DataValidationWrapper } from "@/components/common";
 import { BicycleStylePageLayoutRenderer } from "@/components/features/bicycles/style";
 import { getBicycleStyleLayout, getBicycleStyleContent } from "@/lib/bicycle";
 import { BicycleLayoutData } from "@/types/bicycle";
@@ -11,13 +11,13 @@ export default async function StylePage() {
   const layoutData = await getBicycleStyleLayout();
 
   return (
-    <ErrorBoundaryWrapper data={layoutData}>
+    <DataValidationWrapper data={layoutData}>
       {(validLayoutData) => (
         <PageSuspenseWrapper loadingMessage="스타일 카테고리를 불러오는 중...">
           <StylePageContent layoutData={validLayoutData} />
         </PageSuspenseWrapper>
       )}
-    </ErrorBoundaryWrapper>
+    </DataValidationWrapper>
   );
 }
 

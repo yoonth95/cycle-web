@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PageSuspenseWrapper, ErrorBoundaryWrapper } from "@/components/common";
+import { PageSuspenseWrapper, DataValidationWrapper } from "@/components/common";
 import { HomeLayoutRenderer } from "@/components/features/home";
 import { getHomeLayout, getHomeContent } from "@/lib/home/server";
 import { HomeLayoutData } from "@/types/home";
@@ -11,13 +11,13 @@ export default async function Home() {
   const layoutData = await getHomeLayout();
 
   return (
-    <ErrorBoundaryWrapper data={layoutData}>
+    <DataValidationWrapper data={layoutData}>
       {(validLayoutData) => (
         <PageSuspenseWrapper loadingMessage="홈페이지 콘텐츠를 불러오는 중...">
           <HomePageContent layoutData={validLayoutData} />
         </PageSuspenseWrapper>
       )}
-    </ErrorBoundaryWrapper>
+    </DataValidationWrapper>
   );
 }
 

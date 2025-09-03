@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PageSuspenseWrapper, ErrorBoundaryWrapper } from "@/components/common";
+import { PageSuspenseWrapper, DataValidationWrapper } from "@/components/common";
 import { DynamicMetadataUpdater } from "@/components/features/bicycles/common";
 import { CategoryLayoutRenderer } from "@/components/features/bicycles/category";
 import { getBicycleCategoriesOptions, getBicycleCategoryLayout } from "@/lib/bicycle/server";
@@ -30,7 +30,7 @@ export default async function StyleCategoryPage({
   const layoutData = await getBicycleCategoryLayout();
 
   return (
-    <ErrorBoundaryWrapper data={layoutData}>
+    <DataValidationWrapper data={layoutData}>
       {(validLayoutData) => (
         <div className="bg-gray-50">
           <div className="container mx-auto px-4 py-8">
@@ -40,7 +40,7 @@ export default async function StyleCategoryPage({
           </div>
         </div>
       )}
-    </ErrorBoundaryWrapper>
+    </DataValidationWrapper>
   );
 }
 
