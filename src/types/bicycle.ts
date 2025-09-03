@@ -209,6 +209,7 @@ export const BicycleContentLayoutSchema = z.object({
 });
 
 export const BicycleLayoutDataSchema = z.object({
+  pageId: z.string(),
   layout: z.object({
     type: z.string(),
     className: z.string().optional(),

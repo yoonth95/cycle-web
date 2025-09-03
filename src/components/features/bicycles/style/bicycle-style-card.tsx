@@ -19,6 +19,9 @@ const BicycleStyleCard = ({ card }: BicycleStyleCardProps) => {
             alt={card.title}
             className="object-cover transition-transform group-hover:scale-105"
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={false}
+            quality={80}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
