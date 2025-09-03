@@ -41,16 +41,6 @@ export type DbPageSectionRow = z.infer<typeof DbPageSectionRowSchema>;
 export type NormalizationInput = z.infer<typeof NormalizationInputSchema>;
 
 // =============================================================================
-// 페이지 데이터 구조
-// =============================================================================
-
-export interface PageDataResult<TLayout = unknown> {
-  page: DbPageRow;
-  layout: TLayout | null;
-  sections: DbPageSectionRow[];
-}
-
-// =============================================================================
 // 캐시 설정 타입
 // =============================================================================
 

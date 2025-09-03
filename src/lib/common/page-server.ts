@@ -1,13 +1,5 @@
 import "server-only";
-import type {
-  DbPageRow,
-  DbPageLayoutRow,
-  DbPageSectionRow,
-  PageDataResult,
-  PageCacheOptions,
-  NormalizationInput,
-  DataTransformFunction,
-} from "@/types/common";
+import type { DbPageSectionRow, PageCacheOptions } from "@/types/common";
 
 // =============================================================================
 // Supabase API 설정
@@ -38,7 +30,14 @@ export function createCacheOptions(slug: string, options: PageCacheOptions) {
 
   return isPreview
     ? { cache: "no-store" as const } // 관리자 미리보기는 항상 최신
-    : { next: { revalidate: revalidateTime, tags: [`page-${slug}`] } }; // Edge Cache
+    : {
+        next: {
+          revalidate: revalidateTime,
+          tags: [`page-${slug}`],
+        },
+        // 추가 최적화: force-cache로 더 적극적인 캐싱
+        cache: "force-cache" as const,
+      }; // Edge Cache + 더 적극적인 캐싱
 }
 
 export function createDetailedCacheOptions(
@@ -58,103 +57,80 @@ export function createDetailedCacheOptions(
 // =============================================================================
 
 /**
- * 범용 페이지 데이터 조회 함수
+ * 페이지 레이아웃만 조회하는 함수
  * @param slug 페이지 슬러그
  * @param options 캐시 옵션
  */
-export async function fetchPageData<TLayout = unknown>(
+export async function fetchPageLayout<TLayout = unknown>(
   slug: string,
   options: PageCacheOptions = { isPreview: false },
-): Promise<PageDataResult<TLayout> | null> {
+): Promise<{ id: string; slug: string; layout: TLayout | null } | null> {
   const { baseUrl, headers } = getSupabaseConfig();
-  const cacheOption = createCacheOptions(slug, options);
+  const cacheOption = createDetailedCacheOptions(slug, options, "layout");
 
   try {
-    // 페이지 조회
-    const pageResponse = await fetch(
-      `${baseUrl}/rest/v1/pages?slug=eq.${slug}&select=id,slug&limit=1`,
-      { ...cacheOption, headers },
+    const layoutResponse = await fetch(
+      `${baseUrl}/rest/v1/pages?slug=eq.${slug}&select=id,slug,layout:page_layouts(layout)&limit=1`,
+      { headers, ...(cacheOption && { next: cacheOption }) },
     );
 
-    if (!pageResponse.ok) {
-      throw new Error(`Page fetch failed: ${pageResponse.status}`);
+    if (!layoutResponse.ok) {
+      throw new Error(`Layout fetch failed: ${layoutResponse.status}`);
     }
 
-    const [page] = (await pageResponse.json()) as DbPageRow[];
-    if (!page) return null;
+    const [pageData] = (await layoutResponse.json()) as Array<{
+      id: string;
+      slug: string;
+      layout: { layout: TLayout } | null;
+    }>;
 
-    // 병렬로 layout과 sections 조회 (각각 독립적 Edge Cache)
-    const [layoutResponse, sectionsResponse] = await Promise.all([
-      fetch(`${baseUrl}/rest/v1/page_layouts?page_id=eq.${page.id}&select=layout&limit=1`, {
-        ...cacheOption,
-        headers,
-        next: createDetailedCacheOptions(slug, options, "layout"),
-      }),
-      fetch(
-        `${baseUrl}/rest/v1/page_sections?page_id=eq.${page.id}&select=id,section_type,data,order_index`,
-        {
-          ...cacheOption,
-          headers,
-          next: createDetailedCacheOptions(slug, options, "content"),
-        },
-      ),
-    ]);
-
-    if (!layoutResponse.ok || !sectionsResponse.ok) {
-      throw new Error(
-        `Data fetch failed: layout(${layoutResponse.status}) sections(${sectionsResponse.status})`,
-      );
-    }
-
-    const [layoutData] = (await layoutResponse.json()) as DbPageLayoutRow[];
-    const sectionsData = (await sectionsResponse.json()) as DbPageSectionRow[];
-
-    const layout =
-      layoutData?.layout && typeof layoutData.layout === "object"
-        ? (layoutData.layout as TLayout)
-        : null;
+    if (!pageData) return null;
 
     return {
-      page,
-      layout,
-      sections: sectionsData || [],
+      id: pageData.id,
+      slug: pageData.slug,
+      layout: pageData.layout?.layout ?? null,
     };
   } catch (error) {
-    console.error(`[fetchPageData] Error for slug "${slug}":`, error);
+    console.error(`[fetchPageLayout] Error for slug "${slug}":`, error);
     return null;
   }
 }
 
-// =============================================================================
-// 데이터 변환 유틸리티
-// =============================================================================
-
 /**
- * 섹션 데이터를 정규화하고 변환
- * @param pageData 페이지 데이터
- * @param transformFunction 변환 함수
+ * 페이지 섹션들만 조회하는 함수
+ * @param pageId 페이지 ID
+ * @param slug 캐시를 위한 페이지 슬러그
+ * @param options 캐시 옵션
  */
-export function transformPageSections<TOutput>(
-  pageData: PageDataResult | null,
-  transformFunction: DataTransformFunction<NormalizationInput, TOutput>,
-): TOutput | null {
-  if (!pageData?.sections?.length) return null;
+export async function fetchPageSections(
+  pageId: string,
+  slug: string,
+  options: PageCacheOptions = { isPreview: false },
+): Promise<{ sections: DbPageSectionRow[] } | null> {
+  const { baseUrl, headers } = getSupabaseConfig();
+  const cacheOption = createDetailedCacheOptions(slug, options, "content");
 
-  const sortedSections = pageData.sections.slice().sort((a, b) => {
-    const ao = a.order_index ?? 1;
-    const bo = b.order_index ?? 1;
-    return ao - bo;
-  });
+  try {
+    // 페이지 ID로 섹션들을 조회
+    const sectionsResponse = await fetch(
+      `${baseUrl}/rest/v1/page_sections?page_id=eq.${pageId}&select=id,section_type,data,order_index&order=order_index.asc`,
+      { headers, ...(cacheOption && { next: cacheOption }) },
+    );
 
-  const normalizedInput: NormalizationInput[] = sortedSections.map((section) => ({
-    id: section.id,
-    slug: pageData.page.slug,
-    section: section.section_type,
-    data: section.data,
-    order_index: section.order_index,
-  }));
+    if (!sectionsResponse.ok) {
+      throw new Error(`Sections fetch failed: ${sectionsResponse.status}`);
+    }
 
-  return transformFunction(normalizedInput);
+    const sections = (await sectionsResponse.json()) as DbPageSectionRow[];
+
+    return {
+      sections: sections ?? [],
+    };
+  } catch (error) {
+    console.error(`[fetchPageSections] Error for pageId "${pageId}":`, error);
+    return null;
+  }
 }
 
 // =============================================================================
