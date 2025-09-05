@@ -1,75 +1,22 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PageSuspenseWrapper, DataValidationWrapper } from "@/components/common";
+import { DynamicMetadataUpdater } from "@/components/features/bicycles/common";
 import { CategoryLayoutRenderer } from "@/components/features/bicycles/category";
 import { getBicycleCategoriesOptions, getBicycleCategoryLayout } from "@/lib/bicycle/server";
-import type { CategoryPageData } from "@/types/bicycle";
+import { generateBasicBicycleCategoryMetadata } from "@/utils/metadata-generator";
+import type { BicycleCategoryLayoutData, CategoryPageData } from "@/types/bicycle";
 
 export const revalidate = 300;
 
-// 메타데이터 생성 함수를 page.tsx로 이동
+// 기본 메타데이터 생성 (데이터 로드 전)
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
   const { category } = await params;
-
-  try {
-    // 카테고리 정보를 가져와서 한국어 제목 사용
-    const { currentCategory } = await getBicycleCategoriesOptions(category);
-
-    if (!currentCategory) {
-      return {
-        title: "페이지를 찾을 수 없습니다 | 삼천리자전거",
-        description: "요청하신 페이지를 찾을 수 없습니다.",
-      };
-    }
-
-    // 한국어 제목으로 메타데이터 생성
-    return {
-      title: `${currentCategory.title} | 삼천리자전거`,
-      description: `${currentCategory.title} 자전거 모음. 다양한 ${currentCategory.title} 자전거를 만나보세요.`,
-
-      // 추가 SEO 최적화
-      keywords: [
-        currentCategory.title,
-        "자전거",
-        "삼천리자전거",
-        ...currentCategory.subcategories.map((sub) => sub.name),
-      ].join(", "),
-
-      // Open Graph 메타데이터
-      openGraph: {
-        title: `${currentCategory.title} | 삼천리자전거`,
-        description: `${currentCategory.title} 자전거 모음. 다양한 ${currentCategory.title} 자전거를 만나보세요.`,
-        type: "website",
-        locale: "ko_KR",
-      },
-
-      // 구조화된 데이터를 위한 추가 정보
-      alternates: {
-        canonical: `/bicycles/${category}`,
-      },
-
-      // 로봇 메타태그
-      robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-          index: true,
-          follow: true,
-        },
-      },
-    };
-  } catch (error) {
-    console.error("Error generating metadata:", error);
-
-    // 에러 시 기본 메타데이터 반환
-    return {
-      title: `${category} | 삼천리자전거`,
-      description: `${category} 자전거 목록`,
-    };
-  }
+  return generateBasicBicycleCategoryMetadata({ category });
 }
 
 export default async function StyleCategoryPage({
@@ -79,14 +26,35 @@ export default async function StyleCategoryPage({
 }) {
   const { category } = await params;
 
-  // 먼저 레이아웃과 카테고리 정보를 가져옴
-  const [layoutData, { categories, currentCategory }] = await Promise.all([
-    getBicycleCategoryLayout(),
-    getBicycleCategoriesOptions(category),
-  ]);
+  // 레이아웃을 먼저 빠르게 로드
+  const layoutData = await getBicycleCategoryLayout();
 
-  // 현재 카테고리 정보가 없으면 404
-  if (!layoutData || !currentCategory) notFound();
+  return (
+    <DataValidationWrapper data={layoutData}>
+      {(validLayoutData) => (
+        <div className="bg-gray-50">
+          <div className="container mx-auto px-4 py-8">
+            <PageSuspenseWrapper loadingMessage="카테고리 상품을 불러오는 중...">
+              <CategoryPageContent layoutData={validLayoutData} category={category} />
+            </PageSuspenseWrapper>
+          </div>
+        </div>
+      )}
+    </DataValidationWrapper>
+  );
+}
+
+// 카테고리 데이터를 별도 컴포넌트로 분리하여 스트리밍
+async function CategoryPageContent({
+  layoutData,
+  category,
+}: {
+  layoutData: BicycleCategoryLayoutData;
+  category: string;
+}) {
+  const { categories, currentCategory } = await getBicycleCategoriesOptions(category);
+
+  if (!currentCategory) notFound();
 
   // CategoryPageData 구성
   const categoryPageData: CategoryPageData = {
@@ -97,11 +65,11 @@ export default async function StyleCategoryPage({
 
   return (
     <>
-      <div className="bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          <CategoryLayoutRenderer layoutData={layoutData} categoryPageData={categoryPageData} />
-        </div>
-      </div>
+      {/* 동적 메타데이터 업데이트 */}
+      <DynamicMetadataUpdater category={currentCategory} />
+
+      {/* 실제 페이지 콘텐츠 */}
+      <CategoryLayoutRenderer layoutData={layoutData} categoryPageData={categoryPageData} />
     </>
   );
 }

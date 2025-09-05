@@ -6,7 +6,7 @@ const CategoryLayoutBicycleSkeleton = () => {
     <div className="flex flex-col rounded-lg border border-gray-200 bg-white">
       {/* 자전거 이미지 스켈레톤 */}
       <AspectRatio ratio={26 / 15} className="relative rounded-t">
-        <Skeleton className="h-full w-full rounded-t" />
+        <Skeleton className="h-full w-full rounded-t rounded-b-none" />
       </AspectRatio>
 
       {/* 자전거 정보 스켈레톤 */}

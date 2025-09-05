@@ -114,6 +114,7 @@ export const HomeContentLayoutSchema = z.object({
 });
 
 export const HomeLayoutDataSchema = z.object({
+  pageId: z.string(),
   layout: z.object({
     type: z.string(),
     className: z.string().optional(),

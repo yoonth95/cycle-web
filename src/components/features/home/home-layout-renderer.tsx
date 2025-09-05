@@ -8,11 +8,10 @@ interface HomeLayoutRendererProps {
 
 const HomeLayoutRenderer = ({ layoutData, contentData }: HomeLayoutRendererProps) => {
   const { layout } = layoutData;
-  const { content } = layout;
 
   return (
     <div className={layout.className}>
-      <HomeLayoutContent contentLayout={content} contentData={contentData} />
+      <HomeLayoutContent contentLayout={layout.content} contentData={contentData} />
     </div>
   );
 };
