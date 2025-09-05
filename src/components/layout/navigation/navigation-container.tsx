@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import {
   NavigationBar,
@@ -16,11 +16,13 @@ import { NavigationProps } from "@/types/navigation";
 
 const NavigationContainer = ({ menuData }: NavigationProps) => {
   const pathname = usePathname();
-  const { isMenuOpen, toggleMenu, closeAllMenus } = useNavigationStore(
+  const searchParams = useSearchParams();
+  const { isMenuOpen, toggleMenu, closeAllMenus, setCurrentPath } = useNavigationStore(
     useShallow((state) => ({
       isMenuOpen: state.isMenuOpen,
       toggleMenu: state.toggleMenu,
       closeAllMenus: state.closeAllMenus,
+      setCurrentPath: state.setCurrentPath,
     })),
   );
 
@@ -30,7 +32,10 @@ const NavigationContainer = ({ menuData }: NavigationProps) => {
 
   useEffect(() => {
     closeAllMenus();
-  }, [pathname, closeAllMenus]);
+    // 쿼리 파라미터를 포함한 전체 경로 설정
+    const fullPath = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
+    setCurrentPath(fullPath);
+  }, [pathname, searchParams, closeAllMenus, setCurrentPath]);
 
   return (
     <>
