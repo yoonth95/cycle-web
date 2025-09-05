@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { sortSubItems } from "@/utils/navigation-utils";
+import { useShallow } from "zustand/react/shallow";
 import { useNavigationStore } from "@/stores/navigation-store";
+import { sortSubItems, isCurrentPage } from "@/utils/navigation-utils";
+import { cn } from "@/lib/utils";
 import { NavigationItem, NavigationCategoryItem } from "@/types/navigation";
 
 interface HoverDropdownMenuProps {
@@ -11,7 +12,12 @@ interface HoverDropdownMenuProps {
 }
 
 const HoverDropdownMenu = ({ menuItem }: HoverDropdownMenuProps) => {
-  const activeDropdownId = useNavigationStore((state) => state.activeDropdownId);
+  const { activeDropdownId, currentPath } = useNavigationStore(
+    useShallow((state) => ({
+      activeDropdownId: state.activeDropdownId,
+      currentPath: state.currentPath,
+    })),
+  );
   const isActive = activeDropdownId === menuItem.id.toString();
 
   return (
@@ -41,7 +47,12 @@ const HoverDropdownMenu = ({ menuItem }: HoverDropdownMenuProps) => {
                     <h2 className="border-b border-gray-200 pb-2 text-xl font-bold">
                       <Link
                         href={categoryItem.link || "#"}
-                        className="text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
+                        className={cn(
+                          "transition-colors duration-200",
+                          isCurrentPage(currentPath, categoryItem.link || "")
+                            ? "text-figma-alizarin-crimson"
+                            : "text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80",
+                        )}
                       >
                         {categoryItem.slug}
                       </Link>
@@ -53,7 +64,12 @@ const HoverDropdownMenu = ({ menuItem }: HoverDropdownMenuProps) => {
                             <h3 className="text-base font-semibold text-gray-800">
                               <Link
                                 href={subCategoryItem.link}
-                                className="hover:text-figma-alizarin-crimson transition-colors duration-200"
+                                className={cn(
+                                  "transition-colors duration-200",
+                                  isCurrentPage(currentPath, subCategoryItem.link)
+                                    ? "text-figma-alizarin-crimson"
+                                    : "hover:text-figma-alizarin-crimson",
+                                )}
                               >
                                 {subCategoryItem.slug}
                               </Link>
@@ -71,7 +87,12 @@ const HoverDropdownMenu = ({ menuItem }: HoverDropdownMenuProps) => {
                                     <li key={item.id}>
                                       <Link
                                         href={href}
-                                        className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-1 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                                        className={cn(
+                                          "block border-l-2 py-1 pl-2 text-sm transition-colors duration-200",
+                                          isCurrentPage(currentPath, href)
+                                            ? "text-figma-alizarin-crimson border-figma-alizarin-crimson"
+                                            : "hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson border-transparent text-gray-600",
+                                        )}
                                       >
                                         {item.slug}
                                       </Link>
@@ -92,7 +113,12 @@ const HoverDropdownMenu = ({ menuItem }: HoverDropdownMenuProps) => {
                   <h2 className="border-b border-gray-200 pb-2 text-xl font-bold">
                     <Link
                       href={menuItem.link}
-                      className="text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
+                      className={cn(
+                        "transition-colors duration-200",
+                        isCurrentPage(currentPath, menuItem.link)
+                          ? "text-figma-alizarin-crimson"
+                          : "text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80",
+                      )}
                     >
                       {menuItem.slug}
                     </Link>
@@ -104,7 +130,12 @@ const HoverDropdownMenu = ({ menuItem }: HoverDropdownMenuProps) => {
                           <li key={item.id}>
                             <Link
                               href={item.link || "#"}
-                              className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson my-4 block border-l-2 border-transparent pl-3 text-sm text-gray-600 transition-colors duration-200"
+                              className={cn(
+                                "my-4 block border-l-2 pl-3 text-sm transition-colors duration-200",
+                                isCurrentPage(currentPath, item.link || "")
+                                  ? "text-figma-alizarin-crimson border-figma-alizarin-crimson"
+                                  : "hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson border-transparent text-gray-600",
+                              )}
                             >
                               {item.slug}
                             </Link>
