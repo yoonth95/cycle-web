@@ -28,3 +28,24 @@ export const sortSubItems = <T extends NavigationCategoryItem | NavigationSubIte
   }
   return [...items].sort((a, b) => a.order_index - b.order_index);
 };
+
+/**
+ * 현재 페이지인지 확인하는 유틸리티 함수
+ */
+export const isCurrentPage = (currentPath: string, href: string): boolean => {
+  if (!href || href === "#") return false;
+
+  // 정확한 경로 매칭
+  if (currentPath === href) return true;
+
+  // 쿼리 파라미터가 있는 경우 처리
+  if (href.includes("?")) {
+    return currentPath === href;
+  }
+
+  // 쿼리 파라미터가 없는 경우, 경로가 일치하거나 하위 경로인지 확인
+  if (currentPath.startsWith(href + "?")) return true;
+  if (href !== "/" && currentPath.startsWith(href + "/")) return true;
+
+  return false;
+};

@@ -1,6 +1,9 @@
 import { create } from "zustand";
 
 interface NavigationState {
+  // 현재 페이지 경로
+  currentPath: string;
+
   // 햄버거 메뉴 상태
   isMenuOpen: boolean;
 
@@ -11,11 +14,16 @@ interface NavigationState {
   closeMenu: () => void;
   setActiveDropdown: (id: string | null) => void;
   closeAllMenus: () => void;
+  setCurrentPath: (path: string) => void;
 }
 
 export const useNavigationStore = create<NavigationState>((set) => ({
+  currentPath: "",
   isMenuOpen: false,
   activeDropdownId: null,
+
+  // 현재 페이지 경로 설정
+  setCurrentPath: (path: string) => set({ currentPath: path }),
 
   // 햄버거 메뉴 토글
   toggleMenu: () =>

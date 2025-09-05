@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { sortSubItems } from "@/utils/navigation-utils";
+import { cn } from "@/lib/utils";
+import { sortSubItems, isCurrentPage } from "@/utils/navigation-utils";
+import { useNavigationStore } from "@/stores/navigation-store";
 import { FullMenuProps, NavigationCategoryItem } from "@/types/navigation";
 
 const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
+  const currentPath = useNavigationStore((state) => state.currentPath);
+
   return (
     <AnimatePresence>
       {isMenuOpen && (
@@ -33,7 +37,12 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                     >
                       <Link
                         href={mainCategory.link}
-                        className="text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
+                        className={cn(
+                          "transition-colors duration-200",
+                          isCurrentPage(currentPath, mainCategory.link)
+                            ? "text-figma-alizarin-crimson"
+                            : "text-figma-alizarin-crimson hover:text-figma-alizarin-crimson/80",
+                        )}
                       >
                         {mainCategory.slug}
                       </Link>
@@ -49,7 +58,12 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                         <motion.div whileHover={{ x: 2 }}>
                           <Link
                             href={mainCategory.link}
-                            className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                            className={cn(
+                              "block border-l-2 py-0.5 pl-2 text-sm transition-colors duration-200",
+                              isCurrentPage(currentPath, mainCategory.link)
+                                ? "text-figma-alizarin-crimson border-figma-alizarin-crimson"
+                                : "hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson border-transparent text-gray-600",
+                            )}
                           >
                             바로가기 →
                           </Link>
@@ -84,12 +98,22 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                   className="flex flex-col gap-3"
                                 >
                                   <motion.h2
-                                    className="text-figma-alizarin-crimson text-base font-semibold"
+                                    className={cn(
+                                      "text-base font-semibold",
+                                      isCurrentPage(currentPath, categoryItem.link || "")
+                                        ? "text-figma-alizarin-crimson"
+                                        : "text-figma-alizarin-crimson",
+                                    )}
                                     whileHover={{ x: 2 }}
                                   >
                                     <Link
                                       href={categoryItem.link || "#"}
-                                      className="hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
+                                      className={cn(
+                                        "transition-colors duration-200",
+                                        isCurrentPage(currentPath, categoryItem.link || "")
+                                          ? "text-figma-alizarin-crimson"
+                                          : "hover:text-figma-alizarin-crimson/80",
+                                      )}
                                     >
                                       {categoryItem.slug}
                                     </Link>
@@ -109,12 +133,22 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                             className="flex flex-col gap-1"
                                           >
                                             <motion.h3
-                                              className="text-sm font-medium text-gray-800"
+                                              className={cn(
+                                                "text-sm font-medium",
+                                                isCurrentPage(currentPath, subCategoryItem.link)
+                                                  ? "text-figma-alizarin-crimson"
+                                                  : "text-gray-800",
+                                              )}
                                               whileHover={{ x: 2 }}
                                             >
                                               <Link
                                                 href={subCategoryItem.link}
-                                                className="hover:text-figma-alizarin-crimson transition-colors duration-200"
+                                                className={cn(
+                                                  "transition-colors duration-200",
+                                                  isCurrentPage(currentPath, subCategoryItem.link)
+                                                    ? "text-figma-alizarin-crimson"
+                                                    : "hover:text-figma-alizarin-crimson",
+                                                )}
                                               >
                                                 {subCategoryItem.slug}
                                               </Link>
@@ -139,7 +173,15 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                                       <motion.div whileHover={{ x: 2 }}>
                                                         <Link
                                                           href={`${subCategoryItem.link}?tab=${item.link}`}
-                                                          className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                                                          className={cn(
+                                                            "block border-l-2 py-0.5 pl-2 text-sm transition-colors duration-200",
+                                                            isCurrentPage(
+                                                              currentPath,
+                                                              `${subCategoryItem.link}?tab=${item.link}`,
+                                                            )
+                                                              ? "text-figma-alizarin-crimson border-figma-alizarin-crimson"
+                                                              : "hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson border-transparent text-gray-600",
+                                                          )}
                                                         >
                                                           {item.slug}
                                                         </Link>
@@ -172,7 +214,12 @@ const FullDesktopMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                     <motion.div whileHover={{ x: 2 }}>
                                       <Link
                                         href={item.link || "#"}
-                                        className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-0.5 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                                        className={cn(
+                                          "block border-l-2 py-0.5 pl-2 text-sm transition-colors duration-200",
+                                          isCurrentPage(currentPath, item.link || "")
+                                            ? "text-figma-alizarin-crimson border-figma-alizarin-crimson"
+                                            : "hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson border-transparent text-gray-600",
+                                        )}
                                       >
                                         {item.slug}
                                       </Link>

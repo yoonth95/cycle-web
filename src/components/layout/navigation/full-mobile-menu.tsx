@@ -2,17 +2,20 @@
 
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { sortSubItems } from "@/utils/navigation-utils";
+import { sortSubItems, isCurrentPage } from "@/utils/navigation-utils";
+import { useNavigationStore } from "@/stores/navigation-store";
 import { FullMenuProps, NavigationCategoryItem } from "@/types/navigation";
 
 const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
   const defaultAccordionValue = sortedMenuData?.[0]?.id.toString();
+  const currentPath = useNavigationStore((state) => state.currentPath);
 
   return (
     <AnimatePresence>
@@ -56,7 +59,12 @@ const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                   <h4 className="text-figma-alizarin-crimson font-semibold">
                                     <Link
                                       href={categoryItem.link || "#"}
-                                      className="hover:text-figma-alizarin-crimson/80 transition-colors duration-200"
+                                      className={cn(
+                                        "transition-colors duration-200",
+                                        isCurrentPage(currentPath, categoryItem.link || "")
+                                          ? "text-figma-alizarin-crimson"
+                                          : "hover:text-figma-alizarin-crimson/80",
+                                      )}
                                     >
                                       {categoryItem.slug}
                                     </Link>
@@ -65,10 +73,22 @@ const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                     {categoryItem.items &&
                                       sortSubItems(categoryItem.items).map((subCategoryItem) => (
                                         <div key={subCategoryItem.id} className="ml-3">
-                                          <h5 className="mb-2 font-medium text-gray-700">
+                                          <h5
+                                            className={cn(
+                                              "mb-2 font-medium",
+                                              isCurrentPage(currentPath, subCategoryItem.link)
+                                                ? "text-figma-alizarin-crimson"
+                                                : "text-gray-700",
+                                            )}
+                                          >
                                             <Link
                                               href={subCategoryItem.link}
-                                              className="hover:text-figma-alizarin-crimson transition-colors duration-200"
+                                              className={cn(
+                                                "transition-colors duration-200",
+                                                isCurrentPage(currentPath, subCategoryItem.link)
+                                                  ? "text-figma-alizarin-crimson"
+                                                  : "hover:text-figma-alizarin-crimson",
+                                              )}
                                             >
                                               {subCategoryItem.slug}
                                             </Link>
@@ -79,7 +99,15 @@ const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                                                 <Link
                                                   key={item.id}
                                                   href={`${subCategoryItem.link}?tab=${item.link}`}
-                                                  className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson block border-l-2 border-transparent py-1 pl-2 text-sm text-gray-600 transition-colors duration-200"
+                                                  className={cn(
+                                                    "block border-l-2 py-1 pl-2 text-sm transition-colors duration-200",
+                                                    isCurrentPage(
+                                                      currentPath,
+                                                      `${subCategoryItem.link}?tab=${item.link}`,
+                                                    )
+                                                      ? "text-figma-alizarin-crimson border-figma-alizarin-crimson"
+                                                      : "hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson border-transparent text-gray-600",
+                                                  )}
                                                 >
                                                   {item.slug}
                                                 </Link>
@@ -97,7 +125,12 @@ const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                               <Link
                                 key={item.id}
                                 href={item.link || "#"}
-                                className="hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson my-3 block border-l-2 border-transparent pl-3 text-sm text-gray-600 transition-colors duration-200"
+                                className={cn(
+                                  "my-3 block border-l-2 pl-3 text-sm transition-colors duration-200",
+                                  isCurrentPage(currentPath, item.link || "")
+                                    ? "text-figma-alizarin-crimson border-figma-alizarin-crimson"
+                                    : "hover:text-figma-alizarin-crimson hover:border-figma-alizarin-crimson border-transparent text-gray-600",
+                                )}
                               >
                                 {item.slug}
                               </Link>
@@ -108,7 +141,12 @@ const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
                     <Link
                       key={mainCategory.id}
                       href={mainCategory.link}
-                      className="text-figma-alizarin-crimson hover:text-figma-alizarin-crimson block border-b border-gray-100 py-4 text-lg font-bold transition-colors duration-200"
+                      className={cn(
+                        "block border-b border-gray-100 py-4 text-lg font-bold transition-colors duration-200",
+                        isCurrentPage(currentPath, mainCategory.link)
+                          ? "text-figma-alizarin-crimson"
+                          : "text-figma-alizarin-crimson hover:text-figma-alizarin-crimson",
+                      )}
                     >
                       {mainCategory.slug}
                     </Link>
