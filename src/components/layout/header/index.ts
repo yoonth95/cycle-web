@@ -1,2 +1,3 @@
 import Header from "./header";
-export { Header };
+import AnimatedHeader from "./animated-header";
+export { Header, AnimatedHeader };
