@@ -7,15 +7,19 @@ import {
   getSupabaseConfig,
   createCacheOptions,
 } from "@/lib/common/page-server";
-import { normalizeBicycleSectionsFromDB } from "@/lib/bicycle/transform";
-import type {
-  BicycleLayoutData,
-  BicyclePageContentData,
-  BicycleCategoryLayoutData,
-  BicycleCategoryOptionsType,
-  BicycleFromDB,
-  BicyclesBySubcategory,
-  BicycleCategoryItemType,
+import {
+  normalizeBicycleSectionsFromDB,
+  parseBicycleFromDB,
+  parseBicyclesFromDB,
+} from "@/lib/bicycle/transform";
+import {
+  type BicycleLayoutData,
+  type BicyclePageContentData,
+  type BicycleCategoryLayoutData,
+  type BicycleCategoryOptionsType,
+  type BicycleFromDB,
+  type BicyclesBySubcategory,
+  type BicycleCategoryItemType,
 } from "@/types/bicycle";
 import type { PageCacheOptions, NormalizationInput } from "@/types/common";
 
@@ -231,6 +235,7 @@ export async function getBicycleCategoriesOptions(
 
 /**
  * 특정 카테고리의 자전거 데이터를 서브카테고리별로 그룹화하여 조회 (Edge 캐싱 적용)
+ * 타입 안전성을 위해 Zod 스키마로 검증
  */
 export async function fetchBicyclesByCategory(
   categoryId: string,
@@ -250,7 +255,7 @@ export async function fetchBicyclesByCategory(
 
     // 서브카테고리 필터링
     if (selectedSubcategory && selectedSubcategory !== "all") {
-      url += `&subcategories=eq.${selectedSubcategory}`;
+      url += `&subcategory=eq.${selectedSubcategory}`;
     }
 
     const response = await fetch(url, {
@@ -265,8 +270,11 @@ export async function fetchBicyclesByCategory(
       throw new Error(`Bicycles fetch failed: ${response.status} - ${errorText}`);
     }
 
-    const bicycles = await response.json();
-    return bicycles || [];
+    const rawBicycles = await response.json();
+
+    // Zod 스키마로 안전하게 파싱
+    const bicycles = parseBicyclesFromDB(rawBicycles);
+    return bicycles;
   } catch (error) {
     console.error("[fetchBicyclesByCategory] Error:", error);
     return [];
@@ -275,6 +283,7 @@ export async function fetchBicyclesByCategory(
 
 /**
  * 특정 카테고리의 모든 자전거를 서브카테고리별로 그룹화하여 조회
+ * 타입 안전성을 위해 Zod 스키마로 검증
  */
 export async function fetchBicyclesGroupedBySubcategory(
   categoryId: string,
@@ -299,7 +308,10 @@ export async function fetchBicyclesGroupedBySubcategory(
       throw new Error(`Bicycles fetch failed: ${response.status} - ${errorText}`);
     }
 
-    const bicycles: BicycleFromDB[] = await response.json();
+    const rawBicycles = await response.json();
+
+    // Zod 스키마로 안전하게 파싱
+    const bicycles = parseBicyclesFromDB(rawBicycles);
 
     // 서브카테고리별로 그룹화
     const grouped: BicyclesBySubcategory = {};
@@ -324,6 +336,71 @@ export async function fetchBicyclesGroupedBySubcategory(
     console.error("[fetchBicyclesGroupedBySubcategory] Error:", error);
     return {};
   }
+}
+
+/**
+ * 특정 자전거 ID로 상세 정보 조회하고 카테고리 매칭 검증
+ * 타입 안전성을 위해 Zod 스키마로 검증
+ */
+export async function fetchBicycleDetail(
+  bicycleId: string,
+  categorySlug: string,
+  options: PageCacheOptions = { isPreview: false, revalidateTime: 300 },
+): Promise<BicycleFromDB | null> {
+  const { baseUrl, headers } = getSupabaseConfig();
+  const cacheOption = createCacheOptions(`bicycle-detail-${bicycleId}`, options);
+
+  try {
+    // 자전거 상세 정보와 카테고리 정보를 함께 조회
+    const response = await fetch(
+      `${baseUrl}/rest/v1/bicycles?select=*,bicycle_categories!inner(slug)&id=eq.${bicycleId}`,
+      { ...cacheOption, headers },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[fetchBicycleDetail] Failed with status ${response.status}:`, errorText);
+      throw new Error(`Bicycle detail fetch failed: ${response.status} - ${errorText}`);
+    }
+
+    const rawResult = await response.json();
+
+    // 결과가 없으면 null 반환
+    if (!rawResult || rawResult.length === 0) {
+      return null;
+    }
+
+    const rawBicycle = rawResult[0];
+
+    // 카테고리 슬러그 매칭 검증
+    if (rawBicycle.bicycle_categories?.slug !== categorySlug) {
+      console.warn(
+        `[fetchBicycleDetail] Category mismatch: expected ${categorySlug}, got ${rawBicycle.bicycle_categories?.slug}`,
+      );
+      return null;
+    }
+
+    // bicycle_categories는 조인용이므로 제거
+    const { bicycle_categories: _, ...bicycleData } = rawBicycle;
+
+    // Zod 스키마로 안전하게 파싱
+    const parsedBicycle = parseBicycleFromDB(bicycleData);
+
+    return parsedBicycle;
+  } catch (error) {
+    console.error("[fetchBicycleDetail] Error:", error);
+    return null;
+  }
+}
+
+/**
+ * 자전거 상세 페이지 데이터 조회 (카테고리 매칭 포함)
+ */
+export async function getBicycleDetailWithCategoryValidation(
+  bicycleId: string,
+  categorySlug: string,
+): Promise<BicycleFromDB | null> {
+  return await fetchBicycleDetail(bicycleId, categorySlug);
 }
 
 // =============================================================================
