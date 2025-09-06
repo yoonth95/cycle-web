@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface SizeTabContentProps {
   sizeImages: string[];
@@ -18,18 +19,21 @@ const SizeTabContent = ({ sizeImages, productName }: SizeTabContentProps) => {
     <div className="space-y-6">
       <h3 className="text-xl font-semibold">사이즈 가이드</h3>
       <div className="grid gap-6">
-        {sizeImages.map((image, index) => (
-          <div key={index} className="relative overflow-hidden rounded-lg bg-gray-100">
-            <div className="relative" style={{ aspectRatio: SIZE_IMAGE_ASPECT_RATIO }}>
-              <Image
-                src={image}
-                alt={generateImageAlt(productName, index)}
-                fill
-                className="object-cover"
-              />
+        {sizeImages.map((image, index) => {
+          const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${image}`;
+          return (
+            <div key={index} className="relative overflow-hidden rounded-lg bg-gray-100">
+              <AspectRatio ratio={SIZE_IMAGE_ASPECT_RATIO}>
+                <Image
+                  src={imageUrl}
+                  alt={generateImageAlt(productName, index)}
+                  fill
+                  className="object-cover"
+                />
+              </AspectRatio>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -42,19 +42,22 @@ const ProductImageSection = ({ mainImages, productName }: ProductImageSectionPro
           className="w-full"
         >
           <CarouselContent>
-            {mainImages.map((image, index) => (
-              <CarouselItem key={index}>
-                <AspectRatio ratio={MAIN_IMAGE_ASPECT_RATIO}>
-                  <Image
-                    src={image}
-                    alt={generateImageAlt(productName, index)}
-                    fill
-                    className="object-cover"
-                    priority={index === 0} // 첫 번째 이미지는 우선 로드
-                  />
-                </AspectRatio>
-              </CarouselItem>
-            ))}
+            {mainImages.map((image, index) => {
+              const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${image}`;
+              return (
+                <CarouselItem key={index}>
+                  <AspectRatio ratio={MAIN_IMAGE_ASPECT_RATIO}>
+                    <Image
+                      src={imageUrl}
+                      alt={generateImageAlt(productName, index)}
+                      fill
+                      className="object-cover"
+                      priority={index === 0} // 첫 번째 이미지는 우선 로드
+                    />
+                  </AspectRatio>
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
           {showNavigation && (
             <>

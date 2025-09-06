@@ -10,12 +10,14 @@ interface BicycleStyleCardProps {
 }
 
 const BicycleStyleCard = ({ card }: BicycleStyleCardProps) => {
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${card.image}`;
+
   return (
     <Card className="group overflow-hidden bg-white transition-all hover:shadow-xl">
       <CardContent className="flex h-full flex-col overflow-hidden p-0">
         <AspectRatio ratio={3 / 4} className="relative overflow-hidden">
           <Image
-            src={card.image}
+            src={imageUrl}
             alt={card.title}
             className="object-cover transition-transform group-hover:scale-105"
             fill

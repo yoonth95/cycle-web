@@ -3,26 +3,16 @@ import Link from "next/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import getTagColor from "@/utils/getTagColor";
 import { BicycleFromDB } from "@/types/bicycle";
-
-const getTagColor = (color: string) => {
-  const colorMap: Record<string, string> = {
-    red: "bg-red-500",
-    green: "bg-green-500",
-    blue: "bg-blue-500",
-    yellow: "bg-yellow-500",
-    purple: "bg-purple-500",
-    orange: "bg-orange-500",
-    gray: "bg-gray-500",
-  };
-  return colorMap[color] || "bg-gray-500";
-};
 
 interface CategoryLayoutBicycleCardProps {
   bicycle: BicycleFromDB;
   categorySlug?: string;
 }
 const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicycleCardProps) => {
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${bicycle.images[0]}`;
+
   return (
     <Link href={`/bicycles/style/${categorySlug}/${bicycle.id}`}>
       <div
@@ -32,20 +22,18 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
         {/* 자전거 이미지 */}
         <AspectRatio ratio={26 / 15} className="relative rounded-t">
           <Image
-            src={bicycle.images[0] || "/bike.png"}
+            src={imageUrl || "/bike.png"}
             alt={bicycle.name}
             fill
             className="h-full w-[520px] rounded-t object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             priority={false}
             quality={85}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBH//Q"
           />
 
           {/* 태그들 */}
           <div className="absolute top-2 left-2 flex gap-1">
-            {bicycle.tags.map((tag, index) => (
+            {bicycle.tags?.map((tag, index) => (
               <Badge
                 key={index}
                 variant={tag.variant}
@@ -53,7 +41,7 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
               >
                 {tag.label}
               </Badge>
-            ))}
+            )) ?? null}
           </div>
         </AspectRatio>
 
@@ -71,18 +59,18 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
                     {content}
                   </Badge>
                 ))}
-                {bicycle.features.length > 3 && (
+                {(bicycle.features?.length ?? 0) > 3 && (
                   <Badge variant="secondary" className="text-xs">
-                    +{bicycle.features.length - 3}
+                    +{(bicycle.features?.length ?? 0) - 3}
                   </Badge>
                 )}
               </div>
             </div>
           </div>
-
-          {/* 버튼 */}
-          <Button className="w-full bg-red-500 group-hover:bg-red-600">자세히 보기</Button>
         </div>
+
+        {/* 버튼 */}
+        <Button className="w-full bg-red-500 group-hover:bg-red-600">자세히 보기</Button>
       </div>
     </Link>
   );

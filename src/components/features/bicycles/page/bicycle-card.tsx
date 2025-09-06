@@ -11,13 +11,14 @@ interface BicycleCardProps {
 
 const BicycleCard = ({ card }: BicycleCardProps) => {
   const IconComponent = iconMapping[card.icon as keyof typeof iconMapping];
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${card.image}`;
 
   return (
     <Card className="group overflow-hidden transition-shadow hover:shadow-lg">
       <CardContent className="p-0">
         <div className="relative overflow-hidden">
           <Image
-            src={card.image}
+            src={imageUrl}
             alt={card.title}
             width={600}
             height={300}
@@ -25,8 +26,6 @@ const BicycleCard = ({ card }: BicycleCardProps) => {
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 480px"
             priority={false}
             quality={85}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBHz2HaH9bcfaSXWGaRmknyBH//Q"
           />
           <div className="absolute inset-0 bg-black/30 transition-opacity group-hover:bg-black/40" />
           <div className="absolute top-6 left-6">

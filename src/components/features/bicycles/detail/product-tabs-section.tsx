@@ -1,12 +1,16 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SpecificationCategory } from "@/types/bicycle";
-import { IntroTabContent, SpecsTabContent, SizeTabContent } from "./tab-contents";
+import {
+  IntroTabContent,
+  SpecsTabContent,
+  SizeTabContent,
+} from "@/components/features/bicycles/detail/tab-contents";
+import { SpecificationItem } from "@/types/bicycle";
 
 interface ProductTabsSectionProps {
   productImages: string[];
-  specifications: SpecificationCategory[];
+  specifications: SpecificationItem[];
   sizeImages: string[];
   productName: string;
 }
