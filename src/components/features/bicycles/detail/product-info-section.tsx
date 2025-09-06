@@ -1,17 +1,28 @@
 import { Badge } from "@/components/ui/badge";
+import getTagColor from "@/utils/getTagColor";
+import { BicycleTag } from "@/types/bicycle";
 
 interface ProductInfoSectionProps {
   name: string;
   description: string;
   features: string[];
+  tags: BicycleTag[];
 }
 
-const ProductInfoSection = ({ name, description, features }: ProductInfoSectionProps) => {
+const ProductInfoSection = ({ name, description, features, tags }: ProductInfoSectionProps) => {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <div>
         <div className="mb-2 flex items-center gap-2">
-          <Badge className="bg-red-500 text-white">NEW</Badge>
+          {tags.map((tag, index) => (
+            <Badge
+              key={index}
+              variant={tag.variant}
+              className={`rounded px-2 py-1 text-xs font-medium text-white ${getTagColor(tag.color)}`}
+            >
+              {tag.label}
+            </Badge>
+          ))}
         </div>
         <h1 className="mb-2 text-3xl font-bold text-gray-900">{name}</h1>
         <p className="text-gray-600">{description}</p>
