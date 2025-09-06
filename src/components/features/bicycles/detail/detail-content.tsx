@@ -1,47 +1,26 @@
 import { useMemo } from "react";
-import { BicycleDetail, SpecificationCategory } from "@/types/bicycle";
-import ProductImageSection from "./product-image-section";
-import ProductInfoSection from "./product-info-section";
-import ProductTabsSection from "./product-tabs-section";
+import {
+  ProductImageSection,
+  ProductInfoSection,
+  ProductTabsSection,
+} from "@/components/features/bicycles/detail";
+import { BicycleDetail, SpecificationItem } from "@/types/bicycle";
 
 interface DetailContentProps {
   bicycleData: BicycleDetail;
 }
 
-// 상수 정의
-const BASIC_SPECS_LIMIT = 6;
-const SPEC_CATEGORIES = {
-  BASIC: "기본 사양",
-  ADDITIONAL: "추가 사양",
-} as const;
-
 // 유틸리티 함수
-const createSpecificationCategories = (
-  fullSpecs: BicycleDetail["fullSpecs"],
-): SpecificationCategory[] => {
-  const specsEntries = Object.entries(fullSpecs);
-
-  return [
-    {
-      category: SPEC_CATEGORIES.BASIC,
-      items: specsEntries.slice(0, BASIC_SPECS_LIMIT).map(([key, value]) => ({
-        spec: key,
-        value: value,
-      })),
-    },
-    {
-      category: SPEC_CATEGORIES.ADDITIONAL,
-      items: specsEntries.slice(BASIC_SPECS_LIMIT).map(([key, value]) => ({
-        spec: key,
-        value: value,
-      })),
-    },
-  ];
+const createSpecificationItems = (fullSpecs: BicycleDetail["fullSpecs"]): SpecificationItem[] => {
+  return Object.entries(fullSpecs).map(([key, value]) => ({
+    spec: key,
+    value: value,
+  }));
 };
 
 const DetailContent = ({ bicycleData }: DetailContentProps) => {
   const specifications = useMemo(
-    () => createSpecificationCategories(bicycleData.fullSpecs),
+    () => createSpecificationItems(bicycleData.fullSpecs),
     [bicycleData.fullSpecs],
   );
 
@@ -53,6 +32,7 @@ const DetailContent = ({ bicycleData }: DetailContentProps) => {
       mainImages: bicycleData.mainImages,
       productImages: bicycleData.productImages,
       sizeImages: bicycleData.sizeImages,
+      tags: bicycleData.tags,
     }),
     [bicycleData],
   );
@@ -69,6 +49,7 @@ const DetailContent = ({ bicycleData }: DetailContentProps) => {
             name={productData.name}
             description={productData.description}
             features={productData.features}
+            tags={productData.tags}
           />
         </div>
 
