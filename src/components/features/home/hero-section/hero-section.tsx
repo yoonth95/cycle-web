@@ -8,6 +8,7 @@ import { Phone, MapPin, Clock } from "lucide-react";
 
 export function HeroSection({ data }: HeroSectionProps) {
   const season = getSeason();
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${data.mainImage}`;
 
   return (
     <section className="relative">
@@ -87,7 +88,7 @@ export function HeroSection({ data }: HeroSectionProps) {
           <div className="relative lg:order-first lg:col-span-3">
             <div className="overflow-hidden rounded-3xl shadow-2xl">
               <AspectRatio ratio={4 / 3}>
-                <Image src={data.mainImage} alt="삼천리 자전거 중동역점" fill />
+                <Image src={imageUrl} alt="삼천리 자전거 중동역점" fill />
               </AspectRatio>
             </div>
           </div>
