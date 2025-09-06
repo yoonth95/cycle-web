@@ -67,10 +67,9 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
               </div>
             </div>
           </div>
-        </div>
 
-        {/* 버튼 */}
-        <Button className="w-full bg-red-500 group-hover:bg-red-600">자세히 보기</Button>
+          <Button className="w-full bg-red-500 group-hover:bg-red-600">자세히 보기</Button>
+        </div>
       </div>
     </Link>
   );
