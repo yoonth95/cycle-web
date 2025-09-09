@@ -1,17 +1,12 @@
 import "server-only";
 
-import {
-  fetchPageLayout,
-  fetchPageSections,
-  invalidatePageCache,
-  getSupabaseConfig,
-  createCacheOptions,
-} from "@/lib/common/page-server";
+import { fetchPageLayout, fetchPageSections, invalidatePageCache } from "@/lib/common/page-server";
 import {
   normalizeBicycleSectionsFromDB,
   parseBicycleFromDB,
   parseBicyclesFromDB,
 } from "@/lib/bicycle/transform";
+import { getSupabaseConfig, createCacheOptions } from "@/utils/fetchCacheOption";
 import {
   type BicycleLayoutData,
   type BicyclePageContentData,
