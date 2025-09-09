@@ -47,7 +47,7 @@ export async function getNoticeDetail(
 
   try {
     const response = await fetch(
-      `${baseUrl}/rest/v1/notices?select=*&id=eq.${id}&is_published=eq.true`,
+      `${baseUrl}/rest/v1/notices?select=*&id=eq.${id}&is_published=eq.true&order=created_at.desc`,
       { ...cacheOption, headers },
     );
 
