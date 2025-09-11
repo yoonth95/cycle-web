@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useEffect, useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import { useBicyclesInfinite } from "@/lib/bicycle/client";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import {
   CategoryLayoutBicycleCard,
   CategoryLayoutBicycleSkeleton,
@@ -26,33 +27,14 @@ const CategoryLayoutBicycleList = ({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
     useBicyclesInfinite<BicycleFromDB>(currentCategory.id, currentTab);
 
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-
-  // IntersectionObserver 콜백 최적화
-  const handleIntersection = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const first = entries[0];
-      if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
-    },
-    [hasNextPage, isFetchingNextPage, fetchNextPage],
-  );
-
-  // IntersectionObserver 설정 최적화
-  useEffect(() => {
-    const element = sentinelRef.current;
-    if (!element) return;
-
-    const io = new IntersectionObserver(handleIntersection, {
-      // 성능 최적화를 위한 옵션
-      rootMargin: "100px", // 뷰포트에서 100px 전에 미리 로드
-      threshold: 0.1,
-    });
-
-    io.observe(element);
-    return () => io.unobserve(element);
-  }, [handleIntersection]);
+  // 무한 스크롤 설정
+  const { sentinelRef } = useInfiniteScroll({
+    onLoadMore: fetchNextPage,
+    hasNextPage,
+    isFetching: isFetchingNextPage,
+    rootMargin: "100px",
+    threshold: 0.1,
+  });
 
   // 데이터 플래튼 최적화
   const bicycles = useMemo(() => data?.pages.flatMap((p) => p.items) ?? [], [data?.pages]);
