@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { formatDate, isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
+import { isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
+import { formatDate } from "@/utils/common";
 import type { NoticeDetailType } from "@/types/notice";
 import { Calendar } from "lucide-react";
 import Link from "next/link";

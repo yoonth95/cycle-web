@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import getTagColor from "@/utils/getTagColor";
+import { getTagColor } from "@/utils/common";
 import { BicycleFromDB } from "@/types/bicycle";
 
 interface CategoryLayoutBicycleCardProps {

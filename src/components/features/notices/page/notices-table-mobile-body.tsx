@@ -1,6 +1,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { formatDate, isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
+import { isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
+import { formatDate } from "@/utils/common";
 import { NoticeListItemType, NoticeListResponseType } from "@/types/notice";
 
 export function NoticesTableMobileBody({

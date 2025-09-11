@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import getTagColor from "@/utils/getTagColor";
+import { getTagColor } from "@/utils/common";
 import { BicycleTag } from "@/types/bicycle";
 
 interface ProductInfoSectionProps {

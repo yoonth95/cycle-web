@@ -1,7 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { formatDate, formatViewCount, isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
+import { formatViewCount, isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
+import { formatDate } from "@/utils/common";
 import type { NoticeListItemType, NoticeListResponseType } from "@/types/notice";
 import { ChevronUpIcon, ChevronDownIcon, Eye } from "lucide-react";
 
