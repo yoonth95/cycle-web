@@ -1,20 +1,12 @@
-// 공통 상수 정의
-export interface NavigationItem {
-  name: string;
-  href: string;
-}
-
-export const NAVIGATION_ITEMS: NavigationItem[] = [
-  { name: "자전거", href: "#bicycles" },
-  { name: "자전거용품", href: "#accessories" },
-  { name: "오시는길", href: "#location" },
-  { name: "우리가게소식", href: "#news" },
-  { name: "문의사항", href: "#contact" },
-];
-
-export const CONTACT_INFO = {
-  name: "삼천리 자전거 중동역점",
-  phone: "032-326-3002",
-  mobile: "010-3112-9310",
-  address: "부천 중동 북부역 상동시장입구 대로변",
-} as const;
+// 이메일 도메인 옵션들
+export const EMAIL_DOMAINS = [
+  { value: "naver.com", label: "naver.com" },
+  { value: "gmail.com", label: "gmail.com" },
+  { value: "daum.net", label: "daum.net" },
+  { value: "kakao.com", label: "kakao.com" },
+  { value: "hanmail.net", label: "hanmail.net" },
+  { value: "hotmail.com", label: "hotmail.com" },
+  { value: "nate.com", label: "nate.com" },
+  { value: "outlook.com", label: "outlook.com" },
+  { value: "yahoo.com", label: "yahoo.com" },
+] as const;
