@@ -1,9 +1,8 @@
 import "server-only";
 
-import type { ContactLayout, ContactLayoutData } from "@/types/contact";
 import { fetchPageLayout } from "@/lib/common/page-server";
 import { transformContactLayout } from "@/lib/contact/transform";
-import { PageCacheOptions } from "@/types/common";
+import type { ContactLayout, ContactLayoutData } from "@/types/contact";
 
 // =============================================================================
 // Contact 레이아웃 조회
