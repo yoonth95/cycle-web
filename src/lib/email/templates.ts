@@ -1,9 +1,9 @@
-import type { ContactFormData } from "@/types/contact";
+import type { ContactsFormData } from "@/types/contact";
 
 /**
  * 관리자에게 보낼 메일 템플릿 (새로운 문의사항 알림)
  */
-export function getAdminNotificationTemplate(contactData: ContactFormData) {
+export function getAdminNotificationTemplate(contactData: ContactsFormData) {
   const subject = `[문의사항] ${contactData.title}`;
 
   const html = `
@@ -70,7 +70,7 @@ ${contactData.description}
 /**
  * 사용자에게 보낼 메일 템플릿 (문의사항 접수 확인)
  */
-export function getUserConfirmationTemplate(contactData: ContactFormData) {
+export function getUserConfirmationTemplate(contactData: ContactsFormData) {
   const subject = `[삼천리 자전거] 문의사항이 접수되었습니다 - ${contactData.title}`;
 
   const html = `

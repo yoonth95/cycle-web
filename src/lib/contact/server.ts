@@ -1,28 +1,31 @@
 import "server-only";
 
 import { fetchPageLayout } from "@/lib/common/page-server";
-import { transformContactLayout } from "@/lib/contact/transform";
-import type { ContactLayout, ContactLayoutData } from "@/types/contact";
+import { transformContactsLayout } from "@/lib/contact/transform";
+import type { ContactsLayout, ContactsLayoutData } from "@/types/contact";
 
 // =============================================================================
 // Contact 레이아웃 조회
 // =============================================================================
-export async function getContactLayout(): Promise<{
-  layout: ContactLayoutData;
+
+/**
+ * Contacts 페이지 레이아웃 조회
+ */
+export async function getContactsLayout(slug: string): Promise<{
+  layout: ContactsLayoutData;
 } | null> {
   try {
-    const data = await fetchPageLayout<ContactLayout>("contact", {
+    const data = await fetchPageLayout<ContactsLayout>(slug, {
       isPreview: false,
       revalidateTime: 3600,
     });
 
     if (!data?.layout) return null;
 
-    // transform을 통해 zod 검증 적용
-    const transformedLayout = transformContactLayout(data.layout);
+    const transformedLayout = transformContactsLayout(data.layout);
 
     if (!transformedLayout) {
-      console.error("[getContactLayout] Transform 실패");
+      console.error("[getContactsLayout] Transform 실패");
       return null;
     }
 
@@ -30,7 +33,7 @@ export async function getContactLayout(): Promise<{
       layout: transformedLayout,
     };
   } catch (error) {
-    console.error("[getContactLayout] Error:", error);
+    console.error("[getContactsLayout] Error:", error);
     return null;
   }
 }

@@ -1,13 +1,13 @@
 import { deltaToHtml, type QuillDelta } from "@/lib/home/quill";
 import {
-  ContactLayoutDataSchema,
-  ContactFormDataSchema,
-  type ContactLayoutData,
-  type ContactFormData,
-  ContactHeaderSection,
+  ContactsLayoutDataSchema,
+  ContactsFormDataSchema,
+  type ContactsLayoutData,
+  type ContactsFormData,
+  ContactsHeaderSection,
 } from "@/types/contact";
 
-function transformContactHeaderSection(section: ContactHeaderSection): ContactHeaderSection {
+function transformContactsHeaderSection(section: ContactsHeaderSection): ContactsHeaderSection {
   let transformedTitle = section.title;
   let transformedDescription = section.description;
 
@@ -31,18 +31,18 @@ function transformContactHeaderSection(section: ContactHeaderSection): ContactHe
 /**
  * Contact 레이아웃 데이터를 변환하고 zod로 검증
  */
-export function transformContactLayout(rawData: unknown): ContactLayoutData | null {
+export function transformContactsLayout(rawData: unknown): ContactsLayoutData | null {
   try {
-    const validatedData = ContactLayoutDataSchema.parse(rawData);
+    const validatedData = ContactsLayoutDataSchema.parse(rawData);
 
     const transformedSections = validatedData.layout.content.sections.map((section) => {
-      if (section.section === "contact-header") {
-        return transformContactHeaderSection(section);
+      if (section.section === "contacts-header") {
+        return transformContactsHeaderSection(section);
       }
       return section;
     });
 
-    const transformedLayout: ContactLayoutData = {
+    const transformedLayout: ContactsLayoutData = {
       layout: {
         ...validatedData.layout,
         content: {
@@ -53,7 +53,7 @@ export function transformContactLayout(rawData: unknown): ContactLayoutData | nu
     };
 
     // 변환된 데이터를 다시 zod로 검증
-    return ContactLayoutDataSchema.parse(transformedLayout);
+    return ContactsLayoutDataSchema.parse(transformedLayout);
   } catch (error) {
     console.error("[transformContactLayout] 변환 또는 검증 실패:", error);
     return null;
@@ -63,13 +63,13 @@ export function transformContactLayout(rawData: unknown): ContactLayoutData | nu
 /**
  * Contact 폼 데이터를 변환하고 zod로 검증
  */
-export function transformContactFormData(rawData: unknown): ContactFormData | null {
+export function transformContactsFormData(rawData: unknown): ContactsFormData | null {
   try {
     // 폼 데이터 검증
-    const validatedData = ContactFormDataSchema.parse(rawData);
+    const validatedData = ContactsFormDataSchema.parse(rawData);
 
     // email 필드 추가
-    const resultData: ContactFormData = {
+    const resultData: ContactsFormData = {
       ...validatedData,
       email: `${validatedData.emailLocal}@${validatedData.emailDomain}`,
     };

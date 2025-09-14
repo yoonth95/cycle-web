@@ -1,8 +1,8 @@
 // Server functions
-export { getContactLayout } from "./server";
+export { getContactsLayout } from "./server";
 
 // Transform functions
-export { transformContactLayout, transformContactFormData } from "./transform";
+export { transformContactsFormData } from "./transform";
 
 // Client functions
-export { submitContactForm } from "./client";
+export { submitContactsForm } from "./client";
