@@ -1,11 +1,9 @@
-import { createCacheOptions, getSupabaseConfig } from "@/utils/fetchCacheOption";
-import { PageCacheOptions } from "@/types/common";
-import type {
-  ContactsFormData,
-  ContactsSubmissionResult,
-  ContactsListParamsType,
-  ContactsListResponseType,
-  ContactsListItemType,
+import {
+  type ContactsFormData,
+  type ContactsSubmissionResult,
+  type ContactsListParamsType,
+  type ContactsListResponseType,
+  ContactsListResponseSchema,
 } from "@/types/contact";
 
 /**
@@ -42,7 +40,9 @@ export async function getContactListFromAPI(
       throw new Error(`API request failed: ${response.status} - ${errorText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    return ContactsListResponseSchema.parse(data);
   } catch (error) {
     console.error("[getContactListFromAPI] Error:", error);
     return null;
