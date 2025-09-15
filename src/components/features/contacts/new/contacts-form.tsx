@@ -34,10 +34,10 @@ export function ContactsForm({ formConfig }: ContactsFormProps) {
     defaultValues: {
       title: "",
       description: "",
-      name: "",
+      author: "",
       emailLocal: "",
       emailDomain: "",
-      isPublic: true,
+      isPrivate: true,
       password: "",
     },
   });
@@ -123,14 +123,14 @@ export function ContactsForm({ formConfig }: ContactsFormProps) {
 
         <FormField
           control={form.control}
-          name="name"
+          name="author"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
                 이름 <span className="text-figma-alizarin-crimson">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder={formConfig.namePlaceholder} {...field} />
+                <Input placeholder={formConfig.authorPlaceholder} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

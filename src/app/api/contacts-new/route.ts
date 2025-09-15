@@ -35,10 +35,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<ContactsS
       body: JSON.stringify({
         title: validatedData.title,
         description: validatedData.description,
-        name: validatedData.name,
+        author: validatedData.author,
         email: validatedData.email,
-        is_public: validatedData.isPublic,
-        password: validatedData.isPublic ? null : validatedData.password,
+        is_private: validatedData.isPrivate,
+        password: validatedData.isPrivate ? null : validatedData.password,
       }),
     });
 
