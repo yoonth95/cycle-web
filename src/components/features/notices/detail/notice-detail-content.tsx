@@ -1,10 +1,9 @@
+import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
-import { formatDate } from "@/utils/common";
+import { formatDate, isNewArticle, isUpdatedArticle } from "@/utils/common";
 import type { NoticeDetailType } from "@/types/notice";
 import { Calendar } from "lucide-react";
-import Link from "next/link";
 
 export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
   return (
@@ -15,7 +14,7 @@ export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
           <div className="flex items-start justify-between">
             <div className="flex flex-1 flex-col gap-2.5">
               <div className="flex flex-col gap-2">
-                {isNewNotice(notice.created_at) && (
+                {isNewArticle(notice.created_at) && (
                   <Badge variant="destructive" className="text-xs">
                     NEW
                   </Badge>
@@ -28,12 +27,12 @@ export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
                   <Calendar className="text-muted-foreground h-4 w-4" />
                   <span>
                     {formatDate(
-                      isUpdatedNotice(notice.created_at, notice.updated_at)
+                      isUpdatedArticle(notice.created_at, notice.updated_at)
                         ? notice.updated_at
                         : notice.created_at,
                       true,
                     )}
-                    {isUpdatedNotice(notice.created_at, notice.updated_at) && (
+                    {isUpdatedArticle(notice.created_at, notice.updated_at) && (
                       <span className="ml-1">(수정됨)</span>
                     )}
                   </span>

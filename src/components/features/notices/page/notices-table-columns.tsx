@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { formatViewCount, isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
-import { formatDate } from "@/utils/common";
+import { formatViewCount } from "@/utils/notices-utils";
+import { formatDate, isNewArticle, isUpdatedArticle } from "@/utils/common";
 import type { NoticeListItemType, NoticeListResponseType } from "@/types/notice";
 import { ChevronUpIcon, ChevronDownIcon, Eye } from "lucide-react";
 
@@ -54,7 +54,7 @@ export function createNoticesTableColumns(
           <span className="font-medium text-gray-900 transition-colors hover:text-blue-600">
             {row.original.title}
           </span>
-          {isNewNotice(row.original.created_at) && (
+          {isNewArticle(row.original.created_at) && (
             <Badge variant="destructive" className="text-[10px]">
               NEW
             </Badge>
@@ -82,7 +82,7 @@ export function createNoticesTableColumns(
         </Button>
       ),
       cell: ({ row }) => {
-        const isUpdated = isUpdatedNotice(row.original.created_at, row.original.updated_at);
+        const isUpdated = isUpdatedArticle(row.original.created_at, row.original.updated_at);
 
         return (
           <div className="flex flex-wrap items-center justify-center gap-1 text-sm">
