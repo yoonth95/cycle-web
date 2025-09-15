@@ -4,16 +4,96 @@ import { z } from "zod";
 // DB 스키마 - Raw 데이터 타입
 // =============================================================================
 
+export const CommentsCountSchema = z.object({
+  count: z.number(),
+});
+
 export const DbContactRowSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
-  name: z.string(),
+  author: z.string(),
   email: z.string().email(),
+  is_private: z.boolean(),
   password: z.string().nullable(),
-  is_public: z.boolean(),
+  contact_comments: z.array(CommentsCountSchema),
   created_at: z.string(),
+  updated_at: z.string(),
 });
+
+// // Contact Comments DB 스키마
+// export const DbContactCommentRowSchema = z.object({
+//   id: z.string(),
+//   contact_id: z.string(),
+//   author: z.string().nullable(),
+//   email: z.string().email().nullable(),
+//   content: z.string(),
+//   is_admin_reply: z.boolean(),
+//   created_at: z.string(),
+//   updated_at: z.string(),
+// });
+
+// // Contact Comments 생성 폼 데이터
+// export const ContactCommentFormDataSchema = z
+//   .object({
+//     contact_id: z.string().uuid("유효한 문의 ID를 입력해주세요"),
+//     author: z
+//       .string()
+//       .min(1, "이름을 입력해 주세요")
+//       .max(100, "이름은 100자 이내로 입력해 주세요")
+//       .refine((val) => val.trim().length > 0, "이름을 입력해 주세요")
+//       .optional()
+//       .or(z.literal(""))
+//       .transform((val) => (val === "" ? undefined : val)),
+//     email: z
+//       .string()
+//       .email("올바른 이메일 주소를 입력해 주세요")
+//       .max(254, "이메일 주소는 254자 이내로 입력해 주세요")
+//       .optional()
+//       .or(z.literal(""))
+//       .transform((val) => (val === "" ? undefined : val)),
+//     content: z
+//       .string()
+//       .min(1, "댓글 내용을 입력해 주세요")
+//       .max(1000, "댓글 내용은 1000자 이내로 입력해 주세요")
+//       .refine((val) => val.trim().length > 0, "댓글 내용을 입력해 주세요"),
+//     is_admin_reply: z.boolean().default(false),
+//   })
+//   .refine(
+//     (data) => {
+//       // 관리자 댓글인 경우 author와 email은 optional
+//       if (data.is_admin_reply) return true;
+//       // 일반 사용자 댓글인 경우 author와 email 필수
+//       return data.author && data.email && data.author.trim().length > 0;
+//     },
+//     {
+//       message: "일반 사용자 댓글의 경우 이름과 이메일을 입력해 주세요",
+//       path: ["author"],
+//     },
+//   );
+
+// // Contact Comments 목록 조회용
+// export const ContactCommentsListItemSchema = z.object({
+//   id: z.string(),
+//   contact_id: z.string(),
+//   author: z.string().nullable(),
+//   email: z.string().nullable(),
+//   content: z.string(),
+//   is_admin_reply: z.boolean(),
+//   created_at: z.string(),
+//   updated_at: z.string(),
+// });
+
+// // Contact Comments 목록 응답
+// export const ContactCommentsListResponseSchema = z.object({
+//   comments: z.array(ContactCommentsListItemSchema),
+//   totalCount: z.number(),
+// });
+
+// // Contact 상세 조회용 (댓글 포함)
+// export const ContactWithCommentsSchema = DbContactRowSchema.extend({
+//   comments: z.array(ContactCommentsListItemSchema).optional(),
+// });
 
 // =============================================================================
 // Contacts New 폼 데이터 타입
@@ -31,7 +111,7 @@ export const ContactsFormDataSchema = z
       .min(1, "문의 내용을 입력해 주세요")
       .max(2000, "문의 내용은 2000자 이내로 입력해 주세요")
       .refine((val) => val.trim().length > 0, "문의 내용을 입력해 주세요"),
-    name: z
+    author: z
       .string()
       .min(1, "이름을 입력해 주세요")
       .max(100, "이름은 100자 이내로 입력해 주세요")
@@ -65,7 +145,7 @@ export const ContactsFormDataSchema = z
         ];
         return predefinedDomains.includes(domain);
       }, "올바른 도메인 형식을 입력해 주세요"),
-    isPublic: z.boolean(),
+    isPrivate: z.boolean(),
     password: z
       .string()
       .optional()
@@ -75,7 +155,7 @@ export const ContactsFormDataSchema = z
   .refine(
     (data) => {
       // 공개 글인 경우 비밀번호는 필요 없음
-      if (data.isPublic) return true;
+      if (data.isPrivate) return true;
       // 비공개 글인 경우 비밀번호 필수 및 길이 검증
       return data.password && data.password.trim().length >= 4 && data.password.trim().length <= 6;
     },
@@ -120,15 +200,17 @@ export const ContactsContentSectionBaseSchema = z.object({
 export const ContactsListItemSchema = z.object({
   id: z.string(),
   title: z.string(),
-  name: z.string(),
-  is_public: z.boolean(),
+  author: z.string(),
+  is_private: z.boolean(),
+  contact_comments: z.array(CommentsCountSchema),
   created_at: z.string(),
+  updated_at: z.string(),
 });
 
 export const ContactsListParamsSchema = z.object({
   page: z.number(),
   pageSize: z.number(),
-  sortBy: z.enum(["created_at", "title", "name"]),
+  sortBy: z.enum(["created_at"]),
   sortOrder: z.enum(["asc", "desc"]),
 });
 
@@ -151,7 +233,7 @@ export const ContactsLayoutContentTableSchema = ContactsContentSectionBaseSchema
 export const FormConfigSchema = z.object({
   titlePlaceholder: z.string(),
   descriptionPlaceholder: z.string(),
-  namePlaceholder: z.string(),
+  authorPlaceholder: z.string(),
   emailPlaceholder: z.string(),
   passwordPlaceholder: z.string(),
   submitButtonText: z.string(),
@@ -199,6 +281,11 @@ export const ContactsLayoutDataSchema = z.object({
 
 // 공통 타입
 export type DbContactRow = z.infer<typeof DbContactRowSchema>;
+// export type DbContactCommentRow = z.infer<typeof DbContactCommentRowSchema>;
+// export type ContactCommentFormData = z.infer<typeof ContactCommentFormDataSchema>;
+// export type ContactCommentsListItem = z.infer<typeof ContactCommentsListItemSchema>;
+// export type ContactCommentsListResponse = z.infer<typeof ContactCommentsListResponseSchema>;
+// export type ContactWithComments = z.infer<typeof ContactWithCommentsSchema>;
 export type ContactsHeaderSection = z.infer<typeof ContactsHeaderSectionSchema>;
 export type ContactsLayoutContent = z.infer<typeof ContactsLayoutContentSchema>;
 export type ContactsLayout = z.infer<typeof ContactsLayoutSchema>;
