@@ -28,25 +28,17 @@ export async function GET(request: NextRequest): Promise<NextResponse<ContactsLi
 
     const { baseUrl, headers } = getSupabaseConfig();
 
-    // 전체 카운트 조회
-    const countResponse = await fetch(`${baseUrl}/rest/v1/contacts?select=count`, {
-      method: "HEAD",
-      headers: {
-        ...headers,
-        Prefer: "count=exact",
-      },
-    });
-
-    const totalCount = parseInt(countResponse.headers.get("content-range")?.split("/")[1] || "0");
-    const totalPages = Math.ceil(totalCount / pageSize);
     const offset = (page - 1) * pageSize;
 
-    // contacts 데이터 조회 (공개 문의만)
+    // contacts 데이터 조회
     const dataResponse = await fetch(
-      `${baseUrl}/rest/v1/contacts?select=id,title,name,is_public,created_at&is_public=eq.true&order=${sortBy}.${sortOrder}&limit=${pageSize}&offset=${offset}`,
+      `${baseUrl}/rest/v1/contacts?select=id,title,author,is_private,created_at,updated_at,contact_comments(count)&order=${sortBy}.${sortOrder}&limit=${pageSize}&offset=${offset}`,
       {
         method: "GET",
-        headers,
+        headers: {
+          ...headers,
+          Prefer: "count=exact",
+        },
       },
     );
 
@@ -68,6 +60,9 @@ export async function GET(request: NextRequest): Promise<NextResponse<ContactsLi
     }
 
     const contacts = await dataResponse.json();
+
+    const totalCount = parseInt(dataResponse.headers.get("content-range")?.split("/")[1] || "0");
+    const totalPages = Math.ceil(totalCount / pageSize);
     const hasMore = page < totalPages;
 
     return NextResponse.json({
