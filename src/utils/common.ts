@@ -36,3 +36,22 @@ export function formatDate(dateString: string, isTime: boolean = false): string 
         },
   );
 }
+
+/**
+ * 새로운 글인지 확인합니다 (3일 이내)
+ */
+export function isNewArticle(createdAt: string): boolean {
+  const created = new Date(createdAt);
+  const now = new Date();
+  const diffInDays = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+  return diffInDays <= 3; // 3일 이내면 NEW 표시
+}
+
+/**
+ * 글이 수정되었는지 확인합니다 (1분 이상 차이)
+ */
+export function isUpdatedArticle(createdAt: string, updatedAt: string): boolean {
+  const created = new Date(createdAt);
+  const updated = new Date(updatedAt);
+  return updated.getTime() > created.getTime() + 60000; // 1분 이상 차이가 나면 수정됨
+}
