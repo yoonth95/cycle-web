@@ -17,9 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { CustomPagination } from "@/components/common";
 import {
   NoticesTableHeader,
-  NoticesPagination,
   createNoticesTableColumns,
   NoticesTableMobileBody,
 } from "@/components/features/notices/page";
@@ -136,7 +136,12 @@ export function NoticesTable({ noticeListData }: NoticesTableProps) {
       )}
 
       {/* 페이지네이션 */}
-      <NoticesPagination noticeListData={noticeListData} onPageChange={handlePageChange} />
+      <CustomPagination
+        totalPages={noticeListData.totalPages}
+        currentPage={noticeListData.currentPage}
+        mode="button"
+        onPageChange={handlePageChange}
+      />
     </>
   );
 }
