@@ -1,50 +1,58 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
-import { formatDate } from "@/utils/common";
-import { ContactsListItemType, ContactsListResponseType } from "@/types/contact";
+import { cn } from "@/lib/utils";
+import { formatDate, isUpdatedArticle } from "@/utils/common";
+import { ContactsListItemType } from "@/types/contact";
+import { Calendar, Lock, User } from "lucide-react";
 
 export function ContactsTableMobileBody({
   contact,
-  index,
-  contactListData,
-  // onClick,
+  onClick,
 }: {
   contact: ContactsListItemType;
-  index: number;
-  contactListData: ContactsListResponseType;
-  // onClick: (contactId: string) => void;
+  onClick: (contactId: string) => void;
 }) {
-  const displayIndex =
-    contactListData.totalCount -
-    (contactListData.currentPage - 1) * contactListData.pageSize -
-    index;
-
-  const isUpdated = isUpdatedNotice(contact.created_at, contact.created_at);
+  const isUpdated = isUpdatedArticle(contact.created_at, contact.updated_at);
 
   return (
     <div
-      // onClick={() => onClick(contact.id)}
-      className="cursor-pointer bg-white p-4 transition-colors hover:bg-gray-50"
+      onClick={() => onClick(contact.id)}
+      className="cursor-pointer p-4 transition-shadow hover:shadow-md"
     >
-      <div className="flex items-start justify-between">
-        <div className="flex flex-1 flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <h3 className="flex flex-1 items-center gap-2 text-sm font-medium text-gray-900 transition-colors hover:text-blue-600 [@media(min-width:425px)]:text-base">
-              {isNewNotice(contact.created_at) && (
-                <Badge
-                  variant="destructive"
-                  className="text-[10px] [@media(min-width:425px)]:text-xs"
-                >
-                  N
-                </Badge>
-              )}
-              {contact.title}
-            </h3>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          {contact.is_private && (
+            <Lock className="text-muted-foreground mt-0.5 h-4 w-4 flex-shrink-0" />
+          )}
+          <div
+            className={cn(
+              "text-foreground flex-1 leading-relaxed font-medium",
+              "line-clamp-2 text-pretty",
+              "flex items-center gap-2",
+            )}
+          >
+            <h3>{contact.title}</h3>
+            {contact.contact_comments[0].count > 0 && (
+              <span className="text-xs font-bold text-blue-600">
+                [ {contact.contact_comments[0].count} ]
+              </span>
+            )}
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <span>{formatDate(isUpdated ? contact.created_at : contact.created_at, true)}</span>
-            {isUpdated && <span>(수정됨)</span>}
+        </div>
+
+        {/* 하단: 작성자와 날짜 */}
+        <div className="text-muted-foreground flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <User className="h-3 w-3" />
+            <span className="max-w-15 truncate text-xs [@media(min-width:375px)]:max-w-[120px]">
+              {contact.author}
+            </span>
+          </div>
+          <div className="flex flex-shrink-0 items-center gap-1 [@media(min-width:375px)]:gap-2">
+            <Calendar className="h-3 w-3" />
+            <span className="text-xs">
+              {formatDate(isUpdated ? contact.updated_at : contact.created_at, true)}
+            </span>
+            {isUpdated && <span className="text-xs">(수정됨)</span>}
           </div>
         </div>
       </div>

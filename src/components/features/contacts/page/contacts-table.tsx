@@ -80,12 +80,11 @@ export function ContactsTable({ contactListData, onPageChange, isFetching }: Con
           {isMobile ? (
             <div className="divide-y divide-gray-200">
               {contactListData.contacts.length ? (
-                contactListData.contacts.map((contact, index) => (
+                contactListData.contacts.map((contact) => (
                   <ContactsTableMobileBody
                     key={contact.id}
                     contact={contact}
-                    index={index}
-                    contactListData={contactListData}
+                    onClick={handleRowClick}
                   />
                 ))
               ) : (
