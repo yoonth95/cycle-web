@@ -3,7 +3,8 @@
 import React from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { ContactsTable } from "@/components/features/contacts/page";
-import { useContactsList } from "@/hooks/use-contacts-list";
+import { getContactListFromAPI } from "@/lib/contact/client";
+import { useTableList } from "@/hooks/use-table-list";
 import type { ContactsLayoutContentTable } from "@/types/contact";
 
 interface ContactsTableSectionProps {
@@ -17,7 +18,11 @@ export function ContactsTableSection({ ContactsTableData }: ContactsTableSection
     isFetching,
     error,
     handlePageChange,
-  } = useContactsList(ContactsTableData.defaultValues);
+  } = useTableList({
+    defaultParams: ContactsTableData.defaultValues,
+    queryKey: "contacts-list",
+    queryFn: getContactListFromAPI,
+  });
 
   // 에러 상태 처리
   if (error) {
