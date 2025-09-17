@@ -1,20 +1,27 @@
 import { useSearchParams } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { getContactListFromAPI } from "@/lib/contact/client";
-import type { ContactsListParamsType } from "@/types/contact";
 
-export function useContactsList(defaultParams: ContactsListParamsType) {
+interface UseTableListProps<TParams, TResponse> {
+  defaultParams: TParams;
+  queryKey: string;
+  queryFn: (params: TParams) => Promise<TResponse>;
+}
+export function useTableList<TParams, TResponse>({
+  defaultParams,
+  queryKey,
+  queryFn,
+}: UseTableListProps<TParams, TResponse>) {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  const params: ContactsListParamsType = {
+  const params: TParams = {
     ...defaultParams,
     page: currentPage,
   };
 
   const { data, isLoading, isFetching, isPlaceholderData, error } = useQuery({
-    queryKey: ["contacts-list", currentPage],
-    queryFn: () => getContactListFromAPI(params),
+    queryKey: [queryKey, currentPage],
+    queryFn: () => queryFn(params),
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
   });
