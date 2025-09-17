@@ -64,6 +64,7 @@ export const NoticeListItemSchema = z.object({
   id: z.string(),
   title: z.string(),
   view_count: z.number(),
+  is_pinned: z.boolean(),
   created_at: z.string(),
   updated_at: z.string(),
 });
