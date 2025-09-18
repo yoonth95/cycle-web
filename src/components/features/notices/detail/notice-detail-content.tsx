@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { formatDate, isNewArticle, isUpdatedArticle } from "@/utils/common";
 import type { NoticeDetailType } from "@/types/notice";
-import { Calendar } from "lucide-react";
+import { Calendar, Pencil } from "lucide-react";
 
 export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
   return (
@@ -22,20 +22,22 @@ export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
                 <h1 className="text-2xl font-bold text-gray-900">{notice.title}</h1>
               </div>
 
-              <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
+              <div className="text-muted-foreground flex flex-wrap items-center gap-6 text-sm">
+                {/* 작성 날짜 */}
                 <div className="flex items-center gap-2">
                   <Calendar className="text-muted-foreground h-4 w-4" />
-                  <span>
-                    {formatDate(
-                      isUpdatedArticle(notice.created_at, notice.updated_at)
-                        ? notice.updated_at
-                        : notice.created_at,
-                      true,
-                    )}
+                  <span>{formatDate(notice.created_at, true)}</span>
+                </div>
+
+                {/* 수정 날짜 */}
+                <div className="flex items-center gap-2">
+                  <Pencil className="text-muted-foreground h-4 w-4" />
+                  <div className="flex items-center gap-1">
+                    <span>{formatDate(notice.updated_at, true)}</span>
                     {isUpdatedArticle(notice.created_at, notice.updated_at) && (
-                      <span className="ml-1">(수정됨)</span>
+                      <span>(수정됨)</span>
                     )}
-                  </span>
+                  </div>
                 </div>
               </div>
             </div>
