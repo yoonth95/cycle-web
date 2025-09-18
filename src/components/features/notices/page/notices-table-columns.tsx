@@ -1,10 +1,10 @@
-import type { ColumnDef, Row } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatViewCount } from "@/utils/notices-utils";
 import { formatDate, isNewArticle, isUpdatedArticle } from "@/utils/common";
 import type { NoticeListItemType, NoticeListResponseType } from "@/types/notice";
-import { ChevronUpIcon, ChevronDownIcon, Eye, Pin } from "lucide-react";
+import { ChevronUpIcon, ChevronDownIcon, Eye } from "lucide-react";
 
 /**
  * 공지사항 테이블 컬럼 정의를 생성합니다
