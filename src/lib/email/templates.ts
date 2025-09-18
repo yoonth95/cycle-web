@@ -1,9 +1,9 @@
-import type { ContactFormData } from "@/types/contact";
+import type { ContactsFormData } from "@/types/contact";
 
 /**
  * 관리자에게 보낼 메일 템플릿 (새로운 문의사항 알림)
  */
-export function getAdminNotificationTemplate(contactData: ContactFormData) {
+export function getAdminNotificationTemplate(contactData: ContactsFormData) {
   const subject = `[문의사항] ${contactData.title}`;
 
   const html = `
@@ -34,7 +34,7 @@ export function getAdminNotificationTemplate(contactData: ContactFormData) {
           <br />
 
           <div style="margin-bottom: 20px;">
-            <div style="font-weight: bold; color: #374151; margin-bottom: 5px;">문의자 : ${contactData.name}</div>
+            <div style="font-weight: bold; color: #374151; margin-bottom: 5px;">문의자 : ${contactData.author}</div>
           </div>
 
           <div style="margin-bottom: 20px;">
@@ -54,7 +54,7 @@ export function getAdminNotificationTemplate(contactData: ContactFormData) {
 새로운 문의사항이 접수되었습니다.
 
 제목: ${contactData.title}
-문의자: ${contactData.name}
+문의자: ${contactData.author}
 이메일: ${contactData.email}
 
 문의 내용:
@@ -70,7 +70,7 @@ ${contactData.description}
 /**
  * 사용자에게 보낼 메일 템플릿 (문의사항 접수 확인)
  */
-export function getUserConfirmationTemplate(contactData: ContactFormData) {
+export function getUserConfirmationTemplate(contactData: ContactsFormData) {
   const subject = `[삼천리 자전거] 문의사항이 접수되었습니다 - ${contactData.title}`;
 
   const html = `
@@ -90,7 +90,7 @@ export function getUserConfirmationTemplate(contactData: ContactFormData) {
         <br />
 
         <div style="padding: 30px;">
-          <p style="margin: 0 0 10px 0;">안녕하세요, <strong>${contactData.name}</strong>님!</p>
+          <p style="margin: 0 0 10px 0;">안녕하세요, <strong>${contactData.author}</strong>님!</p>
           <p style="margin: 0 0 10px 0;">삼천리 자전거 중동역점에 문의해 주셔서 감사합니다.</p>
           <p style="margin: 0 0 20px 0;">문의사항이 정상적으로 접수되었으며 빠른 시일 내에 검토 후 답변드리겠습니다.</p>
 
@@ -136,7 +136,7 @@ export function getUserConfirmationTemplate(contactData: ContactFormData) {
   `;
 
   const text = `
-안녕하세요, ${contactData.name}님!
+안녕하세요, ${contactData.author}님!
 
 삼천리 자전거 중동역점에 문의해 주셔서 감사합니다.
 문의사항이 정상적으로 접수되었으며, 빠른 시일 내에 검토 후 답변드리겠습니다.

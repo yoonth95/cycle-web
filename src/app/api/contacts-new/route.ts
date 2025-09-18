@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { transformContactFormData } from "@/lib/contact/transform";
 import { getSupabaseConfig } from "@/utils/fetchCacheOption";
 import { sendContactEmails } from "@/lib/email";
-import type { ContactSubmissionResult } from "@/types/contact";
+import { transformContactsFormData } from "@/lib/contact/transform";
+import type { ContactsSubmissionResult } from "@/types/contact";
 
-export async function POST(request: NextRequest): Promise<NextResponse<ContactSubmissionResult>> {
+export async function POST(request: NextRequest): Promise<NextResponse<ContactsSubmissionResult>> {
   try {
     // 요청 본문 파싱
     const body = await request.json();
 
     // 폼 데이터 검증 및 변환
-    const validatedData = transformContactFormData(body);
+    const validatedData = transformContactsFormData(body);
 
     if (!validatedData) {
       return NextResponse.json(
@@ -35,8 +35,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<ContactSu
       body: JSON.stringify({
         title: validatedData.title,
         description: validatedData.description,
-        name: validatedData.name,
+        author: validatedData.author,
         email: validatedData.email,
+        is_private: validatedData.isPrivate,
+        password: validatedData.isPrivate ? null : validatedData.password,
       }),
     });
 

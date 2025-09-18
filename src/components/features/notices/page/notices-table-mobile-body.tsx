@@ -1,7 +1,6 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { isNewNotice, isUpdatedNotice } from "@/utils/notices-utils";
-import { formatDate } from "@/utils/common";
+import { formatDate, isNewArticle, isUpdatedArticle } from "@/utils/common";
 import { NoticeListItemType, NoticeListResponseType } from "@/types/notice";
 
 export function NoticesTableMobileBody({
@@ -18,7 +17,7 @@ export function NoticesTableMobileBody({
   const displayIndex =
     noticeListData.totalCount - (noticeListData.currentPage - 1) * noticeListData.pageSize - index;
 
-  const isUpdated = isUpdatedNotice(notice.created_at, notice.updated_at);
+  const isUpdated = isUpdatedArticle(notice.created_at, notice.updated_at);
 
   return (
     <div
@@ -32,7 +31,7 @@ export function NoticesTableMobileBody({
             <h3 className="flex-1 text-sm font-medium text-gray-900 transition-colors hover:text-blue-600 [@media(min-width:425px)]:text-base">
               {notice.title}
             </h3>
-            {isNewNotice(notice.created_at) && (
+            {isNewArticle(notice.created_at) && (
               <Badge
                 variant="destructive"
                 className="text-[10px] [@media(min-width:425px)]:text-xs"

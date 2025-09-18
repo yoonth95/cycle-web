@@ -64,6 +64,7 @@ export const NoticeListItemSchema = z.object({
   id: z.string(),
   title: z.string(),
   view_count: z.number(),
+  is_pinned: z.boolean().default(false),
   created_at: z.string(),
   updated_at: z.string(),
 });
@@ -75,7 +76,7 @@ export const NoticeDetailSchema = NoticeListItemSchema.extend({
       ops: z.array(z.record(z.string(), z.unknown())),
     }),
   ]),
-  is_published: z.boolean(),
+  is_published: z.boolean().default(false),
 });
 
 export const NoticeListResponseSchema = z.object({

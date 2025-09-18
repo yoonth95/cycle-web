@@ -17,36 +17,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { CustomPagination } from "@/components/common";
 import {
-  NoticesTableHeader,
-  createNoticesTableColumns,
-  NoticesTableMobileBody,
-} from "@/components/features/notices/page";
+  ContactsTableHeader,
+  createContactsTableColumns,
+  ContactsTableMobileBody,
+} from "@/components/features/contacts/page";
 import { useMobile } from "@/hooks/use-mobile";
-import type { NoticeListResponseType } from "@/types/notice";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import type { ContactsListResponseType } from "@/types/contact";
 
-interface NoticesTableProps {
-  noticeListData: NoticeListResponseType;
-  onPageChange?: (page: number) => void;
+interface ContactsTableProps {
+  contactListData: ContactsListResponseType;
+  onPageChange?: (page: number) => void; // 선택적 prop으로 페이지 변경 핸들러
   isFetching?: boolean;
 }
 
 /**
- * 공지사항 테이블 메인 컴포넌트
+ * 문의사항 테이블 메인 컴포넌트
  */
-export function NoticesTable({ noticeListData, onPageChange, isFetching }: NoticesTableProps) {
-  const router = useRouter();
+export function ContactsTable({ contactListData, onPageChange, isFetching }: ContactsTableProps) {
   const [isMobile] = useMobile({});
+  const router = useRouter();
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "index", desc: true }, // 기본적으로 순번(생성일) 기준 내림차순 정렬 (pin은 항상 상단)
+    { id: "index", desc: true }, // 기본적으로 순번(생성일) 기준 내림차순 정렬
   ]);
 
-  const columns = createNoticesTableColumns(noticeListData);
+  const columns = createContactsTableColumns(contactListData);
 
   const table = useReactTable({
-    data: noticeListData.notices,
+    data: contactListData.contacts,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -61,14 +61,14 @@ export function NoticesTable({ noticeListData, onPageChange, isFetching }: Notic
     onPageChange?.(page);
   };
 
-  const handleRowClick = (noticeId: string) => {
-    router.push(`/notices/${noticeId}`);
+  const handleRowClick = (contactId: string) => {
+    router.push(`/contacts/${contactId}`);
   };
 
   return (
     <>
       {/* 테이블 헤더 정보 */}
-      <NoticesTableHeader noticeListData={noticeListData} />
+      <ContactsTableHeader contactListData={contactListData} />
 
       {isFetching ? (
         <div className="flex min-h-100 items-center justify-center overflow-hidden">
@@ -79,18 +79,16 @@ export function NoticesTable({ noticeListData, onPageChange, isFetching }: Notic
           {/* 모바일 테이블 레이아웃 */}
           {isMobile ? (
             <div className="divide-y divide-gray-200">
-              {noticeListData.notices.length ? (
-                noticeListData.notices.map((notice, index) => (
-                  <NoticesTableMobileBody
-                    key={notice.id}
-                    notice={notice}
-                    index={index}
-                    noticeListData={noticeListData}
+              {contactListData.contacts.length ? (
+                contactListData.contacts.map((contact) => (
+                  <ContactsTableMobileBody
+                    key={contact.id}
+                    contact={contact}
                     onClick={handleRowClick}
                   />
                 ))
               ) : (
-                <div className="p-8 text-center text-gray-500">등록된 공지사항이 없습니다.</div>
+                <div className="p-8 text-center text-gray-500">등록된 문의사항이 없습니다.</div>
               )}
             </div>
           ) : (
@@ -119,8 +117,8 @@ export function NoticesTable({ noticeListData, onPageChange, isFetching }: Notic
                     table.getRowModel().rows.map((row) => (
                       <TableRow
                         key={row.id}
+                        className="cursor-pointer text-center transition-colors hover:bg-gray-50"
                         onClick={() => handleRowClick(row.original.id)}
-                        className="group cursor-pointer text-center transition-colors hover:bg-gray-50"
                       >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
@@ -132,7 +130,7 @@ export function NoticesTable({ noticeListData, onPageChange, isFetching }: Notic
                   ) : (
                     <TableRow>
                       <TableCell colSpan={columns.length} className="h-24 text-center">
-                        등록된 공지사항이 없습니다.
+                        등록된 문의사항이 없습니다.
                       </TableCell>
                     </TableRow>
                   )}
@@ -143,8 +141,8 @@ export function NoticesTable({ noticeListData, onPageChange, isFetching }: Notic
 
           {/* 페이지네이션 */}
           <CustomPagination
-            totalPages={noticeListData.totalPages}
-            currentPage={noticeListData.currentPage}
+            totalPages={contactListData.totalPages}
+            currentPage={contactListData.currentPage}
             mode="button"
             onPageChange={handlePageChange}
           />

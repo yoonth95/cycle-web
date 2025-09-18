@@ -2,9 +2,9 @@ import "server-only";
 
 // 타입만 import하여 런타임에 nodemailer가 없어도 에러가 발생하지 않도록 함
 import type { Transporter } from "nodemailer";
-import type { ContactFormData } from "@/types/contact";
-import { EMAIL_CONFIG, validateEmailConfig } from "./config";
-import { getAdminNotificationTemplate, getUserConfirmationTemplate } from "./templates";
+import { EMAIL_CONFIG, validateEmailConfig } from "@/lib/email/config";
+import { getAdminNotificationTemplate, getUserConfirmationTemplate } from "@/lib/email/templates";
+import type { ContactsFormData } from "@/types/contact";
 
 let transporter: Transporter | null = null;
 
@@ -40,7 +40,7 @@ async function getTransporter(): Promise<Transporter | null> {
 /**
  * 관리자에게 새로운 문의사항 알림 메일 전송
  */
-export async function sendAdminNotification(contactData: ContactFormData): Promise<boolean> {
+export async function sendAdminNotification(contactData: ContactsFormData): Promise<boolean> {
   try {
     const transporter = await getTransporter();
     if (!transporter) return false;
@@ -66,7 +66,7 @@ export async function sendAdminNotification(contactData: ContactFormData): Promi
 /**
  * 사용자에게 문의사항 접수 확인 메일 전송
  */
-export async function sendUserConfirmation(contactData: ContactFormData): Promise<boolean> {
+export async function sendUserConfirmation(contactData: ContactsFormData): Promise<boolean> {
   try {
     const transporter = await getTransporter();
     if (!transporter) return false;
@@ -92,7 +92,7 @@ export async function sendUserConfirmation(contactData: ContactFormData): Promis
 /**
  * 관리자 알림과 사용자 확인 메일을 동시에 전송
  */
-export async function sendContactEmails(contactData: ContactFormData): Promise<{
+export async function sendContactEmails(contactData: ContactsFormData): Promise<{
   adminSent: boolean;
   userSent: boolean;
 }> {

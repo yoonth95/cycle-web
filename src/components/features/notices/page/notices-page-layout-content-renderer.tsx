@@ -39,7 +39,7 @@ export function NoticesPageLayoutContentRenderer({
               | NoticesLayoutContentTable
               | undefined;
             if (!data) return null;
-            return <NoticesTableSection key={section.id} data={data} />;
+            return <NoticesTableSection key={section.id} NoticesTableData={data} />;
           }
           default:
             console.warn(`Unknown notices content section type: ${section}`);

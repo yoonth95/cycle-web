@@ -1,5 +1,6 @@
 "use client";
 
+import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,11 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { EMAIL_DOMAINS } from "@/constants";
-import { UseFormReturn } from "react-hook-form";
-import { ContactFormInputData } from "@/types/contact";
+import { ContactsFormInputData } from "@/types/contact";
 
 interface EmailInputProps {
-  form: UseFormReturn<ContactFormInputData>;
+  form: UseFormReturn<ContactsFormInputData>;
 }
 
 export function EmailInput({ form }: EmailInputProps) {
@@ -29,9 +29,12 @@ export function EmailInput({ form }: EmailInputProps) {
           </FormLabel>
           <div className="flex flex-col gap-3">
             {/* 데스크톱 레이아웃 */}
-            <div className="hidden items-center gap-2 sm:flex">
+            <div className="hidden items-start gap-2 sm:flex">
               <FormControl>
-                <Input placeholder="이메일 아이디" {...field} className="text-sm" />
+                <FormItem className="min-w-0 flex-1">
+                  <Input placeholder="이메일 아이디" {...field} className="text-sm" />
+                  <FormMessage />
+                </FormItem>
               </FormControl>
               <div className="flex min-w-fit items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-gray-600">
                 @
@@ -40,24 +43,27 @@ export function EmailInput({ form }: EmailInputProps) {
                 control={form.control}
                 name="emailDomain"
                 render={({ field: domainField }) => (
-                  <FormControl className="min-w-0 flex-1">
-                    <Select
-                      value={domainField.value}
-                      onValueChange={(value) => {
-                        domainField.onChange(value);
-                      }}
-                    >
-                      <SelectTrigger className="h-9 w-full text-sm">
-                        <SelectValue placeholder="도메인 선택" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {EMAIL_DOMAINS.map((domain) => (
-                          <SelectItem key={domain.value} value={domain.value}>
-                            {domain.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  <FormControl>
+                    <FormItem className="min-w-0 flex-1">
+                      <Select
+                        value={domainField.value}
+                        onValueChange={(value) => {
+                          domainField.onChange(value);
+                        }}
+                      >
+                        <SelectTrigger className="h-9 w-full text-sm">
+                          <SelectValue placeholder="도메인 선택" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {EMAIL_DOMAINS.map((domain) => (
+                            <SelectItem key={domain.value} value={domain.value}>
+                              {domain.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
                   </FormControl>
                 )}
               />
@@ -100,7 +106,6 @@ export function EmailInput({ form }: EmailInputProps) {
               </div>
             </div>
           </div>
-          <FormMessage />
         </FormItem>
       )}
     />
