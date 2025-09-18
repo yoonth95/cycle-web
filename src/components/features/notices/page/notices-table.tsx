@@ -120,7 +120,7 @@ export function NoticesTable({ noticeListData, onPageChange, isFetching }: Notic
                       <TableRow
                         key={row.id}
                         onClick={() => handleRowClick(row.original.id)}
-                        className="cursor-pointer text-center transition-colors hover:bg-gray-50"
+                        className="group cursor-pointer text-center transition-colors hover:bg-gray-50"
                       >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
