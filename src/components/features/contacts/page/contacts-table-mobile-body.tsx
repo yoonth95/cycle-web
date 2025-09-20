@@ -20,7 +20,7 @@ export function ContactsTableMobileBody({
     >
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
-          {contact.is_private && (
+          {!contact.is_public && (
             <Lock className="text-muted-foreground mt-0.5 h-4 w-4 flex-shrink-0" />
           )}
           <div
@@ -31,9 +31,9 @@ export function ContactsTableMobileBody({
             )}
           >
             <h3>{contact.title}</h3>
-            {contact.contact_comments[0].count > 0 && (
-              <span className="text-xs font-bold text-blue-600">
-                [ {contact.contact_comments[0].count} ]
+            {contact.contact_comments && contact.contact_comments.length > 0 && (
+              <span className="text-figma-alizarin-crimson text-xs font-bold">
+                [ {contact.contact_comments.length} ]
               </span>
             )}
           </div>

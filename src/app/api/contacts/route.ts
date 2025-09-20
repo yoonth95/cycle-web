@@ -32,7 +32,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<ContactsLi
 
     // contacts 데이터 조회
     const dataResponse = await fetch(
-      `${baseUrl}/rest/v1/contacts?select=id,title,author,is_private,created_at,updated_at,contact_comments(count)&order=${sortBy}.${sortOrder}&limit=${pageSize}&offset=${offset}`,
+      `${baseUrl}/rest/v1/contacts?select=id,title,author,is_public,created_at,updated_at,contact_comments(*)&order=${sortBy}.${sortOrder}&limit=${pageSize}&offset=${offset}`,
       {
         method: "GET",
         headers: {

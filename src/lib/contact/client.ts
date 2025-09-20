@@ -3,6 +3,7 @@ import {
   type ContactsSubmissionResult,
   type ContactsListParamsType,
   type ContactsListResponseType,
+  type ContactDetailPasswordFormData,
   ContactsListResponseSchema,
 } from "@/types/contact";
 
@@ -75,6 +76,38 @@ export async function submitContactsForm(
     return {
       success: false,
       message: "문의사항 접수 중 오류가 발생했습니다. 다시 시도해 주세요.",
+    };
+  }
+}
+
+/**
+ * Contact 상세 페이지 비밀번호 입력 폼 제출
+ */
+export async function submitContactDetailPasswordForm(
+  formData: ContactDetailPasswordFormData,
+): Promise<ContactsSubmissionResult> {
+  const { password, id } = formData;
+
+  try {
+    const response = await fetch(`/api/contacts-detail-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password, id }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("[submitContactDetailPasswordForm] Error:", error);
+    return {
+      success: false,
+      message: "비밀번호 확인 중 오류가 발생했습니다. 다시 시도해 주세요.",
     };
   }
 }

@@ -49,13 +49,15 @@ export function createContactsTableColumns(
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          {!row.original.is_private && <Lock className="h-4 w-4 text-gray-500" />}
-          <span className="font-medium text-gray-900 transition-colors hover:text-blue-600">
+          {!row.original.is_public && (
+            <Lock className="group-hover:text-figma-alizarin-crimson h-4 w-4 text-gray-500" />
+          )}
+          <span className="hover:text-figma-alizarin-crimson group-hover:text-figma-alizarin-crimson font-medium text-gray-900 transition-colors">
             {row.original.title}
           </span>
-          {row.original.contact_comments[0].count > 0 && (
-            <span className="text-xs font-bold text-blue-600">
-              [ {row.original.contact_comments[0].count} ]
+          {row.original.contact_comments && row.original.contact_comments.length > 0 && (
+            <span className="text-figma-alizarin-crimson text-xs font-bold">
+              [ {row.original.contact_comments.length} ]
             </span>
           )}
         </div>
@@ -83,7 +85,7 @@ export function createContactsTableColumns(
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="h-auto p-0 font-medium hover:bg-transparent"
         >
-          날짜
+          작성 날짜
           {column.getIsSorted() === "asc" ? (
             <ChevronUpIcon className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === "desc" ? (
@@ -102,19 +104,10 @@ export function createContactsTableColumns(
       },
       size: 120,
       sortingFn: (rowA, rowB) => {
-        const dateA = new Date(
-          Math.max(
-            new Date(rowA.original.created_at).getTime(),
-            new Date(rowA.original.updated_at).getTime(),
-          ),
+        return (
+          new Date(rowB.original.created_at).getTime() -
+          new Date(rowA.original.created_at).getTime()
         );
-        const dateB = new Date(
-          Math.max(
-            new Date(rowB.original.created_at).getTime(),
-            new Date(rowB.original.updated_at).getTime(),
-          ),
-        );
-        return dateA.getTime() - dateB.getTime();
       },
     },
   ];

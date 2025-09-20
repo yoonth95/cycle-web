@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseConfig } from "@/utils/fetchCacheOption";
 import { sendContactEmails } from "@/lib/email";
@@ -25,6 +26,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<ContactsS
     // Supabase에 데이터 저장
     const { baseUrl, headers } = getSupabaseConfig();
 
+    const hashPassword = validatedData.isPublic
+      ? null
+      : await bcrypt.hash(validatedData.password || "", 10);
+
     const response = await fetch(`${baseUrl}/rest/v1/contacts`, {
       method: "POST",
       headers: {
@@ -37,8 +42,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<ContactsS
         description: validatedData.description,
         author: validatedData.author,
         email: validatedData.email,
-        is_private: validatedData.isPrivate,
-        password: validatedData.isPrivate ? null : validatedData.password,
+        is_public: validatedData.isPublic,
+        password: hashPassword,
       }),
     });
 

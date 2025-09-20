@@ -12,14 +12,14 @@ interface CheckboxInputProps {
 export function CheckboxInput({ form }: CheckboxInputProps) {
   const isPublic = useWatch({
     control: form.control,
-    name: "isPrivate",
+    name: "isPublic",
   });
 
   return (
     <>
       <FormField
         control={form.control}
-        name="isPrivate"
+        name="isPublic"
         render={({ field }) => (
           <FormItem className="flex flex-row items-start gap-3">
             <FormControl>
