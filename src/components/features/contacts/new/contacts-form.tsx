@@ -37,7 +37,7 @@ export function ContactsForm({ formConfig }: ContactsFormProps) {
       author: "",
       emailLocal: "",
       emailDomain: "",
-      isPrivate: true,
+      isPublic: true,
       password: "",
     },
   });

@@ -20,7 +20,7 @@ export function ContactsTableMobileBody({
     >
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
-          {contact.is_private && (
+          {!contact.is_public && (
             <Lock className="text-muted-foreground mt-0.5 h-4 w-4 flex-shrink-0" />
           )}
           <div

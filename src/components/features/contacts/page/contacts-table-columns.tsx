@@ -49,7 +49,7 @@ export function createContactsTableColumns(
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          {row.original.is_private && (
+          {!row.original.is_public && (
             <Lock className="group-hover:text-figma-alizarin-crimson h-4 w-4 text-gray-500" />
           )}
           <span className="hover:text-figma-alizarin-crimson group-hover:text-figma-alizarin-crimson font-medium text-gray-900 transition-colors">
