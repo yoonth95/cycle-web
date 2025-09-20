@@ -31,9 +31,9 @@ export function ContactsTableMobileBody({
             )}
           >
             <h3>{contact.title}</h3>
-            {contact.contact_comments[0].count > 0 && (
-              <span className="text-xs font-bold text-blue-600">
-                [ {contact.contact_comments[0].count} ]
+            {contact.contact_comments && contact.contact_comments.length > 0 && (
+              <span className="text-figma-alizarin-crimson text-xs font-bold">
+                [ {contact.contact_comments.length} ]
               </span>
             )}
           </div>

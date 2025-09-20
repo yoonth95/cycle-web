@@ -117,7 +117,7 @@ export function ContactsTable({ contactListData, onPageChange, isFetching }: Con
                     table.getRowModel().rows.map((row) => (
                       <TableRow
                         key={row.id}
-                        className="cursor-pointer text-center transition-colors hover:bg-gray-50"
+                        className="group cursor-pointer text-center transition-colors hover:bg-gray-50"
                         onClick={() => handleRowClick(row.original.id)}
                       >
                         {row.getVisibleCells().map((cell) => (
