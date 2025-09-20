@@ -5,6 +5,9 @@ import {
   type ContactsLayoutData,
   type ContactsFormData,
   ContactsHeaderSection,
+  DbContactRow,
+  DbContactRowSchema,
+  ContactWithComments,
 } from "@/types/contact";
 
 function transformContactsHeaderSection(section: ContactsHeaderSection): ContactsHeaderSection {
@@ -77,6 +80,31 @@ export function transformContactsFormData(rawData: unknown): ContactsFormData | 
     return resultData;
   } catch (error) {
     console.error("[transformContactFormData] 변환 또는 검증 실패:", error);
+    return null;
+  }
+}
+
+/**
+ * Contact 상세 데이터를 변환하고 zod로 검증
+ */
+export function transformContactDetail(rawContact: DbContactRow): ContactWithComments | null {
+  try {
+    // Zod 스키마를 사용하여 데이터 유효성 검사 및 변환
+    const parsedContact = DbContactRowSchema.parse(rawContact);
+
+    // description이 Quill Delta 형식인 경우 HTML로 변환
+    const descriptionHtml =
+      typeof parsedContact.description === "string" &&
+      parsedContact.description.startsWith('{"ops":[')
+        ? deltaToHtml(JSON.parse(parsedContact.description))
+        : parsedContact.description;
+
+    return {
+      ...parsedContact,
+      description: descriptionHtml,
+    };
+  } catch (error) {
+    console.error("[transformContactDetail] 변환 또는 검증 실패:", error);
     return null;
   }
 }
