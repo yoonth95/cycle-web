@@ -4,11 +4,6 @@ import { getNoticesLayout } from "@/lib/notice/server";
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: "공지사항 | 삼천리 자전거 중동역점",
-  description: "삼천리 자전거 중동역점의 최신 소식과 공지사항을 확인하세요.",
-};
-
 export default async function NoticesPage() {
   const layoutData = (await getNoticesLayout())?.layout;
 

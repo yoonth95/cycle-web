@@ -3,14 +3,20 @@ import { getContactDetail } from "@/lib/contact/server";
 import { DataValidationWrapper, PageSuspenseWrapper } from "@/components/common";
 import GenericDynamicMetadataUpdater from "@/components/common/generic-dynamic-metadata-updater";
 import { ContactDetailWithAuth } from "@/components/features/contacts/detail";
+import { generatePageMetadata } from "@/utils/metadata-generator";
 
 export const revalidate = 300;
 
-export async function generateMetadata() {
-  return {
-    title: `문의사항 | 삼천리 자전거 중동역점`,
-    description: "문의사항입니다.",
-  };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
+  return generatePageMetadata({
+    title: "문의사항",
+    description: "삼천리자전거에 문의하세요. 제품 문의, 매장 정보, 서비스 관련 문의를 받습니다.",
+    keywords: ["삼천리자전거", "문의사항", "고객지원"],
+    url: `/contacts/${id}`,
+    type: "website",
+  });
 }
 
 export default async function ContactDetailPage({ params }: { params: Promise<{ id: string }> }) {
