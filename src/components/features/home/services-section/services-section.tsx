@@ -33,7 +33,11 @@ export function ServicesSection({ data }: ServicesSectionProps) {
                   {/* 설명 */}
                   <div
                     className="body-medium text-muted-foreground leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: service.description }}
+                    dangerouslySetInnerHTML={
+                      typeof service.description === "string"
+                        ? { __html: service.description }
+                        : undefined
+                    }
                     suppressHydrationWarning
                   />
                 </CardContent>

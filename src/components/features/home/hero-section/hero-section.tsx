@@ -23,13 +23,17 @@ export function HeroSection({ data }: HeroSectionProps) {
             <div className="space-y-4 lg:space-y-6">
               <div
                 className="text-2xl leading-tight font-bold sm:text-3xl lg:text-4xl xl:text-5xl"
-                dangerouslySetInnerHTML={{ __html: data.title }}
+                dangerouslySetInnerHTML={
+                  typeof data.title === "string" ? { __html: data.title } : undefined
+                }
                 suppressHydrationWarning
               />
 
               <div
                 className="text-sm leading-relaxed sm:text-base lg:text-base xl:text-xl"
-                dangerouslySetInnerHTML={{ __html: data.description }}
+                dangerouslySetInnerHTML={
+                  typeof data.description === "string" ? { __html: data.description } : undefined
+                }
                 suppressHydrationWarning
               />
             </div>

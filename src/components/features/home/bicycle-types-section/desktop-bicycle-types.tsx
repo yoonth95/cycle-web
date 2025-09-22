@@ -59,7 +59,11 @@ const DesktopBicycleTypes = ({ data }: { data: BicycleTypesSectionType["bicycleT
                   <div className="absolute right-6 bottom-20 left-6 h-3/8 translate-y-4 opacity-0 transition-all delay-100 duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                     <div
                       className={cn("body-large text-white", "text-sm md:text-base")}
-                      dangerouslySetInnerHTML={{ __html: bicycle.description }}
+                      dangerouslySetInnerHTML={
+                        typeof bicycle.description === "string"
+                          ? { __html: bicycle.description }
+                          : undefined
+                      }
                       suppressHydrationWarning
                     />
                   </div>

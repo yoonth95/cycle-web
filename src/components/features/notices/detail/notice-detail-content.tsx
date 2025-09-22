@@ -48,7 +48,12 @@ export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
 
         {/* 공지사항 내용 */}
         <div className="py-4 sm:py-8">
-          <div dangerouslySetInnerHTML={{ __html: notice.content }} suppressHydrationWarning />
+          <div
+            dangerouslySetInnerHTML={
+              typeof notice.content === "string" ? { __html: notice.content } : undefined
+            }
+            suppressHydrationWarning
+          />
         </div>
 
         {/* 푸터 */}
