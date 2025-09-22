@@ -9,13 +9,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { sortSubItems, isCurrentPage } from "@/utils/navigation-utils";
+import { sortSubItems, isCurrentPage, getDefaultAccordionValue } from "@/utils/navigation-utils";
 import { useNavigationStore } from "@/stores/navigation-store";
 import { FullMenuProps, NavigationCategoryItem } from "@/types/navigation";
 
 const FullMobileMenu = ({ sortedMenuData, isMenuOpen }: FullMenuProps) => {
-  const defaultAccordionValue = sortedMenuData?.[0]?.id.toString();
   const currentPath = useNavigationStore((state) => state.currentPath);
+  const defaultAccordionValue = getDefaultAccordionValue(currentPath, sortedMenuData);
 
   return (
     <AnimatePresence>
