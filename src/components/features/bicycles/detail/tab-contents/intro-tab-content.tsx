@@ -5,9 +5,6 @@ interface IntroTabContentProps {
   productName: string;
 }
 
-// 상수 정의
-const PRODUCT_IMAGE_ASPECT_RATIO = 3 / 2;
-
 // 유틸리티 함수
 const generateImageAlt = (productName: string, index: number): string => {
   return `${productName} 제품 소개 이미지 ${index + 1}`;
@@ -21,18 +18,18 @@ const IntroTabContent = ({ productImages, productName }: IntroTabContentProps) =
         {productImages.map((image, index) => {
           const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${image}`;
           return (
-            <div key={index} className="relative overflow-hidden rounded-lg">
-              <div
-                className="relative aspect-[3/2]"
-                style={{ aspectRatio: PRODUCT_IMAGE_ASPECT_RATIO }}
-              >
-                <Image
-                  src={imageUrl}
-                  alt={generateImageAlt(productName, index)}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+            <div key={index} className="mx-auto">
+              <Image
+                src={imageUrl}
+                alt={generateImageAlt(productName, index)}
+                width={1200}
+                height={0}
+                style={{
+                  width: "825px",
+                  height: "auto",
+                }}
+                priority={index === 0} // 첫 번째 이미지만 우선 로딩
+              />
             </div>
           );
         })}
