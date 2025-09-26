@@ -16,6 +16,7 @@ import {
   Bike,
   ArrowLeft,
   Palette,
+  Toilet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -31,6 +32,7 @@ const iconMap: Record<string, LucideIcon> = {
   car: Car,
   wifi: Wifi,
   phone: Phone,
+  toilet: Toilet,
 
   // 위치 관련 아이콘
   mapPin: MapPin,
