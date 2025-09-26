@@ -25,7 +25,7 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
             src={imageUrl || "/bike.png"}
             alt={bicycle.name}
             fill
-            className="h-full w-[520px] rounded-t object-cover"
+            className="h-full w-[520px] rounded-t border-t border-r border-l object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             priority={false}
             quality={85}
@@ -35,7 +35,7 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
           <div className="absolute top-2 left-2 flex gap-1">
             {bicycle.tags?.map((tag, index) => (
               <Badge
-                key={index}
+                key={`tag-${bicycle.id}-${index}`}
                 variant={tag.variant}
                 className={`rounded px-2 py-1 text-xs font-medium text-white ${getTagColor(tag.color)}`}
               >
@@ -52,15 +52,19 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
             <p className="line-clamp-2 h-11 text-sm text-gray-600">{bicycle.description}</p>
 
             {/* 특징 */}
-            <div>
+            <div className="min-h-6">
               <div className="flex flex-wrap gap-1">
                 {(bicycle.features || []).slice(0, 3).map((content, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
+                  <Badge
+                    key={`feature-${bicycle.id}-${index}`}
+                    variant="secondary"
+                    className="text-xs"
+                  >
                     {content}
                   </Badge>
                 ))}
                 {(bicycle.features?.length ?? 0) > 3 && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge key={`feature-more-${bicycle.id}`} variant="secondary" className="text-xs">
                     +{(bicycle.features?.length ?? 0) - 3}
                   </Badge>
                 )}
