@@ -5,14 +5,10 @@ import { formatDate } from "@/utils/common";
 import type { BlogListItemProps } from "@/types/blog";
 
 export function BlogListItem({ blog }: BlogListItemProps) {
-  const primaryImage = blog.images[0];
-  const hasMultipleImages = blog.imageCount > 1;
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${blog.images[0]}`;
 
   // description에서 HTML 태그 제거하고 텍스트만 추출
-  const stripHtml = (html: string) => {
-    return html.replace(/<[^>]*>/g, "").replace(/&[^;]+;/g, " ");
-  };
-
+  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, "").replace(/&[^;]+;/g, " ");
   const plainDescription = stripHtml(blog.description as string);
 
   return (
@@ -21,24 +17,17 @@ export function BlogListItem({ blog }: BlogListItemProps) {
         <CardContent className="p-6">
           <div className="flex gap-6">
             {/* 이미지 섹션 */}
-            {primaryImage && (
+            {imageUrl && (
               <div className="relative hidden flex-shrink-0 [@media(min-width:425px)]:block">
                 <div className="relative h-24 w-32 overflow-hidden rounded-lg">
                   <Image
-                    src={primaryImage}
+                    src={imageUrl}
                     alt={blog.title}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
                     sizes="128px"
                     quality={85}
                   />
-
-                  {/* 다중 이미지 표시 */}
-                  {hasMultipleImages && (
-                    <div className="absolute right-1 bottom-1 rounded-full bg-black/70 px-1.5 py-0.5 text-xs text-white">
-                      +{blog.imageCount - 1}
-                    </div>
-                  )}
                 </div>
               </div>
             )}
