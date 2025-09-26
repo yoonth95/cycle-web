@@ -347,10 +347,10 @@ export async function fetchBicycleDetail(
 
   try {
     // 자전거 상세 정보와 카테고리 정보를 함께 조회
-    const response = await fetch(
-      `${baseUrl}/rest/v1/bicycles?select=*,bicycle_categories!inner(slug)&id=eq.${bicycleId}`,
-      { ...cacheOption, headers },
-    );
+    const response = await fetch(`${baseUrl}/rest/v1/bicycles?select=*&id=eq.${bicycleId}`, {
+      ...cacheOption,
+      headers,
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -365,18 +365,7 @@ export async function fetchBicycleDetail(
       return null;
     }
 
-    const rawBicycle = rawResult[0];
-
-    // 카테고리 슬러그 매칭 검증
-    if (rawBicycle.bicycle_categories?.slug !== categorySlug) {
-      console.warn(
-        `[fetchBicycleDetail] Category mismatch: expected ${categorySlug}, got ${rawBicycle.bicycle_categories?.slug}`,
-      );
-      return null;
-    }
-
-    // bicycle_categories는 조인용이므로 제거
-    const { bicycle_categories: _, ...bicycleData } = rawBicycle;
+    const bicycleData = rawResult[0];
 
     // Zod 스키마로 안전하게 파싱
     const parsedBicycle = parseBicycleFromDB(bicycleData);
