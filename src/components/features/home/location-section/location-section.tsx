@@ -46,8 +46,8 @@ export function LocationSection({ data }: LocationSectionProps) {
                 <div>
                   <h4 className="body-medium-strong text-foreground mb-2">전화번호</h4>
                   <div className="space-y-1">
-                    <p className="mono-medium text-muted-foreground">{data.phoneNumber}</p>
-                    <p className="mono-medium text-muted-foreground">{data.officeNumber}</p>
+                    <p className="body-medium text-muted-foreground">{data.phoneNumber}</p>
+                    <p className="body-medium text-muted-foreground">{data.officeNumber}</p>
                   </div>
                 </div>
               </div>

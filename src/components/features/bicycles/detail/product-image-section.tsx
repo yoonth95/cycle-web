@@ -17,7 +17,7 @@ interface ProductImageSectionProps {
 
 // 상수 정의
 const MAIN_IMAGE_ASPECT_RATIO = 54 / 31;
-const MIN_IMAGES_FOR_NAVIGATION = 2;
+const MIN_IMAGES_FOR_NAVIGATION = 1;
 
 // 유틸리티 함수
 const generateImageAlt = (productName: string, index: number): string => {

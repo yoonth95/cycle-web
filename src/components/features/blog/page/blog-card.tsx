@@ -5,14 +5,10 @@ import { formatDate } from "@/utils/common";
 import type { BlogCardProps } from "@/types/blog";
 
 export function BlogCard({ blog }: BlogCardProps) {
-  const primaryImage = blog.images[0];
-  const hasMultipleImages = blog.imageCount > 1;
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${blog.images[0]}`;
 
   // description에서 HTML 태그 제거하고 텍스트만 추출
-  const stripHtml = (html: string) => {
-    return html.replace(/<[^>]*>/g, "").replace(/&[^;]+;/g, " ");
-  };
-
+  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, "").replace(/&[^;]+;/g, " ");
   const plainDescription = stripHtml(blog.description as string);
 
   return (
@@ -20,11 +16,11 @@ export function BlogCard({ blog }: BlogCardProps) {
       <Card className="group h-full overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
         <CardContent className="p-0">
           {/* 이미지 섹션 */}
-          {primaryImage && (
+          {imageUrl && (
             <div className="relative overflow-hidden">
               <div className="relative aspect-video">
                 <Image
-                  src={primaryImage}
+                  src={imageUrl}
                   alt={blog.title}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
@@ -32,13 +28,6 @@ export function BlogCard({ blog }: BlogCardProps) {
                   quality={85}
                 />
               </div>
-
-              {/* 다중 이미지 표시 */}
-              {hasMultipleImages && (
-                <div className="absolute right-2 bottom-2 rounded-full bg-black/70 px-2 py-1 text-xs text-white">
-                  +{blog.imageCount - 1}
-                </div>
-              )}
 
               {/* 오버레이 */}
               <div className="absolute inset-0 bg-black/20 transition-opacity group-hover:bg-black/30" />

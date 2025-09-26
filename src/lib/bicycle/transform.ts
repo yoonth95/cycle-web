@@ -72,7 +72,7 @@ export function transformBicycleFromDBToDetail(rawData: unknown): BicycleDetail 
   const specs = bicycleFromDB.specs ?? {};
 
   // images 처리 (최소 1개는 보장)
-  const mainImages = bicycleFromDB.images.length > 0 ? bicycleFromDB.images : ["/bike.png"];
+  const mainImages = bicycleFromDB.images.length > 0 ? bicycleFromDB.images : [];
 
   // contents에서 productImages 추출 (null인 경우 기본 이미지 사용)
   const productImages =
@@ -82,9 +82,7 @@ export function transformBicycleFromDBToDetail(rawData: unknown): BicycleDetail 
 
   // sizes에서 sizeImages 추출 (null인 경우 기본 이미지 사용)
   const sizeImages =
-    Array.isArray(bicycleFromDB.sizes) && bicycleFromDB.sizes.length > 0
-      ? bicycleFromDB.sizes
-      : ["/bike.png"]; // sizes가 없으면 기본 이미지 사용
+    Array.isArray(bicycleFromDB.sizes) && bicycleFromDB.sizes.length > 0 ? bicycleFromDB.sizes : []; // sizes가 없으면 기본 이미지 사용
 
   // BicycleDetail 객체 생성
   const detailData = {

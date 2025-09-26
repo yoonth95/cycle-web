@@ -52,7 +52,7 @@ const fetchBicycles = async <T>({
 };
 
 export function useBicyclesInfinite<T>(categoryId: string, tab: string = "all") {
-  const limit = 20; // 기본값 증가로 네트워크 호출 줄이기
+  const limit = 10; // 기본값 증가로 네트워크 호출 줄이기
 
   // queryKey 안정화 - 불필요한 리렌더링 방지
   const queryKey = useMemo(() => ["bicycles", categoryId, tab, limit], [categoryId, tab, limit]);

@@ -36,8 +36,15 @@ const CategoryLayoutBicycleList = ({
     threshold: 0.1,
   });
 
-  // 데이터 플래튼 최적화
-  const bicycles = useMemo(() => data?.pages.flatMap((p) => p.items) ?? [], [data?.pages]);
+  // 데이터 플래튼 최적화 - 중복 제거
+  const bicycles = useMemo(() => {
+    const allItems = data?.pages.flatMap((p) => p.items) ?? [];
+    // ID 기반으로 중복 제거
+    const uniqueItems = allItems.filter(
+      (item, index, self) => index === self.findIndex((t) => t.id === item.id),
+    );
+    return uniqueItems;
+  }, [data?.pages]);
 
   // 에러 상태 처리
   if (error) {
@@ -99,9 +106,9 @@ const CategoryLayoutBicycleList = ({
     <div className={section.className}>
       {/* 그리드 레이아웃 개선 - 반응형 최적화 */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {bicycles.map((bicycle) => (
+        {bicycles.map((bicycle, index) => (
           <CategoryLayoutBicycleCard
-            key={bicycle.id}
+            key={`${bicycle.id}-${index}`}
             bicycle={bicycle}
             categorySlug={currentCategory.slug}
           />

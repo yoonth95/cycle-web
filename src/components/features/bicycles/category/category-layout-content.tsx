@@ -30,7 +30,7 @@ const CategoryLayoutContent = ({
           case "header":
             return (
               <CategoryLayoutHeader
-                key={section.section}
+                key={section.id}
                 section={section}
                 categoryData={currentCategoryData}
               />
@@ -38,7 +38,7 @@ const CategoryLayoutContent = ({
           case "tabs":
             return (
               <CategoryLayoutTab
-                key={section.section}
+                key={section.id}
                 section={section}
                 subcategories={currentCategoryData.subcategories}
               />
@@ -46,7 +46,7 @@ const CategoryLayoutContent = ({
           case "bicycleList":
             return (
               <CategoryLayoutBicycleListSection
-                key={section.section}
+                key={section.id}
                 section={section}
                 currentCategory={currentCategoryData}
               />
