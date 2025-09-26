@@ -12,7 +12,7 @@ export async function GET(req: Request) {
 
   const categoryId = searchParams.get("categoryId");
   const tab = searchParams.get("tab") ?? "all";
-  const limit = Math.min(Number(searchParams.get("limit") ?? 20), 50); // 기본값 증가, 최대값 제한
+  const limit = Math.min(Number(searchParams.get("limit") ?? 10), 40); // 기본값 증가, 최대값 제한
 
   const cursorOrder = searchParams.get("cursorOrder");
   const cursorId = searchParams.get("cursorId");
