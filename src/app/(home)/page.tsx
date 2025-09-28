@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { PageSuspenseWrapper, DataValidationWrapper } from "@/components/common";
 import { HomeLayoutRenderer } from "@/components/features/home";
+import { PopupDialog } from "@/components/features/popups";
 import { getHomeLayoutWithPageInfo, getHomeContent } from "@/lib/home/server";
 import { HomeLayoutData } from "@/types/home";
 
@@ -38,5 +39,10 @@ async function HomePageContent({
   const contentData = await getHomeContent(pageId, slug);
   if (!contentData) notFound();
 
-  return <HomeLayoutRenderer layoutData={layoutData} contentData={contentData} />;
+  return (
+    <>
+      <PopupDialog />
+      <HomeLayoutRenderer layoutData={layoutData} contentData={contentData} />
+    </>
+  );
 }
