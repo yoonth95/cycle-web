@@ -1,6 +1,6 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseClient } from "@/lib/supabase/client";
 import {
   NavigationDataType,
   NavigationSubItem,
@@ -10,6 +10,12 @@ import {
 
 // 데이터베이스에서 네비게이션 데이터를 직접 가져오는 함수
 async function getNavigationDataFromDB(): Promise<NavigationDataType> {
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    console.warn("[navigation] Supabase client unavailable; returning empty navigation");
+    return [];
+  }
+
   const { data: menus, error: menuErr } = await supabase
     .from("menus")
     .select("id, slug, link, type, order_index")
