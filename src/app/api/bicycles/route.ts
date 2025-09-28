@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getSupabaseClient } from "@/lib/supabase";
 
 // 응답 캐싱을 위한 헤더 설정
 const CACHE_HEADERS = {
@@ -22,6 +22,11 @@ export async function GET(req: Request) {
   }
 
   try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+    }
+
     // 1. 단순화된 쿼리 빌딩
     let query = supabase
       .from("bicycles")
