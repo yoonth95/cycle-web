@@ -23,7 +23,6 @@ interface ContactDetailContentProps {
   contact: ContactWithComments;
 }
 export function ContactDetailContent({ contact }: ContactDetailContentProps) {
-  console.log(contact);
   return (
     <div className="bg-background min-h-screen p-4 md:p-8">
       <div className="mx-auto flex flex-col gap-4">
