@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "tmgpqpvbjvrppwpnumcs.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "postfiles.pstatic.net",
+      },
     ],
     formats: ["image/avif", "image/webp"],
   },
