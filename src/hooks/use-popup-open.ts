@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { UseQueryResult } from "@tanstack/react-query";
-import { getStorageExpiry, setStorageExpiry } from "@/utils/storageExpiry";
+import { getStorageExpiry, setStorageExpiry, msUntilNextKstMidnight } from "@/utils/storageExpiry";
 import type { PopupItem } from "@/types/popup";
 
 interface UsePopupOpenOptions {
@@ -11,12 +11,10 @@ interface UsePopupOpenOptions {
   serverAllows?: (data: unknown) => boolean;
 }
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-
 export function usePopupOpen<TData = PopupItem[]>(
   query: UseQueryResult<TData, unknown>,
   localKey: string,
-  { ttlMs = ONE_DAY_MS, listenStorage = true, serverAllows }: UsePopupOpenOptions = {},
+  { ttlMs, listenStorage = true, serverAllows }: UsePopupOpenOptions = {},
 ) {
   const [suppressed, setSuppressed] = useState<boolean | null>(null);
 
@@ -42,7 +40,8 @@ export function usePopupOpen<TData = PopupItem[]>(
   }, [evaluateSuppressed, listenStorage, localKey]);
 
   const suppressForToday = useCallback(() => {
-    setStorageExpiry(localKey, true, ttlMs);
+    const expiryMs = typeof ttlMs === "number" ? ttlMs : msUntilNextKstMidnight();
+    setStorageExpiry(localKey, true, expiryMs);
     setSuppressed(true);
   }, [localKey, ttlMs]);
 
