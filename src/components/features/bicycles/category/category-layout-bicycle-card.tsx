@@ -17,7 +17,7 @@ const CategoryLayoutBicycleCard = ({ bicycle, categorySlug }: CategoryLayoutBicy
     <Link href={`/bicycles/style/${categorySlug}/${bicycle.id}`}>
       <div
         key={bicycle.id}
-        className="group flex cursor-pointer flex-col rounded-lg bg-white transition-shadow hover:shadow-sm"
+        className="group flex h-full cursor-pointer flex-col rounded-lg bg-white transition-shadow hover:shadow-sm"
       >
         {/* 자전거 이미지 */}
         <AspectRatio ratio={26 / 15} className="relative rounded-t">
