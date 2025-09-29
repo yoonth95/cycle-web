@@ -89,7 +89,10 @@ const PopupContent = ({ popups }: { popups: PopupItem[] }) => {
                   className="m-auto h-auto w-full" // 비율 유지, 여백 없음
                   sizes="100vw"
                   priority={index === 0}
-                  onLoadingComplete={(img) => setNatural(key, img.naturalWidth, img.naturalHeight)}
+                  onLoad={(event) => {
+                    const { naturalWidth, naturalHeight } = event.currentTarget;
+                    setNatural(key, naturalWidth, naturalHeight);
+                  }}
                 />
               </div>
             );

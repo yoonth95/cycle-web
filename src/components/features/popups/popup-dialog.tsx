@@ -37,7 +37,7 @@ const PopupDialog = () => {
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
           showCloseButton={false}
-          className="w-auto max-w-[300px] overflow-hidden rounded-lg border-none p-0 sm:max-w-[300px]"
+          className="w-auto max-w-[300px] min-w-[230px] overflow-hidden rounded-lg border-none p-0 sm:max-w-[300px]"
         >
           <DialogHeader className="hidden">
             <DialogTitle />
