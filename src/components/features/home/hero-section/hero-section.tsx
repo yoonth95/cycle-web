@@ -92,7 +92,12 @@ export function HeroSection({ data }: HeroSectionProps) {
           <div className="relative lg:order-first lg:col-span-3">
             <div className="overflow-hidden rounded-3xl shadow-2xl">
               <AspectRatio ratio={4 / 3}>
-                <Image src={imageUrl} alt="삼천리 자전거 중동역점" fill />
+                <Image
+                  src={imageUrl}
+                  alt="삼천리 자전거 중동역점"
+                  fill
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                />
               </AspectRatio>
             </div>
           </div>
