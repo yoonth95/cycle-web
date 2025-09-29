@@ -33,6 +33,7 @@ export const BicycleTypeItemSchema = z.object({
   title: z.string(),
   description: z.union([z.string(), z.record(z.string(), z.unknown())]),
   image: z.string(),
+  link: z.string(),
 });
 
 const StoreInfoItemSchema = z.object({

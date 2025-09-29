@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { BicycleTypesSectionType } from "@/types/home";
@@ -15,11 +16,20 @@ const MobileBicycleTypes = ({
         .sort((a, b) => a.order - b.order)
         .map((bicycle) => {
           const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${bicycle.image}`;
+
           return (
-            <div key={bicycle.title} className="flex flex-col items-center justify-center">
-              <Image src={imageUrl} alt={bicycle.title} width={100} height={100} />
-              <p className="body-small-strong text-foreground mb-3">{bicycle.title}</p>
-            </div>
+            <Link key={bicycle.title} href={bicycle.link}>
+              <div className="flex flex-col items-center justify-center">
+                <Image
+                  src={imageUrl}
+                  alt={bicycle.title}
+                  width={100}
+                  height={100}
+                  sizes="(max-width: 474px) 33vw, 25vw"
+                />
+                <p className="body-small-strong text-foreground mb-3">{bicycle.title}</p>
+              </div>
+            </Link>
           );
         })}
     </div>
