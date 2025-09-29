@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CategoryListItemType, BicycleCategorySidebar } from "@/types/bicycle";
+import { cn } from "@/lib/utils";
 
 interface CategoryLayoutSidebarProps {
   sidebar: BicycleCategorySidebar;
@@ -17,7 +18,7 @@ const CategoryLayoutSidebar = ({
     : sidebar.className;
 
   return (
-    <aside className={combinedClassName}>
+    <aside className={cn(combinedClassName, "lg:block")}>
       <div className="sticky top-24 rounded-lg border border-gray-200 bg-white p-4">
         <h3 className="mb-4 font-bold text-gray-900">스타일별 카테고리</h3>
 
