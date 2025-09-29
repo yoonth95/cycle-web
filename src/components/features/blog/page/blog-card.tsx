@@ -5,7 +5,7 @@ import { formatDate } from "@/utils/common";
 import type { BlogCardProps } from "@/types/blog";
 
 export function BlogCard({ blog }: BlogCardProps) {
-  const imageUrl = `${blog.images[0]}`;
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${blog.images[0]}`;
 
   // description에서 HTML 태그 제거하고 텍스트만 추출
   const stripHtml = (html: string) => html.replace(/<[^>]*>/g, "").replace(/&[^;]+;/g, " ");
