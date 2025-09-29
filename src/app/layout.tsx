@@ -6,6 +6,10 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
+  verification: {},
+  other: {
+    "naver-site-verification": "4c44c36bd2e52ce173664c507b6e25148748bc05",
+  },
   title: "삼천리 자전거 중동역점 | 부천 중동 대표 자전거 전문점",
   description:
     "부천 중동 북부역 상동시장입구에 위치한 삼천리 자전거 중동역점입니다. 다양한 자전거와 전문적인 수리 서비스를 제공합니다.",
