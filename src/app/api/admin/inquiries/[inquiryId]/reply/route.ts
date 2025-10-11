@@ -10,8 +10,10 @@ const schema = z.object({
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { inquiryId: string } },
+  { params }: { params: Promise<{ inquiryId: string }> },
 ) {
+  const { inquiryId } = await params;
+
   const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -24,7 +26,7 @@ export async function POST(
       return NextResponse.json({ message: "Invalid payload" }, { status: 400 });
     }
 
-    await replyToInquiry(params.inquiryId, result.data.content);
+    await replyToInquiry(inquiryId, result.data.content);
 
     return NextResponse.json({ message: "답변이 등록되었습니다." });
   } catch (error) {
