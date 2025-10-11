@@ -19,22 +19,22 @@ export function getTagColor(color: string) {
  */
 export function formatDate(dateString: string, isTime: boolean = false): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString(
-    "ko-KR",
-    isTime
-      ? {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        }
-      : {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        },
-  );
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Asia/Seoul",
+  };
+  const dateTimeOptions: Intl.DateTimeFormatOptions = {
+    ...dateOptions,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+
+  return isTime
+    ? date.toLocaleString("ko-KR", dateTimeOptions)
+    : date.toLocaleDateString("ko-KR", dateOptions);
 }
 
 /**
