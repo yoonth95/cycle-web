@@ -5,6 +5,8 @@ import { formatDate, isNewArticle, isUpdatedArticle } from "@/utils/common";
 import type { NoticeDetailType } from "@/types/notice";
 import { Calendar, Pencil } from "lucide-react";
 
+import styles from "./notice-detail-content.module.css";
+
 export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
   return (
     <div className="mx-auto">
@@ -49,6 +51,7 @@ export function NoticeDetailContent({ notice }: { notice: NoticeDetailType }) {
         {/* 공지사항 내용 */}
         <div className="py-4 sm:py-8">
           <div
+            className={styles.content}
             dangerouslySetInnerHTML={
               typeof notice.content === "string" ? { __html: notice.content } : undefined
             }
