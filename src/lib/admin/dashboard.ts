@@ -1,9 +1,6 @@
 import { getSupabaseServiceRoleClient } from "@/lib/supabase";
 
-import {
-  ADMIN_LOGIN_LOGS_TABLE,
-  ADMIN_USERS_TABLE,
-} from "./constants";
+import { ADMIN_LOGIN_LOGS_TABLE, ADMIN_USERS_TABLE } from "./constants";
 import type { AdminLoginLogRecord } from "./types";
 
 export interface AdminDashboardSnapshot {
@@ -19,11 +16,13 @@ export const fetchAdminDashboardSnapshot = async (): Promise<AdminDashboardSnaps
     throw new Error("Supabase service role client is not configured");
   }
 
-  const [{ count: totalNotices = 0, error: noticesError }, { count: totalContacts = 0, error: contactsError }] =
-    await Promise.all([
-      supabase.from("notices").select("id", { count: "exact", head: true }),
-      supabase.from("contacts").select("id", { count: "exact", head: true }),
-    ]);
+  const [
+    { count: totalNotices = 0, error: noticesError },
+    { count: totalContacts = 0, error: contactsError },
+  ] = await Promise.all([
+    supabase.from("notices").select("id", { count: "exact", head: true }),
+    supabase.from("contacts").select("id", { count: "exact", head: true }),
+  ]);
 
   if (noticesError) {
     throw noticesError;
@@ -53,9 +52,9 @@ export const fetchAdminDashboardSnapshot = async (): Promise<AdminDashboardSnaps
   }
 
   return {
-    totalNotices,
-    totalContacts,
-    lockedAccounts,
+    totalNotices: totalNotices || 0,
+    totalContacts: totalContacts || 0,
+    lockedAccounts: lockedAccounts || 0,
     recentLoginLogs: recentLogs as AdminLoginLogRecord[],
   };
 };
