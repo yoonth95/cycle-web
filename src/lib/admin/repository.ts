@@ -11,7 +11,6 @@ import {
 } from "./constants";
 import type {
   AdminAuthAuditContext,
-  AdminLoginLogRecord,
   AdminSession,
   AdminSessionRecord,
   AdminUserRecord,

@@ -66,6 +66,7 @@ const SiteConfigEditor = ({ initialPageId, configs }: SiteConfigEditorProps) => 
         try {
           parsed = JSON.parse(editorValue);
         } catch (parseError) {
+          console.error("[SiteConfigEditor.save]", parseError);
           toast.error("JSON 형식이 올바르지 않습니다.");
           return;
         }
