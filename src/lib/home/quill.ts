@@ -15,3 +15,21 @@ export function deltaToHtml(delta: QuillDelta): string {
     return "";
   }
 }
+
+export function isDeltaEmpty(delta: QuillDelta): boolean {
+  if (!delta || !Array.isArray(delta.ops)) return true;
+
+  return delta.ops.every((op) => {
+    const insert = (op as { insert?: unknown }).insert;
+
+    if (typeof insert === "string") {
+      return insert.replace(/\s/g, "").length === 0;
+    }
+
+    if (insert && typeof insert === "object") {
+      return false;
+    }
+
+    return true;
+  });
+}

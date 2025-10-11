@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { QuillDeltaSchema } from "@/lib/quill/delta";
+
 // =============================================================================
 // 공통 스키마
 // =============================================================================
@@ -29,9 +31,7 @@ export const NoticesLayoutContentHeaderSchema = NoticesContentSectionBaseSchema.
   title: z.string(),
   description: z.union([
     z.string(),
-    z.object({
-      ops: z.array(z.record(z.string(), z.unknown())),
-    }),
+    QuillDeltaSchema,
   ]),
 });
 
@@ -70,12 +70,7 @@ export const NoticeListItemSchema = z.object({
 });
 
 export const NoticeDetailSchema = NoticeListItemSchema.extend({
-  content: z.union([
-    z.string(),
-    z.object({
-      ops: z.array(z.record(z.string(), z.unknown())),
-    }),
-  ]),
+  content: z.union([z.string(), QuillDeltaSchema]),
   is_published: z.boolean().default(false),
 });
 
