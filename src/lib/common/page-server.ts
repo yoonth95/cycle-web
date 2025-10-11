@@ -94,6 +94,7 @@ const PAGE_PATHS: Record<string, string[]> = {
   home: ["/"],
   bicycles: ["/bicycles"],
   "bicycles-style": ["/bicycles/style"],
+  notices: ["/notices"],
 };
 
 /**

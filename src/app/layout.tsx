@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Noto_Sans_KR } from "next/font/google";
 import QueryProvider from "@/providers/QueryProvider";
 import { Header } from "@/components/layout/header";
@@ -41,17 +42,29 @@ const noto = Noto_Sans_KR({
   display: "swap",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = (await headers()).get("x-pathname") ?? "";
+  const isAdminRoute = pathname.startsWith("/admin");
+
+  // console.log(pathname, isAdminRoute);
+  const content = isAdminRoute ? (
+    children
+  ) : (
+    <>
+      <Header />
+      {children}
+      <Footer />
+    </>
+  );
+
   return (
     <html lang="ko">
       <body className={`${noto.className} font-sans antialiased`}>
-        <Header />
-        <QueryProvider>{children}</QueryProvider>
-        <Footer />
+        <QueryProvider>{content}</QueryProvider>
       </body>
     </html>
   );
