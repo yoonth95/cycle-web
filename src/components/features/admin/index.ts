@@ -4,7 +4,6 @@ import AdminNavigation from "./AdminNavigation";
 import SiteConfigEditor from "./SiteConfigEditor";
 import AdminLoginForm from "./AdminLoginForm";
 import AdminInquiryManager from "./AdminInquiryManager";
-export * from "./notices";
 
 export {
   AdminAppShell,
