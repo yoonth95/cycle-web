@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { Toaster } from "@/components/ui/sonner";
 import type { AdminSession } from "@/lib/admin/types";
 import { AdminNavigation, AdminLogoutButton } from "@/components/features/admin";
 
@@ -13,7 +12,6 @@ interface AdminAppShellProps {
 const AdminAppShell = ({ session, children }: AdminAppShellProps) => {
   return (
     <div className="bg-background min-h-screen">
-      <Toaster position="top-center" richColors closeButton duration={2500} />
       <header className="bg-card/30 border-b backdrop-blur">
         <div className="container mx-auto flex flex-col gap-3 px-4 py-4 md:px-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">

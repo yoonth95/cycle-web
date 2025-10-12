@@ -1,4 +1,5 @@
 import type { ContactsFormData } from "@/types/contact";
+import type { AdminInquiryRecord } from "@/types/inquiry";
 
 /**
  * 관리자에게 보낼 메일 템플릿 (새로운 문의사항 알림)
@@ -27,7 +28,7 @@ export function getAdminNotificationTemplate(contactData: ContactsFormData) {
 
           <div style="margin-bottom: 20px;">
             <div style="font-weight: bold; color: #374151; margin-bottom: 5px;">문의 내용</div>
-            <div style="background-color: #f9fafb; padding: 10px; border-radius: 4px; border-left: 4px solid #2563eb; white-space: pre-wrap; line-height: 1.6;">${contactData.description}</div>
+            <div style="background-color: #f9fafb; padding: 10px; border-radius: 4px; border-left: 4px solid #2563eb; white-space: pre-line; line-height: 1.6;">${contactData.description}</div>
           </div>
 
           <br />
@@ -105,7 +106,7 @@ export function getUserConfirmationTemplate(contactData: ContactsFormData) {
 
           <div style="margin-bottom: 20px;">
             <div style="font-weight: bold; color: #374151; margin-bottom: 5px;">문의 내용</div>
-            <div style="background-color: #f0f9ff; padding: 10px; border-radius: 4px; border-left: 4px solid #059669; white-space: pre-wrap; line-height: 1.6;">${contactData.description}</div>
+            <div style="background-color: #f0f9ff; padding: 10px; border-radius: 4px; border-left: 4px solid #059669; white-space: pre-line; line-height: 1.6;">${contactData.description}</div>
           </div>
 
           <br />
@@ -153,6 +154,83 @@ export function getUserConfirmationTemplate(contactData: ContactsFormData) {
 
 ---
 이 메일은 발신전용입니다. 추가 문의사항이 있으시면 매장으로 직접 연락해 주세요.
+  `;
+
+  return { subject, html, text };
+}
+
+/**
+ * 사용자에게 보낼 메일 템플릿 (문의사항 답변 안내)
+ */
+export function getInquiryAnswerTemplate(inquiry: AdminInquiryRecord, answerContent: string) {
+  const subject = `[삼천리 자전거] 문의에 대한 답변이 등록되었습니다 - ${inquiry.title}`;
+
+  const html = `
+    <!DOCTYPE html>
+    <html lang="ko">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>문의사항 답변 안내</title>
+      </head>
+      <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <div style="background-color: #2563eb; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0; font-size: 24px;">🚲 문의사항에 대한 답변이 등록되었습니다</h1>
+          </div>
+
+          <div style="padding: 30px;">
+            <p style="margin: 0 0 10px 0;">안녕하세요, <strong>${inquiry.author}</strong>님!</p>
+            <p style="margin: 0 0 10px 0;">문의해 주신 내용에 대한 답변을 아래와 같이 안내드립니다.</p>
+
+            <div style="margin: 30px 0;">
+              <div style="font-weight: bold; color: #1f2937; margin-bottom: 10px;">📌 문의 제목</div>
+              <div style="background-color: #f8fafc; padding: 12px; border-radius: 6px; border-left: 4px solid #2563eb;">${inquiry.title}</div>
+            </div>
+
+            <div style="margin: 30px 0;">
+              <div style="font-weight: bold; color: #1f2937; margin-bottom: 10px;">💬 문의 내용</div>
+              <div style="background-color: #f1f5f9; padding: 12px; border-radius: 6px; border-left: 4px solid #94a3b8; white-space: pre-line; line-height: 1.6;">
+                ${inquiry.description}
+              </div>
+            </div>
+
+            <div style="margin: 30px 0;">
+              <div style="font-weight: bold; color: #1f2937; margin-bottom: 10px;">✅ 답변 내용</div>
+              <div style="background-color: #ecfdf5; padding: 12px; border-radius: 6px; border-left: 4px solid #10b981; white-space: pre-line; line-height: 1.6;">
+                ${answerContent}
+              </div>
+            </div>
+
+            <p style="margin: 0 0 10px 0;">추가로 궁금하신 사항이 있으시면 언제든지 문의해 주세요.</p>
+            <p style="margin: 0;">빠르게 도움드릴 수 있도록 노력하겠습니다.</p>
+          </div>
+
+          <div style="background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 12px; color: #6b7280;">
+            <p style="margin: 0;">삼천리 자전거 중동역점 | 이 메일은 발신전용입니다.</p>
+            <p style="margin: 5px 0 0 0;">📞 032-326-3002 | 📍 부천시 원미구 부일로 303</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const text = `
+안녕하세요, ${inquiry.author}님.
+
+문의해 주신 "${inquiry.title}"에 대한 답변이 등록되었습니다.
+
+문의 내용:
+${inquiry.description}
+
+답변 내용:
+${answerContent}
+
+추가 문의가 있으시면 언제든지 연락해 주세요.
+
+삼천리 자전거 중동역점
+📞 032-326-3002
+📍 부천시 원미구 부일로 303
   `;
 
   return { subject, html, text };

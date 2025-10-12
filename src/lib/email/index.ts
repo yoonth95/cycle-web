@@ -1,5 +1,10 @@
 // Email functions
-export { sendAdminNotification, sendUserConfirmation, sendContactEmails } from "./mailer";
+export {
+  sendAdminNotification,
+  sendUserConfirmation,
+  sendContactEmails,
+  sendInquiryAnswerNotification,
+} from "./mailer";
 
 // Email config
 export { EMAIL_CONFIG, validateEmailConfig } from "./config";

@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { formatDate, isUpdatedArticle } from "@/utils/common";
 import type { ContactWithComments } from "@/types/contact";
-import { Calendar, MessageSquare, Pencil, Shield } from "lucide-react";
+import { CircleQuestionMark, MessageSquare, Shield } from "lucide-react";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -37,42 +37,23 @@ export function ContactDetailContent({ contact }: ContactDetailContentProps) {
 
         <Card>
           <CardHeader className="flex flex-col gap-4">
-            <div className="flex items-start justify-between">
-              <h2 className="text-foreground text-xl font-semibold">{contact.title}</h2>
-            </div>
-
-            <div className="bg-muted/50 flex flex-col items-start gap-3 rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-foreground font-medium">{contact.author}</span>
-                    <span className="text-muted-foreground text-sm">질문자</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-muted-foreground flex flex-col space-y-2 text-sm sm:flex-row sm:items-center sm:space-y-0 sm:space-x-6">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formatDate(contact.created_at, true)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Pencil className="h-4 w-4" />
-                  <span>{formatDate(contact.updated_at, true)}</span>
-                  {isUpdatedArticle(contact.created_at, contact.updated_at) && (
-                    <span>(수정됨)</span>
-                  )}
-                </div>
-              </div>
+            <div className="flex flex-col items-start gap-2">
+              <h2 className="text-foreground text-2xl font-semibold">{contact.title}</h2>
+              <span className="text-muted-foreground text-sm">
+                {contact.author} · {formatDate(contact.created_at, true)} ·{" "}
+                {contact.is_public ? "공개" : "비공개"}
+              </span>
             </div>
           </CardHeader>
 
           <CardContent className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <h3 className="text-foreground flex items-center space-x-2 text-lg font-medium">
-                <MessageSquare className="h-5 w-5" />
-                <span>문의 내용</span>
-              </h3>
+              <div className="text-foreground flex items-center gap-2 font-medium">
+                <div className="h-4 w-4">
+                  <CircleQuestionMark className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg">문의 내용</h3>
+              </div>
               <div className="bg-muted/30 rounded-lg p-4">
                 <p className="text-foreground leading-relaxed whitespace-pre-line">
                   {contact.description}
@@ -82,10 +63,12 @@ export function ContactDetailContent({ contact }: ContactDetailContentProps) {
 
             {contact.contact_comments && contact.contact_comments.length > 0 && (
               <div>
-                <h3 className="text-foreground mb-3 flex items-center space-x-2 text-lg font-medium">
-                  <MessageSquare className="h-5 w-5 text-blue-600" />
-                  <span>관리자 답변</span>
-                </h3>
+                <div className="text-foreground mb-3 flex items-center space-x-2 text-lg font-medium">
+                  <div className="h-4 w-4">
+                    <MessageSquare className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <h3 className="text-lg">관리자 답변</h3>
+                </div>
                 <div className="flex flex-col gap-4">
                   {contact.contact_comments.map((comment) => (
                     <div
@@ -93,10 +76,10 @@ export function ContactDetailContent({ contact }: ContactDetailContentProps) {
                       className="rounded-r-lg border-l-4 border-blue-500 bg-blue-50 p-4 dark:bg-blue-950/20"
                     >
                       <div className="mb-3 flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Avatar className="h-8 w-8">
+                        <div className="flex items-center gap-1">
+                          <Avatar className="h-5 w-5">
                             <AvatarFallback className="bg-blue-600 text-white">
-                              <Shield className="h-4 w-4" />
+                              <Shield className="h-3 w-3" />
                             </AvatarFallback>
                           </Avatar>
                           <span className="text-foreground font-medium">관리자</span>

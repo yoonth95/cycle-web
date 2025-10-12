@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseConfig } from "@/utils/fetchCacheOption";
 import { sendContactEmails } from "@/lib/email";
 import { transformContactsFormData } from "@/lib/contact/transform";
+import { invalidateContactsCache } from "@/lib/admin/inquiries-cache";
 import type { ContactsSubmissionResult } from "@/types/contact";
 
 export async function POST(request: NextRequest): Promise<NextResponse<ContactsSubmissionResult>> {
@@ -62,6 +63,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ContactsS
 
     const savedContact = await response.json();
     const contactId = savedContact?.[0]?.id;
+
+    try {
+      await invalidateContactsCache(contactId);
+    } catch (cacheError) {
+      console.error("[Contact API] Cache invalidation failed:", cacheError);
+    }
 
     // 이메일 전송 (백그라운드에서 실행하여 응답 속도 향상)
     sendContactEmails(validatedData)
