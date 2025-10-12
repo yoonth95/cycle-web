@@ -4,144 +4,162 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import type { AdminInquiryRecord } from "@/lib/admin/inquiries";
+import { Accordion } from "@/components/ui/accordion";
+import { InquiryItem } from "@/components/features/admin/inquiry";
+
+import type {
+  CommentActionHandlers,
+  InquiryPendingStates,
+  AdminInquiryRecord,
+} from "@/types/inquiry";
 
 interface AdminInquiryManagerProps {
   inquiries: AdminInquiryRecord[];
 }
 
-const formatDateTime = (value: string) =>
-  new Intl.DateTimeFormat("ko-KR", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(value));
-
 const AdminInquiryManager = ({ inquiries }: AdminInquiryManagerProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [draft, setDraft] = useState<Record<string, string>>({});
+  const [pendingReplyId, setPendingReplyId] = useState<string | null>(null);
+  const [pendingEditId, setPendingEditId] = useState<string | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
-  const handleReply = (contactId: string) => {
-    const content = draft[contactId];
-    if (!content?.trim()) {
-      toast.error("답변 내용을 입력해주세요.");
-      return;
-    }
-
-    startTransition(async () => {
-      try {
-        const response = await fetch(`/api/admin/inquiries/${contactId}/reply`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to submit reply");
-        }
-
-        toast.success("답변이 등록되었습니다.");
-        setDraft((prev) => ({ ...prev, [contactId]: "" }));
-        router.refresh();
-      } catch (error) {
-        console.error("[AdminInquiryManager.reply]", error);
-        toast.error("답변 등록에 실패했습니다.");
+  const submitReply: CommentActionHandlers["onSubmitReply"] = (contactId, content) =>
+    new Promise<boolean>((resolve) => {
+      const trimmed = content.trim();
+      if (!trimmed.length) {
+        toast.error("답변 내용을 입력해주세요.");
+        resolve(false);
+        return;
       }
+
+      setPendingReplyId(contactId);
+      startTransition(async () => {
+        try {
+          const response = await fetch(`/api/admin/inquiries/${contactId}/reply`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: trimmed }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to submit reply");
+          }
+
+          toast.success("답변이 등록되었습니다.");
+          resolve(true);
+          router.refresh();
+        } catch (error) {
+          console.error("[AdminInquiryManager.reply]", error);
+          toast.error("답변 등록에 실패했습니다.");
+          resolve(false);
+        } finally {
+          setPendingReplyId(null);
+        }
+      });
     });
+
+  const updateComment: CommentActionHandlers["onUpdateComment"] = (
+    contactId,
+    commentId,
+    content,
+    originalContent,
+  ) =>
+    new Promise<boolean>((resolve) => {
+      const trimmed = content.trim();
+      if (!trimmed.length) {
+        toast.error("수정할 답변 내용을 입력해주세요.");
+        resolve(false);
+        return;
+      }
+
+      if (trimmed === originalContent.trim()) {
+        toast.info("변경된 내용이 없습니다.");
+        resolve(false);
+        return;
+      }
+
+      setPendingEditId(commentId);
+      startTransition(async () => {
+        try {
+          const response = await fetch(`/api/admin/inquiries/${contactId}/comments/${commentId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: trimmed }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to update reply");
+          }
+
+          toast.success("답변이 수정되었습니다.");
+          resolve(true);
+          router.refresh();
+        } catch (error) {
+          console.error("[AdminInquiryManager.update]", error);
+          toast.error("답변 수정에 실패했습니다.");
+          resolve(false);
+        } finally {
+          setPendingEditId(null);
+        }
+      });
+    });
+
+  const deleteComment: CommentActionHandlers["onDeleteComment"] = (contactId, commentId) =>
+    new Promise<boolean>((resolve) => {
+      setPendingDeleteId(commentId);
+      startTransition(async () => {
+        try {
+          const response = await fetch(`/api/admin/inquiries/${contactId}/comments/${commentId}`, {
+            method: "DELETE",
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to delete reply");
+          }
+
+          toast.success("답변이 삭제되었습니다.");
+          resolve(true);
+          router.refresh();
+        } catch (error) {
+          console.error("[AdminInquiryManager.delete]", error);
+          toast.error("답변 삭제에 실패했습니다.");
+          resolve(false);
+        } finally {
+          setPendingDeleteId(null);
+        }
+      });
+    });
+
+  const handlers: CommentActionHandlers = {
+    onSubmitReply: submitReply,
+    onUpdateComment: updateComment,
+    onDeleteComment: deleteComment,
   };
 
+  if (inquiries.length === 0) {
+    return <p className="text-muted-foreground">문의사항이 없습니다.</p>;
+  }
+
   return (
-    <div className="space-y-6">
-      {inquiries.length === 0 ? (
-        <p className="text-muted-foreground">문의사항이 없습니다.</p>
-      ) : (
-        <Accordion type="single" collapsible className="space-y-2">
-          {inquiries.map((inquiry) => {
-            const comments = inquiry.contact_comments ?? [];
-            const latestComment = comments[comments.length - 1];
-            const hasAnswer = Boolean(latestComment);
+    <Accordion type="single" collapsible className="flex flex-col gap-2">
+      {inquiries.map((inquiry) => {
+        const pendingStates: InquiryPendingStates = {
+          isReplying: isPending && pendingReplyId === inquiry.id,
+          editingCommentId: isPending ? pendingEditId : null,
+          deletingCommentId: isPending ? pendingDeleteId : null,
+        };
 
-            return (
-              <AccordionItem key={inquiry.id} value={inquiry.id} className="rounded-lg border">
-                <AccordionTrigger className="px-4 py-3 text-left">
-                  <div className="flex flex-col text-left">
-                    <span className="font-medium">{inquiry.title}</span>
-                    <span className="text-muted-foreground text-xs">
-                      {inquiry.author} · {formatDateTime(inquiry.created_at)} ·{" "}
-                      {inquiry.is_public ? "공개" : "비공개"}
-                    </span>
-                  </div>
-                  <span
-                    className={`text-xs font-medium ${hasAnswer ? "text-emerald-600" : "text-destructive"}`}
-                  >
-                    {hasAnswer ? "답변 완료" : "미답변"}
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="space-y-4 px-4 pb-4">
-                    <div className="bg-muted/30 text-muted-foreground rounded-md border p-4 text-sm">
-                      <h3 className="text-foreground font-medium">문의 내용</h3>
-                      <p className="text-foreground mt-2 whitespace-pre-line">
-                        {inquiry.description}
-                      </p>
-                    </div>
-
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-semibold">답변 내역</h4>
-                      {comments.length === 0 ? (
-                        <p className="text-muted-foreground text-sm">등록된 답변이 없습니다.</p>
-                      ) : (
-                        <ul className="space-y-3 text-sm">
-                          {comments.map((comment) => (
-                            <li
-                              key={comment.id}
-                              className="bg-card rounded-md border p-3 shadow-sm"
-                            >
-                              <p className="whitespace-pre-line">{comment.content}</p>
-                              <span className="text-muted-foreground mt-1 block text-xs">
-                                {formatDateTime(comment.updated_at ?? comment.created_at)}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Textarea
-                        value={draft[inquiry.id] ?? ""}
-                        onChange={(event) =>
-                          setDraft((prev) => ({ ...prev, [inquiry.id]: event.target.value }))
-                        }
-                        rows={4}
-                        placeholder="답변 내용을 입력하세요."
-                        disabled={isPending}
-                      />
-                      <div className="flex justify-end">
-                        <Button
-                          onClick={() => handleReply(inquiry.id)}
-                          disabled={isPending || !draft[inquiry.id]?.trim().length}
-                        >
-                          {isPending ? "등록 중..." : "답변 등록"}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
-      )}
-    </div>
+        return (
+          <InquiryItem
+            key={inquiry.id}
+            inquiry={inquiry}
+            handlers={handlers}
+            pendingStates={pendingStates}
+          />
+        );
+      })}
+    </Accordion>
   );
 };
 

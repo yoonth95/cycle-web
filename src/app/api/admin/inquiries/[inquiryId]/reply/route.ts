@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { replyToInquiry } from "@/lib/admin/inquiries";
 import { getAdminSession } from "@/lib/admin/session";
+import { sendInquiryAnswerNotification } from "@/lib/email/mailer";
 
 const schema = z.object({
   content: z.string().min(1, "답변 내용을 입력해주세요."),
@@ -26,7 +27,11 @@ export async function POST(
       return NextResponse.json({ message: "Invalid payload" }, { status: 400 });
     }
 
-    await replyToInquiry(inquiryId, result.data.content);
+    const inquiry = await replyToInquiry(inquiryId, result.data.content);
+
+    sendInquiryAnswerNotification(inquiry, result.data.content).catch((notificationError) => {
+      console.error("[api/admin/inquiries/:id/reply][POST] notification failed", notificationError);
+    });
 
     return NextResponse.json({ message: "답변이 등록되었습니다." });
   } catch (error) {
