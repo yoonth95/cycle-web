@@ -3,8 +3,13 @@ import "server-only";
 // 타입만 import하여 런타임에 nodemailer가 없어도 에러가 발생하지 않도록 함
 import type { Transporter } from "nodemailer";
 import { EMAIL_CONFIG, validateEmailConfig } from "@/lib/email/config";
-import { getAdminNotificationTemplate, getUserConfirmationTemplate } from "@/lib/email/templates";
+import {
+  getAdminNotificationTemplate,
+  getInquiryAnswerTemplate,
+  getUserConfirmationTemplate,
+} from "@/lib/email/templates";
 import type { ContactsFormData } from "@/types/contact";
+import type { AdminInquiryRecord } from "@/types/inquiry";
 
 let transporter: Transporter | null = null;
 
@@ -105,4 +110,33 @@ export async function sendContactEmails(contactData: ContactsFormData): Promise<
     adminSent: adminSent.status === "fulfilled" ? adminSent.value : false,
     userSent: userSent.status === "fulfilled" ? userSent.value : false,
   };
+}
+
+/**
+ * 사용자에게 문의사항 답변 안내 메일 전송
+ */
+export async function sendInquiryAnswerNotification(
+  inquiry: AdminInquiryRecord,
+  answerContent: string,
+): Promise<boolean> {
+  try {
+    const transporter = await getTransporter();
+    if (!transporter) return false;
+
+    const template = getInquiryAnswerTemplate(inquiry, answerContent);
+
+    await transporter.sendMail({
+      from: `"${EMAIL_CONFIG.from.name}" <${EMAIL_CONFIG.from.address}>`,
+      to: inquiry.email,
+      subject: template.subject,
+      text: template.text,
+      html: template.html,
+    });
+
+    console.log("[Email] 사용자 답변 안내 메일 전송 완료:", inquiry.email);
+    return true;
+  } catch (error) {
+    console.error("[Email] 사용자 답변 안내 메일 전송 실패:", error);
+    return false;
+  }
 }
