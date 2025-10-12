@@ -17,26 +17,31 @@ export function getTagColor(color: string) {
 /**
  * 날짜를 한국어 형식으로 포맷합니다
  */
-export function formatDate(dateString: string, isTime: boolean = false): string {
+export function formatDate(
+  dateString: string,
+  isTime: boolean = false,
+  ampm: boolean = false, // ← 추가: true면 '오전/오후' 12시간제
+): string {
   const date = new Date(dateString);
+
   const dateOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
     timeZone: "Asia/Seoul",
   };
+
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     ...dateOptions,
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hour12: ampm, // ← 여기만 플래그로 제어
   };
 
   return isTime
-    ? date.toLocaleString("ko-KR", dateTimeOptions)
-    : date.toLocaleDateString("ko-KR", dateOptions);
+    ? date.toLocaleString("ko-KR", dateTimeOptions) // ampm=true면 '오전/오후 HH:MM'
+    : date.toLocaleDateString("ko-KR", dateOptions); // 날짜만
 }
-
 /**
  * 새로운 글인지 확인합니다 (3일 이내)
  */
