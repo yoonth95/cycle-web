@@ -12,9 +12,16 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import type { PopupItem } from "@/types/popup";
-import { Pause, Play } from "lucide-react";
+import { Pause, Play, X } from "lucide-react";
 
-const PopupContent = ({ popups }: { popups: PopupItem[] }) => {
+interface PopupContentProps {
+  popups: PopupItem[];
+  onActiveSizeChange?: (size: { width: number; height: number }) => void;
+  onClose?: () => void;
+  displaySize?: { width: number; height: number };
+}
+
+const PopupContent = ({ popups, onActiveSizeChange, onClose, displaySize }: PopupContentProps) => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -31,6 +38,32 @@ const PopupContent = ({ popups }: { popups: PopupItem[] }) => {
   const [naturalMap, setNaturalMap] = useState<Record<string, { w: number; h: number }>>({});
   const setNatural = (key: string, w: number, h: number) =>
     setNaturalMap((m) => (m[key] ? m : { ...m, [key]: { w, h } }));
+  const lastReportedSize = useRef<{ width: number; height: number } | null>(null);
+
+  const activeSize = useMemo(() => {
+    const currentPopup = popups[currentIndex];
+    if (!currentPopup) return null;
+
+    const key = `${currentPopup.id}-${currentIndex}`;
+    const metaW = (currentPopup as { width?: number }).width as number | undefined;
+    const metaH = (currentPopup as { height?: number }).height as number | undefined;
+    const width = metaW ?? naturalMap[key]?.w;
+    const height = metaH ?? naturalMap[key]?.h;
+
+    if (!width || !height) return null;
+    return { width, height };
+  }, [currentIndex, naturalMap, popups]);
+
+  useEffect(() => {
+    if (!onActiveSizeChange || !activeSize) return;
+
+    const { width, height } = activeSize;
+    const prev = lastReportedSize.current;
+    if (!prev || prev.width !== width || prev.height !== height) {
+      lastReportedSize.current = { width, height };
+      onActiveSizeChange({ width, height });
+    }
+  }, [activeSize, onActiveSizeChange]);
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -62,14 +95,32 @@ const PopupContent = ({ popups }: { popups: PopupItem[] }) => {
   if (total === 0) return null;
 
   return (
-    <div className="flex w-full flex-col items-stretch">
+    <div
+      className="flex w-full flex-col items-stretch"
+      style={displaySize ? { height: `${displaySize.height}px` } : undefined}
+    >
+      <div className="absolute top-1 right-1 z-[105] flex items-center justify-center gap-2">
+        <div className="flex h-6 w-6 items-center justify-center rounded-full border border-black bg-black text-white">
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-4 w-4 p-0 hover:bg-transparent hover:text-white"
+            onClick={onClose}
+            aria-pressed={!isPlaying ? true : false}
+            aria-label={isPlaying ? "자동 재생 정지" : "자동 재생 시작"}
+          >
+            <X strokeWidth={2} className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
       <Carousel
         opts={{ loop: total > 1 }}
         plugins={[autoplayRef.current]}
         setApi={setCarouselApi}
-        className="w-full p-0"
+        className="h-full w-full p-0"
       >
-        <CarouselContent className="[margin-left:0]">
+        <CarouselContent className="[margin-left:0] h-full">
           {popups.map((popup, index) => {
             const key = `${popup.id}-${index}`;
             const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_IMAGE_URL}${popup.image}`;
@@ -86,7 +137,7 @@ const PopupContent = ({ popups }: { popups: PopupItem[] }) => {
                   alt={`프로모션 팝업 이미지 ${index + 1}`}
                   width={w}
                   height={h}
-                  className="m-auto h-auto w-full" // 비율 유지, 여백 없음
+                  className="m-auto h-full w-full object-contain" // 컨테이너 내 비율 유지
                   sizes="100vw"
                   priority={index === 0}
                   onLoad={(event) => {
@@ -98,7 +149,7 @@ const PopupContent = ({ popups }: { popups: PopupItem[] }) => {
             );
 
             return (
-              <CarouselItem key={key} className="basis-full ![padding-left:0]">
+              <CarouselItem key={key} className="h-full basis-full ![padding-left:0]">
                 {popup.link ? (
                   <Link
                     href={popup.link}
@@ -119,7 +170,7 @@ const PopupContent = ({ popups }: { popups: PopupItem[] }) => {
       </Carousel>
 
       {total > 1 && (
-        <div className="absolute bottom-7 left-4 z-20 flex items-center justify-center gap-2">
+        <div className="absolute bottom-5 left-4 z-20 flex items-center justify-center gap-2">
           <div className="flex justify-center">
             <Button
               type="button"
