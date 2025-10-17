@@ -40,7 +40,7 @@ const initialState = {
   | "forcedStop"
 >;
 
-const usePopupCarouselStore = create<PopupCarouselState>((set, get) => ({
+const usePopupCarouselStore = create<PopupCarouselState>((set) => ({
   ...initialState,
   setTotal: (total) =>
     set((state) => {
