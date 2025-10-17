@@ -12,6 +12,7 @@ import {
 import { PopupContent, PopupButtons } from "@/components/features/popups";
 import { usePopupOpen } from "@/hooks/use-popup-open";
 import { getPopups } from "@/lib/popup/client";
+import usePopupCarouselStore from "@/stores/popup-carousel-store";
 
 const PopupDialog = () => {
   const popupsQuery = useQuery({
@@ -29,6 +30,7 @@ const PopupDialog = () => {
   });
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
   const [buttonHeight, setButtonHeight] = useState(0);
+  const resetCarouselControls = usePopupCarouselStore((state) => state.reset);
 
   const HORIZONTAL_MARGIN = 32;
   const VERTICAL_MARGIN = 80;
@@ -119,6 +121,10 @@ const PopupDialog = () => {
     };
   }, [buttonHeight, imageSize, viewport.height, viewport.width]);
 
+  useEffect(() => {
+    if (!open) resetCarouselControls();
+  }, [open, resetCarouselControls]);
+
   if (isLoading || !ready) return null;
   if (isError) return null;
 
@@ -135,7 +141,7 @@ const PopupDialog = () => {
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
           showCloseButton={false}
-          className="flex w-auto flex-col items-stretch overflow-hidden rounded-lg border-none p-0"
+          className="flex w-auto min-w-[280px] flex-col items-stretch overflow-hidden rounded-lg border-none p-0"
           style={{
             width: `${contentMetrics.dialogWidth}px`,
             height: `${contentMetrics.dialogHeight}px`,

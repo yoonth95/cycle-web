@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import AutoPlay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -11,8 +12,9 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
+import usePopupCarouselStore from "@/stores/popup-carousel-store";
 import type { PopupItem } from "@/types/popup";
-import { Pause, Play, X } from "lucide-react";
+import { X } from "lucide-react";
 
 interface PopupContentProps {
   popups: PopupItem[];
@@ -23,8 +25,16 @@ interface PopupContentProps {
 
 const PopupContent = ({ popups, onActiveSizeChange, onClose, displaySize }: PopupContentProps) => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const { currentIndex, setCurrentIndex, setScrollTo, setTotal, setAutoplayControllers } =
+    usePopupCarouselStore(
+      useShallow((state) => ({
+        currentIndex: state.currentIndex,
+        setCurrentIndex: state.setCurrentIndex,
+        setScrollTo: state.setScrollTo,
+        setTotal: state.setTotal,
+        setAutoplayControllers: state.setAutoplayControllers,
+      })),
+    );
 
   const autoplayRef = useRef(
     AutoPlay({
@@ -66,31 +76,44 @@ const PopupContent = ({ popups, onActiveSizeChange, onClose, displaySize }: Popu
   }, [activeSize, onActiveSizeChange]);
 
   useEffect(() => {
-    if (!carouselApi) return;
+    if (!carouselApi) {
+      setScrollTo(null);
+      return;
+    }
+
     const onSelect = () => setCurrentIndex(carouselApi.selectedScrollSnap());
     onSelect();
 
     carouselApi.on("select", onSelect);
+    setScrollTo((index) => carouselApi.scrollTo(index));
+
     return () => {
-      carouselApi?.off("select", onSelect);
+      carouselApi.off("select", onSelect);
+      setScrollTo(null);
     };
-  }, [carouselApi]);
+  }, [carouselApi, setCurrentIndex, setScrollTo]);
 
-  const toggleAutoplay = () => {
+  useEffect(() => {
     const plugin = autoplayRef.current;
-    if (!plugin) return;
-
-    if (isPlaying) {
-      plugin.stop();
-      setIsPlaying(false);
-    } else {
-      plugin.play();
-      setIsPlaying(true);
+    if (!plugin) {
+      setAutoplayControllers(null, null);
+      return;
     }
-  };
 
-  const total = useMemo(() => popups.length, [popups]);
-  const scrollTo = (i: number) => carouselApi?.scrollTo(i);
+    const play = () => plugin.play();
+    const stop = () => plugin.stop();
+    setAutoplayControllers(play, stop);
+
+    return () => {
+      setAutoplayControllers(null, null);
+    };
+  }, [setAutoplayControllers]);
+
+  const total = popups.length;
+
+  useEffect(() => {
+    setTotal(total);
+  }, [setTotal, total]);
 
   if (total === 0) return null;
 
@@ -106,8 +129,7 @@ const PopupContent = ({ popups, onActiveSizeChange, onClose, displaySize }: Popu
             variant="ghost"
             className="h-4 w-4 p-0 hover:bg-transparent hover:text-white"
             onClick={onClose}
-            aria-pressed={!isPlaying ? true : false}
-            aria-label={isPlaying ? "자동 재생 정지" : "자동 재생 시작"}
+            aria-label="닫기"
           >
             <X strokeWidth={2} className="h-4 w-4" />
           </Button>
@@ -168,39 +190,6 @@ const PopupContent = ({ popups, onActiveSizeChange, onClose, displaySize }: Popu
           })}
         </CarouselContent>
       </Carousel>
-
-      {total > 1 && (
-        <div className="absolute bottom-5 left-4 z-20 flex items-center justify-center gap-2">
-          <div className="flex justify-center">
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-4 w-4 p-0 hover:bg-transparent"
-              onClick={toggleAutoplay}
-              aria-pressed={!isPlaying ? true : false}
-              aria-label={isPlaying ? "자동 재생 정지" : "자동 재생 시작"}
-            >
-              {isPlaying ? (
-                <Pause strokeWidth={1} className="h-4 w-4" />
-              ) : (
-                <Play strokeWidth={1} className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-          <div className="flex justify-center gap-2">
-            {Array.from({ length: total }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollTo(i)}
-                aria-label={`${i + 1}번째 배너로 이동`}
-                className={`h-2 w-2 rounded-full transition ${
-                  currentIndex === i ? "bg-black/90" : "bg-black/20"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
