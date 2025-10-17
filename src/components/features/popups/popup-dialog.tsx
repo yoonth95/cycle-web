@@ -36,6 +36,7 @@ const PopupDialog = () => {
   const VERTICAL_MARGIN = 80;
   const MIN_IMAGE_DIMENSION = 160;
   const FALLBACK_BUTTON_HEIGHT = 64;
+  const EXTRA_BUTTON_SPACE = 32;
   const FALLBACK_IMAGE = { width: 300, height: 400 } as const;
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const PopupDialog = () => {
   const contentMetrics = useMemo(() => {
     const naturalWidth = imageSize?.width ?? FALLBACK_IMAGE.width;
     const naturalHeight = imageSize?.height ?? FALLBACK_IMAGE.height;
-    const effectiveButtonHeight = buttonHeight || FALLBACK_BUTTON_HEIGHT;
+    const effectiveButtonHeight = (buttonHeight || FALLBACK_BUTTON_HEIGHT) + EXTRA_BUTTON_SPACE;
 
     const maxWidth = viewport.width
       ? Math.max(viewport.width - HORIZONTAL_MARGIN, MIN_IMAGE_DIMENSION)
@@ -112,12 +113,9 @@ const PopupDialog = () => {
       width *= scale;
     }
 
-    const dialogHeight = Math.min(height + effectiveButtonHeight, maxDialogHeight);
-
     return {
       dialogWidth: width,
       imageHeight: height,
-      dialogHeight,
     };
   }, [buttonHeight, imageSize, viewport.height, viewport.width]);
 
@@ -144,7 +142,6 @@ const PopupDialog = () => {
           className="flex w-auto min-w-[280px] flex-col items-stretch overflow-hidden rounded-lg border-none p-0"
           style={{
             width: `${contentMetrics.dialogWidth}px`,
-            height: `${contentMetrics.dialogHeight}px`,
             maxWidth: `calc(100vw - ${HORIZONTAL_MARGIN}px)`,
             maxHeight: `calc(100vh - ${VERTICAL_MARGIN}px)`,
           }}

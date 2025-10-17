@@ -34,7 +34,7 @@ const PopupButtons = ({ onDismissForToday, disabled }: PopupButtonsProps) => {
   return (
     <div
       className={cn(
-        "flex items-center gap-4 px-4 pb-4",
+        "flex w-full items-center gap-4 px-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]",
         hasMultiple ? "justify-between" : "justify-end",
       )}
     >
